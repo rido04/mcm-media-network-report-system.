@@ -2,32 +2,29 @@
 <html>
 <head>
     <title>Login</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.0.0/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
 </head>
-<body class="flex items-center justify-center h-screen bg-gray-100">
-    <form method="POST" action="/login" class="bg-white p-6 rounded shadow-md w-96">
-        @csrf
-        <h2 class="text-2xl mb-4 font-bold">Login</h2>
+<body>
+    <div class="container">
+        <h1>MCM Login</h1>
+        <p>Masuk ke akun Anda</p>
+        <form method="POST" action="/login">
+            @csrf
 
-        @if ($errors->any())
-            <div class="text-red-500 text-sm mb-4">
-                {{ $errors->first() }}
-            </div>
-        @endif
+            @if ($errors->any())
+                <div class="error">
+                    {{ $errors->first() }}
+                </div>
+            @endif
 
-        <div class="mb-4">
-            <label>Email</label>
-            <input type="email" name="email" class="w-full border px-3 py-2 rounded" required>
-        </div>
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Masukkan email Anda" required>
 
-        <div class="mb-4">
-            <label>Password</label>
-            <input type="password" name="password" class="w-full border px-3 py-2 rounded" required>
-        </div>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Masukkan password Anda" required>
 
-        <button class="bg-blue-600 text-white px-4 py-2 rounded w-full hover:bg-blue-700">
-            Login
-        </button>
-    </form>
+            <button type="submit">Login</button>
+        </form>
+    </div>
 </body>
 </html>
