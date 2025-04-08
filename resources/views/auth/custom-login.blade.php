@@ -6,8 +6,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>MCM Login</h1>
-        <p>Masuk ke akun Anda</p>
+        <h1>MCM Media Networks</h1>
+        <p>Login</p>
         <form method="POST" action="/login">
             @csrf
 
