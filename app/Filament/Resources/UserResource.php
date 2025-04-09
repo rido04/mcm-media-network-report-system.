@@ -39,14 +39,13 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name')->required(),
+                TextInput::make('name')->label('Nama Perusahaan')->required(),
                 TextInput::make('email')->email()->required(),
                 TextInput::make('password')
                     ->password()
                     ->required(fn ($livewire) => $livewire instanceof CreateRecord)
                     ->dehydrated(fn ($state) => filled($state))
                     ->dehydrateStateUsing(fn ($state) => bcrypt($state)),
-                TextInput::make('company_name')->label('Nama Perusahaan')->required(),
                 Textarea::make('company_address')->label('Alamat Perusahaan')->required(),
                 TextInput::make('company_phone')->label('Telepon')->required(),
 
@@ -60,10 +59,9 @@ class UserResource extends Resource
             TextColumn::make('name')
             ->label('Nama Perusahaan'),
             TextColumn::make('email'),
-            TextColumn::make('company_phone')->label('No Telp'),
             TextColumn::make('company_address')->label('Alamat'),
+            TextColumn::make('company_phone')->label('No Telp'),
         ])
-        ->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])
