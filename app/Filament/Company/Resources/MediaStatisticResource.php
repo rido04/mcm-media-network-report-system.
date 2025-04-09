@@ -2,8 +2,6 @@
 
 namespace App\Filament\Company\Resources;
 
-use App\Filament\Company\Widgets\MediaStatisticOverview;
-use App\Filament\Widgets\MediaStatisticFilterWidget;
 use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
@@ -67,17 +65,12 @@ class MediaStatisticResource extends Resource
             TextColumn::make('city')->label('Kota'),
             TextColumn::make('start_date')->label('Mulai')->date(),
             TextColumn::make('end_date')->label('Selesai')->date(),
-        ])->defaultSort('start_date', 'desc')
+            ])->defaultSort('start_date', 'desc')
             ->filters([
-                //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
             ]);
     }
 

@@ -18,6 +18,7 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Filament\Company\Widgets\MediaStatisticOverview;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use App\Filament\Company\Resources\MediaStatisticResource;
+use App\Filament\Widgets\MediaStatisticFilterWidget;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -48,7 +49,8 @@ class CompanyPanelProvider extends PanelProvider
             ->widgets([
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
-                MediaStatisticOverview::class
+                MediaStatisticOverview::class,
+                MediaStatisticFilterWidget::class
             ])
             ->middleware([
                 EncryptCookies::class,

@@ -22,6 +22,7 @@ class ListMediaStatistics extends ListRecords
     public function getHeaderWidgets(): array
     {
         return [
+            MediaStatisticFilterWidget::class,
             MediaStatisticOverview::class,
         ];
     }

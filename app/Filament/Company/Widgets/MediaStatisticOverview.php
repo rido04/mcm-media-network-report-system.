@@ -4,6 +4,7 @@ namespace App\Filament\Company\Widgets;
 
 use App\Models\MediaStatistic;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Filament\Widgets\StatsOverviewWidget\Card;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
@@ -12,11 +13,26 @@ class MediaStatisticOverview extends BaseWidget
 {
     protected static ?string $pollingInterval = '5s'; // Auto-refresh setiap 5 detik
 
+    protected $listeners = ['refreshStatsWidget' => '$refresh'];
     protected function getCards(): array
     {
         $user = Auth::user();
 
-        $mediaStats = MediaStatistic::where('user_id', $user->id)->get();
+        $filtersData = session('filters', []);
+        $filters = $filtersData['filters'] ?? [];
+        Log::info('FILTER FINAL YANG DIPAKAI DI QUERY', $filters);
+
+        Log::info('Session filters di widget statistik:', $filters);
+
+        $mediaStats = MediaStatistic::where('user_id', $user->id)
+        ->when($filters['start_date'] ?? null, fn($q, $val) => $q->whereDate('start_date', '>=', $val))
+        ->when($filters['end_date'] ?? null, fn($q, $val) => $q->whereDate('end_date', '<=', $val))
+        ->when($filters['media_plan'] ?? null, fn($q, $val) => $q->where('media_plan', $val))
+        ->when($filters['city'] ?? null, fn($q, $val) => $q->where('city', 'like', "%$val%"))
+        ->when($filters['media_placement'] ?? null, fn($q, $val) => $q->where('media_placement', 'like', "%$val%"))
+        ->get();
+
+
 
         $totalMediaPlan = $mediaStats->count();
         $totalInventory = $mediaStats->pluck('media_placement')->count();
