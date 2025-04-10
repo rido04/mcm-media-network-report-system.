@@ -1,0 +1,17 @@
+[33mcommit a1e10a061c0a8dfab1d6d0dc07d868aa069e03b0[m[33m ([m[1;36mHEAD[m[33m)[m
+Author: Ridho Febrian <ridhofebrian.445@gmail.com>
+Date:   Wed Apr 9 17:23:07 2025 +0700
+
+    setup filter widget(overview media statistic)
+
+ .../Company/Resources/MediaStatisticResource.php   |  9 [32m+[m[31m--[m
+ .../Pages/ListMediaStatistics.php                  |  1 [32m+[m
+ .../Company/Widgets/MediaStatisticOverview.php     | 18 [32m+++++[m[31m-[m
+ app/Filament/Widgets/GlobalFilterWidget.php        | 48 [32m++[m[31m-------------[m
+ .../Widgets/MediaStatisticFilterWidget.php         | 71 [32m+++++++++++++++[m[31m-------[m
+ app/Providers/Filament/AdminPanelProvider.php      | 21 [32m++++[m[31m---[m
+ app/Providers/Filament/CompanyPanelProvider.php    |  4 [32m+[m[31m-[m
+ composer.json                                      |  1 [32m+[m
+ composer.lock                                      |  2 [32m+[m[31m-[m
+ .../media-statistic-filter-widget.blade.php        | 11 [32m+++[m[31m-[m
+ 10 files changed, 97 insertions(+), 89 deletions(-)
