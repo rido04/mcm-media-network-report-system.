@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Resources\AdminTrafficResource;
+use App\Filament\Resources\DailyImpressionResource;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\Widgets;
@@ -13,6 +15,7 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Filament\Http\Middleware\AuthenticateSession;
 use App\Filament\Resources\MediaStatisticResource;
+use App\Filament\Resources\TrafficStatResource;
 use App\Filament\Widgets\MediaStatisticFilterWidget;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
@@ -33,13 +36,16 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->authMiddleware([
                 'role:admin', // tambahan role check
-            ])
+                ])
             ->colors([
-                'primary' => Color::Blue,
-            ])
+                    'primary' => Color::Blue,
+                    ])
             ->resources([
                 UserResource::class,
                 MediaStatisticResource::class,
+                AdminTrafficResource::class,
+                DailyImpressionResource::class,
+                TrafficStatResource::class,
             ])
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([

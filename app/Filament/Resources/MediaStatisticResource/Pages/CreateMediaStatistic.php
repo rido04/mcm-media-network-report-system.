@@ -9,4 +9,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateMediaStatistic extends CreateRecord
 {
     protected static string $resource = MediaStatisticResource::class;
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }
