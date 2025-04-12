@@ -1,29 +1,39 @@
 <x-filament-widgets::widget>
-    <x-filament::section>
-        <div class="p-4 bg-grey-100 rounded-lg">
-            <div x-data="{ open: false }" class="relative">
-                <!-- Tombol atau Ikon -->
-                <button @click="open = !open" class="p-2 bg-blue-500 text-blue rounded-full">
-                    <x-heroicon-o-funnel class="w-6 h-6" /> <!-- Gunakan ikon filter -->
-                </button>
+    <div x-data="{ open: false }" class="relative inline-block">
+        <!-- Trigger Button -->
+        <button
+            @click="open = !open"
+            class="flex items-center space-x-1 px-3 py-2 bg-primary-50 dark:bg-gray-800 rounded-lg hover:bg-primary-100 dark:hover:bg-gray-700 transition-colors"
+        >
+            <x-heroicon-o-funnel class="w-4 h-4 text-primary-500" />
+            <span class="text-xs font-medium">Filter</span>
+        </button>
 
-                <!-- Form Filter -->
-                <div
-                    x-show="open"
-                    @click.away="open = false"
-                    class="absolute top-10 right-0 bg-black shadow-lg rounded-lg p-4 z-50 w-80"
-                    style="display: none;"
-                >
-                    <h3 class="text-lg font-bold mb-4">Filter Statistik</h3>
+        <!-- Dropdown Content -->
+        <div
+            x-show="open"
+            @click.away="open = false"
+            x-transition:enter="transition ease-out duration-100"
+            x-transition:enter-start="opacity-0 scale-95"
+            x-transition:enter-end="opacity-100 scale-100"
+            x-transition:leave="transition ease-in duration-75"
+            x-transition:leave-start="opacity-100 scale-100"
+            x-transition:leave-end="opacity-0 scale-95"
+            class="absolute right-0 mt-2 w-72 bg-white dark:bg-gray-800 rounded-md shadow-lg z-50 border border-gray-200 dark:border-gray-700"
+            style="display: none;"
+        >
+            <div class="p-4 space-y-4">
+                <div class="grid grid-cols-2 gap-3">
                     {{ $this->form }}
-                    <button
-                        wire:click="applyFilters"
-                        class="mt-4 bg-primary-500 text-white px-4 py-2 rounded-lg"
-                    >
-                        Terapkan Filter
-                    </button>
                 </div>
+
+                <button
+                    wire:click="applyFilters"
+                    class="w-full py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-md text-sm font-medium transition-colors"
+                >
+                    Terapkan Filter
+                </button>
             </div>
         </div>
-    </x-filament::section>
+    </div>
 </x-filament-widgets::widget>

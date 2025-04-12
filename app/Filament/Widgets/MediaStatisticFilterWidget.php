@@ -16,6 +16,7 @@ class MediaStatisticFilterWidget extends Widget implements HasForms
 
     protected static string $view = 'filament.widgets.media-statistic-filter-widget';
 
+    protected static ?int $sort = 1;
     public $filters = [
         'start_date' => null,
         'end_date' => null,

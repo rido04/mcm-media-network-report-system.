@@ -18,7 +18,12 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Filament\Company\Widgets\MediaStatisticOverview;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use App\Filament\Company\Resources\MediaStatisticResource;
+use App\Filament\Widgets\CommuterlineChart;
+use App\Filament\Widgets\JakartaTrafficChart;
+use App\Filament\Widgets\MediaStatChart;
 use App\Filament\Widgets\MediaStatisticFilterWidget;
+use App\Filament\Widgets\MediaStatisticTableWidget;
+use App\Filament\Widgets\TransjakartaUserChart;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -37,7 +42,23 @@ class CompanyPanelProvider extends PanelProvider
             ])
             ->brandName('MCM Client')
             ->colors([
-                'primary' => Color::Blue,
+                'gray' => [
+                    50 => '#f9fafb',
+                    100 => '#f3f4f6',
+                    200 => '#e5e7eb',
+                    300 => '#d1d5db',
+                    400 => '#9ca3af',
+                    500 => '#6b7280',
+                    600 => '#4b5563',
+                    700 => '#374151',
+                    800 => '#1f2937',
+                    900 => '#111827',
+                    950 => '#030712', // Tambahkan ini
+                ],
+                'widget' => [
+                    'background' => '#e5e7eb', // Light mode
+                    'dark' => '#1e293b', // Dark mode
+                ],
             ])
             ->resources([
                 MediaStatisticResource::class
@@ -49,10 +70,15 @@ class CompanyPanelProvider extends PanelProvider
             ->widgets([
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
-                MediaStatisticOverview::class,
-                MediaStatisticFilterWidget::class
-            ])
-            ->middleware([
+                MediaStatisticFilterWidget::class, // filter widget for statistic overview
+                MediaStatisticOverview::class, // statistic overview widget
+                MediaStatChart::class, //total impression widget chart
+                MediaStatisticTableWidget::class, // widget table
+                CommuterlineChart::class, // commuterline User chart widget
+                TransjakartaUserChart::class, // Transjakarta user chart
+                JakartaTrafficChart::class, //Jakarta Traffic chart widget
+                ])
+                ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
