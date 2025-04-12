@@ -14,6 +14,7 @@ Route::get('/login', function () {
 })->name('login');
 
 
+
 Route::post('/login', function (Request $request) {
     // Ambil kredensial dari request
     $credentials = $request->only(['email', 'password']); // Gunakan dependency injection
