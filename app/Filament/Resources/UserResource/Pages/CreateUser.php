@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\UserResource\Pages;
 
 use App\Filament\Resources\UserResource;
+use App\Models\User; // Tambahkan ini untuk memastikan model User dikenali
 use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
@@ -11,14 +12,18 @@ class CreateUser extends CreateRecord
     protected static string $resource = UserResource::class;
 
     protected function mutateFormDataBeforeCreate(array $data): array
-{
-    $data['role_to_assign'] = 'company'; // optional, kalau mau pakai event
-    return $data;
-}
+    {
+        return $data;
+    }
 
-protected function afterCreate(): void
-{
-    $this->record->assignRole('company');
-}
+    protected function afterCreate(): void
+    {
+        $this->record->assignRole('company');// registrasi role otomatis
+    }
 
+    protected function getRedirectUrl(): string
+    {
+        // redirect setelah input users
+        return $this->getResource()::getUrl('index');
+    }
 }

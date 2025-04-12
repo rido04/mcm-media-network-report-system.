@@ -11,12 +11,13 @@ use Filament\Resources\Resource;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Resources\Pages\CreateRecord;
 use App\Filament\Resources\UserResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\UserResource\RelationManagers;
-use Filament\Tables\Actions\DeleteAction;
+
 
 class UserResource extends Resource
 {
@@ -24,32 +25,31 @@ class UserResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-building-office-2';
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->role('company'); //query client menjadi role company
+    }
+
     public static function getPluralLabel(): ?string
     {
         return 'Client';
     }
 
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()->role('company'); //atur role ke company secara otomatis
-    }
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                TextInput::make('name')->required()->label('Nama Perusahaan'),
+                TextInput::make('name')->label('Nama Perusahaan')->required(),
                 TextInput::make('email')->email()->required(),
                 TextInput::make('password')
                     ->password()
                     ->required(fn ($livewire) => $livewire instanceof CreateRecord)
                     ->dehydrated(fn ($state) => filled($state))
                     ->dehydrateStateUsing(fn ($state) => bcrypt($state)),
-                TextInput::make('company_phone')->label('Telepon')->required(),
                 Textarea::make('company_address')->label('Alamat Perusahaan')->required(),
-                    
-    
-            
+                TextInput::make('company_phone')->label('Telepon')->required(),
+
             ]);
     }
 
@@ -57,16 +57,12 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-            TextColumn::make('name')->label('Nama Perusahaan')
-            ->sortable()
-            ->searchable(),
-            TextColumn::make('email')
-            ->searchable(),
+            TextColumn::make('name')
+            ->label('Nama Perusahaan'),
+            TextColumn::make('email'),
+            TextColumn::make('company_address')->label('Alamat'),
             TextColumn::make('company_phone')->label('No Telp'),
-            TextColumn::make('company_address')
-            ->label('Alamat')
-            ->searchable(),
-        ])           
+        ])
             ->filters([
                 //
             ])

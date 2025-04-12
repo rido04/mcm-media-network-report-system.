@@ -1,8 +1,9 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Company\DashboardController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -11,6 +12,7 @@ Route::get('/', function () {
 Route::get('/login', function () {
     return view('auth.custom-login');
 })->name('login');
+
 
 Route::post('/login', function (Request $request) {
     // Ambil kredensial dari request
@@ -39,7 +41,7 @@ Route::post('/login', function (Request $request) {
     ]);
 });
 
-Route::post('/logout', function () {
+Route::post('/filament/logout', function () {
     Auth::logout();
     return redirect('/login');
 })->name('logout');
