@@ -32,6 +32,18 @@ class MediaStatChart extends ChartWidget
         ];
     }
 
+    protected function getOptions(): array
+    {
+    return [
+        'plugins' => [
+            'background' => [
+                'color' => 'grey', // Warna background widget
+            ],
+        ],
+    ];
+}
+
+
     protected function getData(): array
     {
         $query = DailyImpression::query();
@@ -73,7 +85,7 @@ class MediaStatChart extends ChartWidget
                     'type' => 'bar', // Dataset untuk bar chart
                     'label' => 'Bar Data',
                     'data' => $barValues,
-                    'backgroundColor' => '#e5e7eb',
+                    'backgroundColor' => '#3b82f6', //biru
                     'borderColor' => '#e5e7eb',
                     'borderWidth' => 1,
                 ],
@@ -94,15 +106,10 @@ class MediaStatChart extends ChartWidget
     {
         return 'bar'; // Tipe utama chart
     }
-
-    protected function getOptions(): array
-    {
-        return [
-            'plugins' => [
-                'background' => [
-                    'color' => '#f3f4f6', // Warna background widget
-                ],
-            ],
-        ];
-    }
+    protected function getExtraAttributes(): array
+{
+    return [
+        'class' => 'bg-white dark:bg-gray-800', // Light: putih, Dark: gray-800
+    ];
+}
 }

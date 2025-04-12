@@ -3,10 +3,10 @@
         <!-- Trigger Button -->
         <button
             @click="open = !open"
-            class="flex items-center space-x-1 px-3 py-2 bg-primary-50 dark:bg-gray-800 rounded-lg hover:bg-primary-100 dark:hover:bg-gray-700 transition-colors"
+            class="flex items-center space-x-2 px-3 py-2 bg-primary-50 dark:bg-gray-800 rounded-lg hover:bg-primary-100 dark:hover:bg-gray-700 transition-colors"
         >
-            <x-heroicon-o-funnel class="w-4 h-4 text-primary-500" />
-            <span class="text-xs font-medium">Filter</span>
+            <x-heroicon-o-funnel class="w-6 h-6 text-primary-500" />
+            {{-- <span class="text-xs font-medium">Filter</span> --}}
         </button>
 
         <!-- Dropdown Content -->
@@ -22,7 +22,7 @@
             class="absolute right-0 mt-2 w-72 bg-white dark:bg-gray-800 rounded-md shadow-lg z-50 border border-gray-200 dark:border-gray-700"
             style="display: none;"
         >
-            <div class="p-4 space-y-4">
+            <div class="p-10 space-y-4">
                 <div class="grid grid-cols-2 gap-3">
                     {{ $this->form }}
                 </div>

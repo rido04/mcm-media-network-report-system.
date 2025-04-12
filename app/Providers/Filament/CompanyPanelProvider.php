@@ -24,6 +24,7 @@ use App\Filament\Widgets\MediaStatChart;
 use App\Filament\Widgets\MediaStatisticFilterWidget;
 use App\Filament\Widgets\MediaStatisticTableWidget;
 use App\Filament\Widgets\TransjakartaUserChart;
+use Filament\Enums\ThemeMode;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -41,6 +42,7 @@ class CompanyPanelProvider extends PanelProvider
                 'role:company', // tambahan role check
             ])
             ->brandName('MCM Client')
+            ->defaultThemeMode(ThemeMode::Dark)
             ->colors([
                 'gray' => [
                     50 => '#f9fafb',
@@ -55,13 +57,22 @@ class CompanyPanelProvider extends PanelProvider
                     900 => '#111827',
                     950 => '#030712', // Tambahkan ini
                 ],
-                'widget' => [
-                    'background' => '#e5e7eb', // Light mode
-                    'dark' => '#1e293b', // Dark mode
-                ],
+                'primary' => [
+                    50 => '#f0f9ff',
+                    100 => '#e0f2fe',
+                    200 => '#bae6fd',
+                    300 => '#7dd3fc',
+                    400 => '#38bdf8',
+                    500 => '#0ea5e9',
+                    600 => '#0284c7',
+                    700 => '#0369a1',
+                    800 => '#075985',
+                    900 => '#0c4a6e',
+                    950 => '#082f49'
+            ]
             ])
             ->resources([
-                MediaStatisticResource::class
+                // MediaStatisticResource::class
             ])
             ->discoverPages(in: app_path('Filament/Company/Pages'), for: 'App\\Filament\\Company\\Pages')
             ->pages([

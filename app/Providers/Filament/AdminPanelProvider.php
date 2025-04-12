@@ -17,6 +17,7 @@ use Filament\Http\Middleware\AuthenticateSession;
 use App\Filament\Resources\MediaStatisticResource;
 use App\Filament\Resources\TrafficStatResource;
 use App\Filament\Widgets\MediaStatisticFilterWidget;
+use Filament\Enums\ThemeMode;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -37,6 +38,7 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 'role:admin', // tambahan role check
                 ])
+            ->defaultThemeMode(ThemeMode::Dark)
             ->colors([
                     'primary' => Color::Blue,
                     ])

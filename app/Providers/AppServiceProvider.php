@@ -4,9 +4,10 @@ namespace App\Providers;
 
 use Filament\Facades\Filament;
 use Filament\Support\Colors\Color;
-use Illuminate\Support\ServiceProvider;
 use Filament\Support\Facades\FilamentColor;
-
+use App\Http\Responses\LogoutResponse;
+use Illuminate\Support\ServiceProvider;
+use Filament\Http\Responses\Auth\Contracts\LogoutResponse as LogoutResponseContract;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -14,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(LogoutResponseContract::class, LogoutResponse::class);
     }
 
     /**
@@ -31,7 +32,7 @@ class AppServiceProvider extends ServiceProvider
             'danger' => Color::Red,
             'gray' => Color::Zinc,
             'info' => Color::Blue,
-            'primary' => Color::Amber,
+            'primary' => Color::Blue,
             'success' => Color::Green,
             'warning' => Color::Amber,
         ]);
