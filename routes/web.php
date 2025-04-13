@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Company\DashboardController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('login');
 });
 
 Route::get('/login', function () {

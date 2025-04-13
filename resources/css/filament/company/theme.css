@@ -1,0 +1,30 @@
+@import "../../../../vendor/filament/filament/resources/css/theme.css";
+
+@config 'tailwind.config.js';
+
+:root {
+    --primary: #3b82f6; /* Biru Tailwind */
+    --secondary: #64748b;
+    --danger: #ef4444;
+    --success: #10b981;
+    --warning: #f59e0b;
+}
+
+.fi-body {
+    @apply bg-neutral-200; /* Warna latar */
+}
+
+.fi-sidebar {
+    @apply bg-neutral-200 text-white; /* Warna sidebar */
+}
+
+/* Target tulisan Dashboard di sidebar */
+.fi-sidebar-nav a[href$="dashboard"] {
+    color: #0ef; /* Ganti dengan warna yang Anda inginkan */
+    font-weight: bold; /* Opsional: Membuat teks lebih tebal */
+}
+
+/* Warna saat hover */
+.fi-sidebar-nav a[href$="dashboard"]:hover {
+    color: #10b981; /* Ganti dengan warna hover yang Anda inginkan */
+}
