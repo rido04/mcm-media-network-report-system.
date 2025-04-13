@@ -18,6 +18,7 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Filament\Company\Widgets\MediaStatisticOverview;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use App\Filament\Company\Resources\MediaStatisticResource;
+use App\Filament\Widgets\ActiveAdMediaWidget;
 use App\Filament\Widgets\CommuterlineChart;
 use App\Filament\Widgets\JakartaTrafficChart;
 use App\Filament\Widgets\MediaStatChart;
@@ -68,6 +69,7 @@ class CompanyPanelProvider extends PanelProvider
                 CommuterlineChart::class, // commuterline User chart widget
                 TransjakartaUserChart::class, // Transjakarta user chart
                 JakartaTrafficChart::class, //Jakarta Traffic chart widget
+                ActiveAdMediaWidget::class, // active ad media widget
                 ])
                 ->middleware([
                 EncryptCookies::class,

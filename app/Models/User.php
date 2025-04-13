@@ -47,4 +47,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function adMedia()
+    {
+        return $this->hasMany(AdMedia::class);
+    }
+
 }

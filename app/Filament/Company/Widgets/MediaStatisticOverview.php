@@ -13,7 +13,7 @@ class MediaStatisticOverview extends BaseWidget
 {
     protected static ?string $pollingInterval = '5s'; // Auto-refresh setiap 5 detik
 
-    protected static ?int $sort = 1;
+    protected static ?int $sort = 2;
     protected $listeners = ['refreshStatsWidget' => '$refresh'];
     protected function getCards(): array
     {

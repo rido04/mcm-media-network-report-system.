@@ -10,7 +10,7 @@ class CommuterlineChart extends ChartWidget
 {
     protected static ?string $heading = 'Commuterline User';
     protected int | string | array $columnSpan = 'full';
-
+    public static ?int $sort = 5;
     public ?string $filter = 'daily';
 
     protected function getFilters(): ?array
@@ -28,7 +28,6 @@ class CommuterlineChart extends ChartWidget
         return '200px';
     }
 
-    public static ?int $sort = 4;
 
     protected function getData(): array
     {
