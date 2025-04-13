@@ -43,7 +43,7 @@ class CompanyPanelProvider extends PanelProvider
             ])
             ->brandName('MCM Client')
             ->defaultThemeMode(ThemeMode::Dark)
-            ->viteTheme('resources/css/filament/company/theme.css')
+            // ->viteTheme('resources/css/filament/company/theme.css')
             ->colors([
                 'danger' => Color::Rose,
                 'gray' => Color::Gray,
@@ -53,7 +53,6 @@ class CompanyPanelProvider extends PanelProvider
                 'warning' => Color::Orange,
             ])
             ->resources([
-                // MediaStatisticResource::class
             ])
             ->discoverPages(in: app_path('Filament/Company/Pages'), for: 'App\\Filament\\Company\\Pages')
             ->pages([

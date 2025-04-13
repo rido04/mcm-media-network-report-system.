@@ -34,14 +34,20 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->brandName('MCM Media Networks')
+            // ->viteTheme('resources/css/filament/admin/theme.css')
             ->login()
             ->authMiddleware([
                 'role:admin', // tambahan role check
                 ])
             ->defaultThemeMode(ThemeMode::Dark)
             ->colors([
-                    'primary' => Color::Blue,
-                    ])
+                'danger' => Color::Rose,
+                'gray' => Color::Gray,
+                'info' => Color::Blue,
+                'primary' => Color::Indigo,
+                'success' => Color::Emerald,
+                'warning' => Color::Orange,
+            ])
             ->resources([
                 UserResource::class,
                 MediaStatisticResource::class,
