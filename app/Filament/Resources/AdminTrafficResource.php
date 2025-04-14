@@ -12,12 +12,13 @@ use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\AdminTrafficResource\Pages;
 use App\Filament\Resources\AdminTrafficResource\RelationManagers;
 use App\Filament\Resources\AdminTrafficResource\RelationManagers\DailyImpressionsRelationManager;
-use Filament\Tables\Filters\SelectFilter;
 
 class AdminTrafficResource extends Resource
 {
@@ -29,19 +30,29 @@ class AdminTrafficResource extends Resource
     {
         return 'Traffic';
     }
-
+    protected static function getCategories():array
+    {
+        return [
+            'Transjakarta' => 'Transjakarta',
+            'Commuterline' => 'Commuterline',
+            'DOOH' => 'DOOH',
+            'OOH' => 'OOH',
+        ];
+    }
+    protected static ?string $navigationGroup = 'Media';
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                TextInput::make('category')
-                ->label('Kategori')
-                ->required(),
                 Select::make('user_id')
                 ->label('Perusahaan')
                 ->options(fn () => User::whereHas('roles', fn($query) => $query->where('name', 'company'))
                     ->pluck('name', 'id')
                 )
+                ->required(),
+                Select::make('category')
+                ->label('Kategori')
+                ->options(self::getCategories())
                 ->required(),
             ]);
     }
@@ -66,6 +77,7 @@ class AdminTrafficResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

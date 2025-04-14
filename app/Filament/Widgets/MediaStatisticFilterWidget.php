@@ -2,6 +2,7 @@
 
 namespace App\Filament\Widgets;
 
+use App\Models\MediaStatistic;
 use Filament\Forms;
 use Filament\Widgets\Widget;
 use Illuminate\Support\Facades\Log;
@@ -45,25 +46,28 @@ class MediaStatisticFilterWidget extends Widget implements HasForms
         DatePicker::make('filters.end_date')
             ->label('Tanggal Selesai'),
 
-        Select::make('filters.media_plan')
+            Select::make('filters.media_plan')
             ->label('Media Plan')
-            ->options([
-                'DOOH' => 'DOOH',
-                'OOH' => 'OOH',
-                'Commuterline' => 'Commuterline',
-                'Bus' => 'Bus',
-                'Sosial Media' => 'Sosial Media',
-            ])
-            ->placeholder('Pilih Media Plan'),
+            ->placeholder('Media Plan')
+            ->options(fn () => MediaStatistic::query()
+            ->select('media_plan')
+            ->distinct()
+            ->pluck('media_plan', 'media_plan')),
 
-        Forms\Components\TextInput::make('filters.city')
+        Select::make('filters.city')
             ->label('Kota')
-            ->placeholder('Masukkan nama kota'),
+            ->placeholder('Pilih Kota')
+            ->options(fn () => MediaStatistic::query()
+            ->select('city')
+            ->distinct()
+            ->pluck('city', 'city')),
 
-        Forms\Components\TextInput::make('filters.media_placement')
+            Select::make('filters.media_placement')
             ->label('Media Placement')
-            ->maxLength(10)
-            ->placeholder('Maks. 10 karakter'),
+            ->options(fn () => MediaStatistic::query()
+            ->select('media_placement')
+            ->distinct()
+            ->pluck('media_placement', 'media_placement')),
     ];
     }
 

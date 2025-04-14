@@ -8,8 +8,7 @@ use Filament\Widgets\ChartWidget;
 class MediaStatChart extends ChartWidget
 {
     protected static ?string $heading = 'Total Impression';
-    protected static ?int $sort = 3;
-
+    protected static ?int $sort = 7;
     public function getColumnSpan(): array|int|string
     {
         return 'full'; // Gunakan 12 untuk lebar penuh, 6 untuk setengah, dll.

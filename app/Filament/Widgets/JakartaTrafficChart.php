@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class JakartaTrafficChart extends ChartWidget
 {
-    protected static ?string $heading = 'Jakarta Traffic';
+    protected static ?string $heading = 'Road Traffic';
     protected int | string | array $columnSpan = '50px';
 
     public ?string $filter = 'daily';
@@ -33,7 +33,7 @@ class JakartaTrafficChart extends ChartWidget
     protected function getData(): array
     {
         $userId = Auth::id();
-        $category = 'Jakarta Traffic';
+        $category = ['DOOH', 'OOH'];
 
         $query = DailyImpression::query()
             ->whereHas('adminTraffic', function ($q) use ($userId, $category) {

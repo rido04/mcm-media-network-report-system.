@@ -13,6 +13,7 @@ use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\DailyImpressionResource\Pages;
@@ -23,6 +24,14 @@ class DailyImpressionResource extends Resource
     protected static ?string $model = DailyImpression::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-presentation-chart-line';
+
+    protected static ?string $navigationGroup = 'Media';
+
+    public static function getEloquentQuery(): Builder
+{
+    return parent::getEloquentQuery()
+        ->with(['adminTraffic.user']); // Eager loading
+}
 
     public static function form(Form $form): Form
     {
@@ -60,7 +69,11 @@ class DailyImpressionResource extends Resource
             TextColumn::make('impression')->label('Total Impression'),
             ])->defaultSort('date', 'desc')
             ->filters([
-                //
+                SelectFilter::make('admin_traffic_id')
+                    ->label('Perusahaan')
+                    ->relationship('adminTraffic.user', 'name')
+                    ->searchable()
+                    ->preload()
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

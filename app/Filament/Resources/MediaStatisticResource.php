@@ -30,6 +30,8 @@ class MediaStatisticResource extends Resource
         return 'Media Statistik';
     }
 
+    protected static ?string $navigationGroup = 'Media';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -52,8 +54,6 @@ class MediaStatisticResource extends Resource
             Select::make('media_plan')
                 ->label('Media Plan')
                 ->options([
-                    'DOOH' => 'DOOH',
-                    'OOH' => 'OOH',
                     'Commuterline' => 'Commuterline',
                     'Bus' => 'Bus',
                     'Sosial Media' => 'Sosial Media',

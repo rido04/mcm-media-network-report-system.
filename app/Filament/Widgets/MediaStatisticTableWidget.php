@@ -17,7 +17,7 @@ class MediaStatisticTableWidget extends BaseWidget
     public function table(Table $table): Table
     {
         return $table
-            ->query(MediaStatistic::where('user_id', Auth::id()))
+            ->query(fn () => MediaStatistic::where('user_id', Auth::id()))
             ->columns([
                 Tables\Columns\TextColumn::make('media_plan')
                     ->label('Media Plan')

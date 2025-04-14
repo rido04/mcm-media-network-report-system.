@@ -32,4 +32,9 @@ class AdMedia extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function mediaStatistic()
+    {
+        return $this->belongsTo(MediaStatistic::class, 'media_statistic_id');
+    }
 }

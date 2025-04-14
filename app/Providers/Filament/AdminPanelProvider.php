@@ -4,6 +4,7 @@ namespace App\Providers\Filament;
 
 use App\Filament\Resources\AdMediaResource;
 use App\Filament\Resources\AdminTrafficResource;
+use App\Filament\Resources\AdPerformanceResource;
 use App\Filament\Resources\DailyImpressionResource;
 use Filament\Pages;
 use Filament\Panel;
@@ -54,8 +55,8 @@ class AdminPanelProvider extends PanelProvider
                 MediaStatisticResource::class,
                 AdminTrafficResource::class,
                 DailyImpressionResource::class,
-                TrafficStatResource::class,
                 AdMediaResource::class,
+                AdPerformanceResource::class,
             ])
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([

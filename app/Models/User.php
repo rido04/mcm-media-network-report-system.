@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Spatie\Permission\Contracts\Role;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -51,6 +52,11 @@ class User extends Authenticatable
     public function adMedia()
     {
         return $this->hasMany(AdMedia::class);
+    }
+
+    public function role()
+    {
+        return $this->belongsToMany(Role::class);
     }
 
 }

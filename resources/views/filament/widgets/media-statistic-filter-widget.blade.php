@@ -22,17 +22,19 @@
             class="absolute right-0 mt-2 w-72 bg-white dark:bg-gray-800 rounded-md shadow-lg z-50 border border-gray-200 dark:border-gray-700"
             style="display: none;"
         >
-            <div class="p-10 space-y-4">
-                <div class="grid grid-cols-2 gap-3">
+            <div class="p-4 space-y-4"> <!-- Ubah p-10 menjadi p-4 untuk padding yang lebih rapi -->
+                <div class="grid grid-cols-2 gap-4 px-3"> <!-- Tambahkan px-3 untuk padding horizontal -->
                     {{ $this->form }}
                 </div>
 
-                <button
-                    wire:click="applyFilters"
-                    class="w-full py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-md text-sm font-medium transition-colors"
-                >
-                    Terapkan Filter
-                </button>
+                <div class="px-3"> <!-- Tambahkan container dengan padding untuk tombol -->
+                    <button
+                        wire:click="applyFilters"
+                        class="w-full py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-md text-sm font-medium transition-colors"
+                    >
+                        Terapkan Filter
+                    </button>
+                </div>
             </div>
         </div>
     </div>

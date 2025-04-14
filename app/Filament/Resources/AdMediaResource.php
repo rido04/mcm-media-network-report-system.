@@ -23,17 +23,30 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\AdMediaResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\AdMediaResource\RelationManagers;
+use Filament\Actions\DeleteAction as ActionsDeleteAction;
 
 class AdMediaResource extends Resource
 {
     protected static ?string $model = AdMedia::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-play-circle';
+    protected static ?string $navigationIcon = 'heroicon-o-play-pause';
+
+    public static function getEloquentQuery():Builder
+    {
+        return parent::getEloquentQuery()
+            ->with(['user', 'mediaStatistic']); // Eager loading
+    }
 
     public static function  getPluralLabel(): string
     {
         return 'Media Display';
     }
+
+    public static function getNavigationLabel(): string
+    {
+        return 'Media Display';
+    }
+    protected static ?string $navigationGroup = 'Media';
 
     public static function form(Form $form): Form
     {
@@ -85,20 +98,18 @@ class AdMediaResource extends Resource
     {
         return $table
             ->columns([
-                //
-            ])
+            TextColumn::make('user.name')->label('Company'),
+            TextColumn::make('mediaStatistic.media_plan')->label('Media Plan'),
+            ImageColumn::make('image_path')->circular(),
+            TextColumn::make('start_date')->date(),
+            TextColumn::make('end_date')->date(),
+            ])->defaultSort('start_date', 'desc')
             ->filters([
-                TextColumn::make('user.name')->label('Company'),
-                TextColumn::make('media_plan'),
-                ImageColumn::make('image_path')->circular(),
-                TextColumn::make('start_date')->date(),
-                TextColumn::make('end_date')->date(),
-            ])->filters([])->actions([
-                EditAction::make(),
-                DeleteAction::make(),
+                //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
