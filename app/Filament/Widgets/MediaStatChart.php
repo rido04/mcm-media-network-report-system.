@@ -7,7 +7,7 @@ use Filament\Widgets\ChartWidget;
 
 class MediaStatChart extends ChartWidget
 {
-    protected static ?string $heading = 'Total Impression';
+    protected static ?string $heading = 'Performance';
     protected static ?int $sort = 7;
     public function getColumnSpan(): array|int|string
     {
