@@ -58,12 +58,10 @@ class AdMediaResource extends Resource
                     ->pluck('name', 'id'))
                 ->searchable()
                 ->required(),
-
             Select::make('media_statistic_id')
                 ->label('Media Plan')
                 ->options(function (callable $get) {
                     $userId = $get('user_id');
-
                     return $userId
                         ? MediaStatistic::where('user_id', $userId)
                             ->pluck('media_plan', 'id') // Ambil ID dan nama media_plan
@@ -72,22 +70,21 @@ class AdMediaResource extends Resource
                 ->searchable()
                 ->required()
                 ->reactive(),
-
             FileUpload::make('image_path')
                 ->image()
                 ->disk('public')
                 ->directory('image')
                 ->visibility('public')
                 ->required(),
-
+            TextInput::make('title')
+                ->label('Judul')
+                ->required(),
             Textarea::make('description')
                 ->rows(4)
                 ->maxLength(1000),
-
             DatePicker::make('start_date')
                 ->label('Tanggal Mulai')
                 ->required(),
-
             DatePicker::make('end_date')
                 ->label('Tanggal Selesai')
                 ->required(),

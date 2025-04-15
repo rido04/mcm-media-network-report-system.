@@ -13,6 +13,7 @@ class AdMedia extends Model
         'user_id',
         'media_statistic_id',
         'image_path',
+        'title',
         'description',
         'start_date',
         'end_date'

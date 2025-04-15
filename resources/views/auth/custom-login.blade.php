@@ -10,7 +10,8 @@
 
 <div class="container">
     <div class="login-box">
-        <h2>MCM Media Networks</h2>
+        <h2>MCM Portal</h2>
+        <h4>Login</h4>
 
         <form method="POST" action="{{ route('login') }}">
             @csrf

@@ -5,15 +5,19 @@ namespace App\Filament\Widgets;
 use App\Models\AdminTraffic;
 use App\Models\AdPerformance;
 use Filament\Widgets\ChartWidget;
-use Filament\Widgets\BarChartWidget;
 use Illuminate\Support\Facades\Auth;
+use App\Models\MediaStatistic;
 
 class AdPerformanceChart extends ChartWidget
 {
-    protected static ?string $heading = 'Total Impresison';
+    protected static ?string $heading = 'Total Impression';
     protected static ?int $sort = 2;
-    protected int|string|array $columnSpan = '50%';
+    protected int|string|array $columnSpan = 'full';
 
+    public function getMaxHeight(): string|null
+    {
+        return '500px';
+    }
     protected function getFilters(): ?array
     {
         return [
@@ -25,57 +29,82 @@ class AdPerformanceChart extends ChartWidget
 
     protected function getData(): array
     {
-        $userId = Auth::id();
-        $selectedFilter = $this->filters['daily'] ?? 'daily';
+        $data = AdPerformance::with(['adminTraffic.user'])
+            ->whereHas('adminTraffic', fn($q) => $q->where('user_id', Auth::id()))
+            ->select([
+                'admin_traffic_id',
+                'used_placement',
+                'available_placement'
+            ])
+            ->get()
+            ->groupBy('adminTraffic.category');
 
-        $dateFrom = match ($selectedFilter) {
-            'weekly' => now()->subWeek(),
-            'monthly' => now()->subMonth(),
-            default => now()->subDay(),
-        };
+        $datasets = [];
+        $labels = [];
 
-        $adminTraffics = AdminTraffic::where('user_id', $userId)->get()->groupBy('category');
-
-        $commuterlineIds = $adminTraffics->get('Commuterline', collect())->pluck('id');
-        $transjakartaIds = $adminTraffics->get('Transjakarta', collect())->pluck('id');
-
-        $trafficIds = collect()
-            ->merge($adminTraffics->get('DOOH', collect())->pluck('id'))
-            ->merge($adminTraffics->get('OOH', collect())->pluck('id'));
-
-        $commuterlineSum = AdPerformance::whereIn('admin_traffic_id', $commuterlineIds)
-            ->where('date', '>=', $dateFrom)
-            ->sum('performance');
-
-        $transjakartaSum = AdPerformance::whereIn('admin_traffic_id', $transjakartaIds)
-            ->where('date', '>=', $dateFrom)
-            ->sum('performance');
-
-        $trafficSum = AdPerformance::whereIn('admin_traffic_id', $trafficIds)
-            ->where('date', '>=', $dateFrom)
-            ->sum('performance');
+        foreach ($data as $category => $performances) {
+            $labels[] = $category;
+            $datasets['used'][] = $performances->sum('used_placement');
+            $datasets['available'][] = $performances->sum('available_placement');
+        }
 
         return [
             'datasets' => [
                 [
-                    'label' => 'Ad Performance',
-                    'data' => [
-                        $transjakartaSum,
-                        $commuterlineSum,
-                        $trafficSum,
-                    ],
-                    'backgroundColor' => [
-                        'rgba(16, 185, 129, 0.7)',    // Transjakarta
-                        'rgba(59, 130, 246, 0.7)',    // Commuterline
-                        'rgba(234, 88, 12, 0.7)',     // Traffic
-                    ],
+                    'label' => 'Used Placement',
+                    'data' => $datasets['used'] ?? [],
+                    'backgroundColor' => '#3b82f6',
+                    'borderColor' => '#2563eb',
+                    'borderWidth' => 1,
+                    'borderRadius' => 4,
+                ],
+                [
+                    'label' => 'Available Placement',
+                    'data' => $datasets['available'] ?? [],
+                    'backgroundColor' => '#d1d5db',
+                    'borderColor' => '#9ca3af',
+                    'borderWidth' => 1,
+                    'borderRadius' => 4,
                 ],
             ],
-            'labels' => ['Transjakarta', 'Commuterline', 'Traffic (OOH + DOOH)'],
+            'labels' => $labels,
         ];
     }
 
-    public function getType():string
+    protected function getOptions(): array
+    {
+        return [
+            'scales' => [
+                'x' => [
+                    'stacked' => false, // Bar berdampingan
+                    'grid' => ['display' => false],
+                ],
+                'y' => [
+                    'beginAtZero' => true,
+                    'ticks' => ['stepSize' => 1],
+                ],
+            ],
+            'plugins' => [
+                'legend' => [
+                    'position' => 'top',
+                    'labels' => ['boxWidth' => 12],
+                ],
+                'tooltip' => [
+                    'mode' => 'index',
+                    'intersect' => false,
+                    'callbacks' => [
+                        'label' => 'function(context) {
+                            return context.dataset.label + ": " + context.parsed.y + " placements";
+                        }'
+                    ]
+                ]
+            ],
+            'responsive' => true,
+            'maintainAspectRatio' => false,
+        ];
+    }
+
+    public function getType(): string
     {
         return 'bar';
     }

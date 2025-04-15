@@ -38,7 +38,7 @@ class JakartaTrafficChart extends ChartWidget
         $query = DailyImpression::query()
             ->whereHas('adminTraffic', function ($q) use ($userId, $category) {
                 $q->where('user_id', $userId)
-                  ->where('category', $category);
+                  ->whereIn('category', $category); //menggunakan where in untuk multiple category
             });
 
         switch ($this->filter) {

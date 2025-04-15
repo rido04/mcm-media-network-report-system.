@@ -3,15 +3,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class AdPerformance extends Model
+class MediaPlacement extends Model
 {
     protected $fillable = [
         'admin_traffic_id',
-        'used_placement',
-        'available_placement',
+        'user_id',
+        'media',
+        'size',
+        'space_ads',
+        'daily_impression_id',
     ];
 
+    // Di model MediaPlacement
     public function adminTraffic()
     {
         return $this->belongsTo(AdminTraffic::class);

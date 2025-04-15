@@ -2,24 +2,28 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Resources\AdMediaResource;
-use App\Filament\Resources\AdminTrafficResource;
-use App\Filament\Resources\AdPerformanceResource;
-use App\Filament\Resources\DailyImpressionResource;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\Widgets;
 use Filament\PanelProvider;
+use Filament\Enums\ThemeMode;
 use Filament\Support\Colors\Color;
 use App\Filament\Resources\UserResource;
 use Filament\Http\Middleware\Authenticate;
-use Illuminate\Session\Middleware\StartSession;
-use Illuminate\Cookie\Middleware\EncryptCookies;
-use Filament\Http\Middleware\AuthenticateSession;
-use App\Filament\Resources\MediaStatisticResource;
+use App\Filament\Resources\AdMediaResource;
+use App\Filament\Resources\MediaPlanResource;
 use App\Filament\Resources\TrafficStatResource;
+use Illuminate\Session\Middleware\StartSession;
+use App\Filament\Resources\AdminTrafficResource;
+use Illuminate\Cookie\Middleware\EncryptCookies;
+use App\Filament\Resources\AdPerformanceResource;
+use App\Filament\Resources\DocumentationResource;
+use Filament\Http\Middleware\AuthenticateSession;
+use App\Filament\Resources\MediaPlacementResource;
+use App\Filament\Resources\MediaStatisticResource;
+use App\Filament\Resources\DailyImpressionResource;
+use App\Filament\Resources\PlayLogResource;
 use App\Filament\Widgets\MediaStatisticFilterWidget;
-use Filament\Enums\ThemeMode;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -57,6 +61,10 @@ class AdminPanelProvider extends PanelProvider
                 DailyImpressionResource::class,
                 AdMediaResource::class,
                 AdPerformanceResource::class,
+                MediaPlacementResource::class,
+                MediaPlanResource::class,
+                PlayLogResource::class,
+                DocumentationResource::class,
             ])
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([

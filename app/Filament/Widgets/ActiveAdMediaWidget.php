@@ -6,6 +6,7 @@ use App\Models\AdMedia;
 use Filament\Widgets\Widget;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Filament\Support\Facades\FilamentAsset;
 
 class ActiveAdMediaWidget extends Widget
 {
@@ -28,5 +29,30 @@ class ActiveAdMediaWidget extends Widget
         }
 
         return $records;
+    }
+    protected function getViewData(): array
+    {
+        return [
+            'records' => $this->getRecords()
+        ];
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        
+        FilamentAsset::register([
+            $this->makeAsset('style', 'https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css'),
+            $this->makeAsset('style', asset('css/filament/swiper.css')),
+            $this->makeAsset('style', asset('../resources/css/filament/swiper.css')),
+            $this->makeAsset('script', 'https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js'),
+        ]);
+    }
+    
+    private function makeAsset(string $type, string $path): mixed
+    {
+        return $type === 'style' 
+            ? FilamentAsset::style(md5($path), $path)
+            : FilamentAsset::script(md5($path), $path);
     }
 }

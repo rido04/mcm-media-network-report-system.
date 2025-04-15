@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ad_performances', function (Blueprint $table) {
+        Schema::create('media_plans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('admin_traffic_id')->constrained('admin_traffic')->onDelete('cascade');
-            $table->integer('used_placement');
-            $table->integer('available_placement')->default(0);
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('media');
+            $table->date('start_date');
+            $table->date('end_date');
+            $table->string('total_impression');
             $table->timestamps();
         });
     }
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ad_performances');
+        Schema::dropIfExists('media_plans');
     }
 };

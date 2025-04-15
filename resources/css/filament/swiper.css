@@ -1,0 +1,41 @@
+.my-swiper {
+    width: 100%;
+    padding: 10px 0;
+}
+
+.my-swiper .swiper-slide {
+    width: 85%;
+    background: #fff;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.dark .my-swiper .swiper-slide {
+    background: #1f2937;
+}
+
+.my-swiper .swiper-button-next,
+.my-swiper .swiper-button-prev {
+    color: #3b82f6;
+    background: rgba(255, 255, 255, 0.8);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    padding: 10px;
+    --swiper-navigation-size: 20px;
+    backdrop-filter: blur(4px);
+}
+
+.dark .my-swiper .swiper-button-next,
+.dark .my-swiper .swiper-button-prev {
+    background: rgba(31, 41, 55, 0.8);
+}
+
+.my-swiper .swiper-pagination-bullet {
+    background: #cbd5e0;
+}
+
+.my-swiper .swiper-pagination-bullet-active {
+    background: #3b82f6;
+}

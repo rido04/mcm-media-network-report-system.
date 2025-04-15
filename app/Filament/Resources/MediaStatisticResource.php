@@ -10,14 +10,17 @@ use Filament\Tables\Table;
 use App\Models\MediaStatistic;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
+use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\MediaStatisticResource\Pages;
 use App\Filament\Resources\MediaStatisticResource\RelationManagers;
-use Filament\Tables\Actions\DeleteAction;
 
 class MediaStatisticResource extends Resource
 {
@@ -55,7 +58,7 @@ class MediaStatisticResource extends Resource
                 ->label('Media Plan')
                 ->options([
                     'Commuterline' => 'Commuterline',
-                    'Bus' => 'Bus',
+                    'Transjakarta' => 'Transjakarta',
                     'Sosial Media' => 'Sosial Media',
                 ])
                 ->required(),
@@ -86,12 +89,12 @@ class MediaStatisticResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                EditAction::make(),
                 DeleteAction::make()
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                DeleteBulkAction::make(),
                 ]),
             ]);
     }
