@@ -40,7 +40,7 @@ class MediaStatisticResource extends Resource
         return $form
             ->schema([
                 Select::make('user_id')
-                ->label('Perusahaan')
+                ->label('Client')
                 ->options(User::whereHas('roles', fn($q) => $q->where('name', 'company'))
                     ->pluck('name', 'id'))
                 ->searchable()
@@ -49,15 +49,15 @@ class MediaStatisticResource extends Resource
                 ->label('Media')
                 ->required(),
             DatePicker::make('start_date')
-                ->label('Tanggal Mulai')
+                ->label('Start Date')
                 ->required(),
 
             DatePicker::make('end_date')
-                ->label('Tanggal Selesai')
+                ->label('End Date')
                 ->required(),
 
             TextInput::make('city')
-                ->label('Kota/Distrik')
+                ->label('City/District')
                 ->required(),
             ]);
     }
@@ -74,7 +74,7 @@ class MediaStatisticResource extends Resource
         )
         ->columns([
             TextColumn::make('user.name')
-                ->label('Perusahaan')
+                ->label('Client')
                 ->sortable(),
 
             TextColumn::make('media')
@@ -83,17 +83,17 @@ class MediaStatisticResource extends Resource
                 ->searchable(),
 
             TextColumn::make('city')
-                ->label('Kota/Distrik')
+                ->label('City/District')
                 ->sortable()
                 ->searchable(),
 
             TextColumn::make('start_date')
-                ->label('Mulai')
+                ->label('Start')
                 ->date()
                 ->sortable(),
 
             TextColumn::make('end_date')
-                ->label('Selesai')
+                ->label('End')
                 ->date()
                 ->sortable(),
 
@@ -106,7 +106,7 @@ class MediaStatisticResource extends Resource
 
             // Rata-rata per hari (contoh tambahan)
             TextColumn::make('avg_impression')
-                ->label('Rata-rata/Hari')
+                ->label('Total Impression per Day')
                 ->state(function ($record) {
                     $days = $record->dailyImpressions->count();
                     return $days > 0 ? number_format($record->total_impression / $days, 2) : 0;

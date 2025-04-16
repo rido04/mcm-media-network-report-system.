@@ -45,13 +45,13 @@ class AdminTrafficResource extends Resource
         return $form
             ->schema([
                 Select::make('user_id')
-                ->label('Perusahaan')
+                ->label('Client')
                 ->options(fn () => User::whereHas('roles', fn($query) => $query->where('name', 'company'))
                     ->pluck('name', 'id')
                 )
                 ->required(),
                 TextInput::make('category')
-                ->label('Kategori')
+                ->label('Category')
                 ->required(),
             ]);
     }
@@ -61,16 +61,16 @@ class AdminTrafficResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')
-                    ->label('Nama Perusahaan')
+                    ->label('Client')
                     ->getStateUsing(fn ($record) => $record->user?->name ?? '-'),
-                TextColumn::make('category')->label('Kategori'),
+                TextColumn::make('category')->label('Category'),
                 TextColumn::make('highest_impression')->label('Highest'),
                 TextColumn::make('lowest_impression')->label('Lowest'),
                 TextColumn::make('average_impression')->label('Average'),
             ])
             ->filters([
                 SelectFilter::make('user_id')
-                    ->label('Perusahaan')
+                    ->label('Client')
                     ->options(fn () => User::whereHas('roles', fn ($query) => $query->where('name', 'company'))
                         ->pluck('name', 'id')),
             ])

@@ -27,7 +27,7 @@ class CompanyResource extends Resource
         return $form
             ->schema([
                 TextInput::make('name')
-                ->label('Nama Perusahaan')
+                ->label('Client')
                 ->required()
                 ->maxLength(255),
 
@@ -46,7 +46,7 @@ class CompanyResource extends Resource
     {
         return $table
             ->columns([
-            TextColumn::make('name')->label('Nama'),
+            TextColumn::make('name')->label('Client'),
             TextColumn::make('phone')->label('Telepon'),
             TextColumn::make('address')->label('Alamat')
             ])

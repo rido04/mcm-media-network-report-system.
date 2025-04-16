@@ -25,6 +25,10 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\AdMediaResource\RelationManagers;
 use Filament\Actions\DeleteAction as ActionsDeleteAction;
 
+/*
+Resource for managing ad media/media display
+*/
+
 class AdMediaResource extends Resource
 {
     protected static ?string $model = AdMedia::class;
@@ -53,7 +57,7 @@ class AdMediaResource extends Resource
         return $form
             ->schema([
             Select::make('user_id')
-                ->label('Company')
+                ->label('Client')
                 ->options(User::whereHas('roles', fn($q) => $q->where('name', 'company'))
                     ->pluck('name', 'id'))
                 ->searchable()
@@ -64,7 +68,7 @@ class AdMediaResource extends Resource
                     $userId = $get('user_id');
                     return $userId
                         ? MediaStatistic::where('user_id', $userId)
-                            ->pluck('media', 'id') // Ambil ID dan nama media_plan
+                            ->pluck('media', 'id') // ambil
                         : [];
                 })
                 ->searchable()
@@ -95,7 +99,7 @@ class AdMediaResource extends Resource
     {
         return $table
             ->columns([
-            TextColumn::make('user.name')->label('Company'),
+            TextColumn::make('user.name')->label('Client'),
             TextColumn::make('mediaStatistic.media')->label('Media Plan'),
             ImageColumn::make('image_path'),
             TextColumn::make('start_date')->date(),

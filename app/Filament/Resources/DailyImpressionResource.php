@@ -40,14 +40,14 @@ class DailyImpressionResource extends Resource
         return $form
             ->schema([
             Select::make('user_id')
-                ->label('Perusahaan')
+                ->label('Client')
                 ->options(fn () => User::whereHas('roles', fn($query) => $query->where('name', 'company'))
                 ->pluck('name', 'id')
                 )
                 ->required(),
             Select::make('admin_traffic_id')
-                ->label('Kategori')
-                ->relationship('adminTraffic', 'category')
+                ->label('Category')
+                ->relationship('adminTraffic', 'Category')
                 ->required(),
             Select::make('media_statistic_id')
                 ->label('Media Plan')
@@ -55,7 +55,7 @@ class DailyImpressionResource extends Resource
                 ->required(),
 
             DatePicker::make('date')
-                ->label('Tanggal')
+                ->label('Date')
                 ->required(),
 
             TextInput::make('impression')
@@ -69,14 +69,14 @@ class DailyImpressionResource extends Resource
     {
         return $table
             ->columns([
-            TextColumn::make('adminTraffic.user.name')->label('Perusahaan'),
-            TextColumn::make('adminTraffic.category')->label('Kategori'),
-            TextColumn::make('date')->label('Tanggal')->date(),
+            TextColumn::make('adminTraffic.user.name')->label('Client'),
+            TextColumn::make('adminTraffic.category')->label('Category'),
+            TextColumn::make('date')->label('Date')->date(),
             TextColumn::make('impression')->label('Total Impression'),
             ])->defaultSort('date', 'desc')
             ->filters([
                 SelectFilter::make('admin_traffic_id')
-                    ->label('Perusahaan')
+                    ->label('Client')
                     ->relationship('adminTraffic.user', 'name')
                     ->searchable()
                     ->preload()

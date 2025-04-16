@@ -30,7 +30,7 @@ class MediaPlanResource extends Resource
         return $form
             ->schema([
                 Select::make('user_id')
-                ->label('Perusahaan')
+                ->label('Client')
                 ->options(User::whereHas('roles', fn($q) => $q->where('name', 'company'))
                     ->pluck('name', 'id'))
                 ->searchable()
@@ -52,7 +52,7 @@ class MediaPlanResource extends Resource
         return $table
         ->columns([
             TextColumn::make('user.name')
-                ->label('Perusahaan')
+                ->label('Client')
                 ->sortable(),
             TextColumn::make('media')
                 ->label('Media')

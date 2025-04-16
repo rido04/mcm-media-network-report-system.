@@ -74,17 +74,12 @@ class CompanyPanelProvider extends PanelProvider
                 MediaStatisticFilterWidget::class, // filter widget for statistic overview
                 MediaStatisticOverview::class, // statistic overview widget
                 MediaStatChart::class, //total impression widget chart
-                // MediaStatisticTableWidget::class, // widget table
                 CommuterlineChart::class, // commuterline User chart widget
                 TransjakartaUserChart::class, // Transjakarta user chart
                 JakartaTrafficChart::class, //Jakarta Traffic chart widget
                 ActiveAdMediaWidget::class, // active ad media widget
                 AdPerformanceChart::class, // ad performance chart widget
-                // MediaPlanTableWidget::class, // media plan table widget
-                // PlayLogTableWidget::class, // play log table widget
-                // DocumentationWidget::class,
-                // DocumentationGalleryWidget::class,
-                DashboardTabsWidget::class,
+                DashboardTabsWidget::class, // table with tabs widget
                 ])
                 ->middleware([
                 EncryptCookies::class,

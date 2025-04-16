@@ -30,7 +30,7 @@ class PlayLogResource extends Resource
         return $form
             ->schema([
                 Select::make('user_id')
-                ->label('Perusahaan')
+                ->label('Client')
                 ->options(User::whereHas('roles', fn($q) => $q->where('name', 'company'))
                     ->pluck('name', 'id'))
                 ->searchable()
@@ -63,7 +63,7 @@ class PlayLogResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('user.name')
-                ->label('Perusahaan')
+                ->label('Client')
                 ->searchable(),
                 TextColumn::make('device_id')
                 ->label('Device ID')

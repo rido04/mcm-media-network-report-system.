@@ -36,7 +36,7 @@ class AdPerformanceResource extends Resource
         return $form
             ->schema([
                 Select::make('user_id')
-                ->label('Perusahaan')
+                ->label('Client')
                 ->options(fn () => User::whereHas('roles', fn($query) => $query->where('name', 'company'))
                 ->pluck('name', 'id'))
                 ->searchable()
@@ -44,7 +44,7 @@ class AdPerformanceResource extends Resource
                 ->reactive()
                 ,
                 Select::make('admin_traffic_id')
-                ->label('Kategori')
+                ->label('Category')
                 ->options(function (callable $get) {
                     $userId = $get('user_id');
 
@@ -75,8 +75,8 @@ class AdPerformanceResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('adminTraffic.category')->label('Kategori'),
-                TextColumn::make('adminTraffic.user.name')->label('Company'),
+                TextColumn::make('adminTraffic.category')->label('Category'),
+                TextColumn::make('adminTraffic.user.name')->label('Client'),
                 TextColumn::make('used_placement')->label('Used Placement'),
                 TextColumn::make('available_placement')->label('Available Placement'),
             ])

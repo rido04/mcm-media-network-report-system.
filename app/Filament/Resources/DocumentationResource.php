@@ -35,7 +35,7 @@ class DocumentationResource extends Resource
         return $form
             ->schema([
                 Select::make('user_id')
-                ->label('Perusahaan')
+                ->label('Client')
                 ->options(User::whereHas('roles', fn($q) => $q->where('name', 'company'))
                     ->pluck('name', 'id'))
                 ->searchable()
@@ -58,7 +58,7 @@ class DocumentationResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('user.name')
-                ->label('Perusahaan')
+                ->label('Client')
                 ->searchable(),
                 ImageColumn::make('image_path')
                 ->label('Image'),

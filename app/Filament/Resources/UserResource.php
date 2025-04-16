@@ -40,15 +40,19 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name')->label('Nama Perusahaan')->required(),
-                TextInput::make('email')->email()->required(),
+                TextInput::make('name')->label('Client Name')->required(),
+                TextInput::make('email')
+                ->label('Email')
+                ->email()
+                ->required(),
                 TextInput::make('password')
                     ->password()
+                    ->label('Password')
                     ->required(fn ($livewire) => $livewire instanceof CreateRecord)
                     ->dehydrated(fn ($state) => filled($state))
                     ->dehydrateStateUsing(fn ($state) => bcrypt($state)),
-                Textarea::make('company_address')->label('Alamat Perusahaan')->required(),
-                TextInput::make('company_phone')->label('Telepon')->required(),
+                Textarea::make('company_address')->label('Address')->required(),
+                TextInput::make('company_phone')->label('Phone')->required(),
 
             ]);
     }
@@ -58,10 +62,10 @@ class UserResource extends Resource
         return $table
             ->columns([
             TextColumn::make('name')
-            ->label('Nama Perusahaan'),
+            ->label('Client Name'),
             TextColumn::make('email'),
-            TextColumn::make('company_address')->label('Alamat'),
-            TextColumn::make('company_phone')->label('No Telp'),
+            TextColumn::make('company_address')->label('Address'),
+            TextColumn::make('company_phone')->label('Phone'),
         ])
             ->filters([
                 //

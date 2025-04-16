@@ -33,13 +33,13 @@ class MediaPlacementResource extends Resource
         return $form
             ->schema([
                 Select::make('user_id')
-                ->label('Perusahaan')
+                ->label('Client')
                 ->options(User::whereHas('roles', fn($q) => $q->where('name', 'company'))
                     ->pluck('name', 'id'))
                 ->searchable()
                 ->required(),
                 Select::make('admin_traffic_id')
-                ->label('Kategori')
+                ->label('Category')
                 ->options(function (callable $get) {
                     $userId = $get('user_id');
 
@@ -91,14 +91,14 @@ class MediaPlacementResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('user.name')
-                ->label('Perusahaan')
+                ->label('Client')
                 ->sortable()
                 ->searchable(),
                 TextColumn::make('media')
                 ->label('Media')
                 ->sortable()
                 ->searchable(),
-                TextColumn::make('adminTraffic.category')->label('Kategori'),
+                TextColumn::make('adminTraffic.category')->label('Category'),
                 TextColumn::make('size')
                 ->label('Size')
                 ->sortable()
