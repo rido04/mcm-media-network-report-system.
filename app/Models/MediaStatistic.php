@@ -22,7 +22,7 @@ public function user()
 
 public function dailyImpressions()
 {
-    return $this->hasMany(DailyImpression::class);
+    return $this->hasMany(DailyImpression::class, 'media_statistic_id');
 }
 
 }

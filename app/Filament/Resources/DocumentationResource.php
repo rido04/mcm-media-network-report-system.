@@ -27,7 +27,7 @@ class DocumentationResource extends Resource
 {
     protected static ?string $model = Documentation::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-camera';
 
     protected static ?string $navigationGroup = 'Table Log';
     public static function form(Form $form): Form

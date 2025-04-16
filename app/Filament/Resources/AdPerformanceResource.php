@@ -23,7 +23,12 @@ class AdPerformanceResource extends Resource
 {
     protected static ?string $model = AdPerformance::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-play-circle';
+    protected static ?string $navigationIcon = 'heroicon-o-archive-box';
+
+    public static function getPluralLabel():string
+    {
+        return 'Storage';
+    }
 
     protected static ?string $navigationGroup = 'Media';
     public static function form(Form $form): Form
@@ -42,7 +47,7 @@ class AdPerformanceResource extends Resource
                 ->label('Kategori')
                 ->options(function (callable $get) {
                     $userId = $get('user_id');
-                    
+
                     if (!$userId) {
                         return [];
                     }

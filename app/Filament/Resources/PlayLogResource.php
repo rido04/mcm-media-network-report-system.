@@ -22,7 +22,7 @@ class PlayLogResource extends Resource
 {
     protected static ?string $model = PlayLog::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-document-chart-bar';
 
     protected static ?string $navigationGroup = 'Table Log';
     public static function form(Form $form): Form
