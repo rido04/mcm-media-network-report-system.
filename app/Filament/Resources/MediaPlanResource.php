@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use Carbon\Carbon;
 use Filament\Forms;
 use App\Models\User;
 use Filament\Tables;
@@ -36,21 +37,12 @@ class MediaPlanResource extends Resource
                 ->required(),
                 TextInput::make('media')
                 ->label('Media')
-                ->searchable()
                 ->required(),
                 DatePicker::make('start-date')
-                ->label('Start Date') 
+                ->label('Start Date')
                 ->required(),
                 DatePicker::make('end-date')
                 ->label('End Date')
-                ->required(),
-                TextInput::make('remaining_days')
-                ->numeric()
-                ->label('Remaining Days')
-                ->required(),   
-                TextInput::make('total_impression')
-                ->numeric()
-                ->label('Total Impression')
                 ->required(),
             ]);
     }
@@ -58,31 +50,38 @@ class MediaPlanResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([
-                TextColumn::make('user.name')
-                    ->label('Perusahaan')
-                    ->sortable()
-                    ->searchable(),
-                TextColumn::make('media')
-                    ->label('Media')
-                    ->sortable()
-                    ->searchable(),
-                TextColumn::make('start_date')
-                    ->label('Start Date')
-                    ->sortable()
-                    ->date(),
-                TextColumn::make('end_date')
-                    ->label('End Date')
-                    ->sortable()
-                    ->date(),
-                TextColumn::make('remaining_days')
-                    ->label('Remaining Days')
-                    ->sortable()
-                    ->searchable(),
-                TextColumn::make('total_impression')
-                    ->label('Total Impression')
-                    ->sortable()
-                    ->searchable(),
+        ->columns([
+            TextColumn::make('user.name')
+                ->label('Perusahaan')
+                ->sortable(),
+            TextColumn::make('media')
+                ->label('Media')
+                ->sortable()
+                ->searchable(),
+            TextColumn::make('start_date')
+                ->label('Start Date')
+                ->sortable()
+                ->date(),
+            TextColumn::make('end_date')
+                ->label('End Date')
+                ->sortable()
+                ->date(),
+            TextColumn::make('remaining_days')
+                ->label('Remaining Days')
+                ->sortable()
+                ->getStateUsing(function ($record) {
+                    $endDate = Carbon::parse($record->end_date);
+                    $now = Carbon::now();
+                    return $now->diffInDays($endDate, false); // false untuk mendapatkan nilai negatif jika sudah lewat
+                })
+                ->searchable(),
+            TextColumn::make('total_impression')
+                ->label('Total Impression')
+                ->sortable()
+                ->getStateUsing(function ($record) {
+                    return $record->daily_impressions->sum('impression');
+                })
+                ->searchable(),
             ])
             ->filters([
                 //

@@ -11,4 +11,9 @@ class Documentation extends Model
         'image_path',
         'description',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

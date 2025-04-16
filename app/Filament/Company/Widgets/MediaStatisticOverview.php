@@ -27,7 +27,7 @@ class MediaStatisticOverview extends BaseWidget
         $mediaStats = MediaStatistic::where('user_id', $user->id)
         ->when($filters['start_date'] ?? null, fn($q, $val) => $q->whereDate('start_date', '>=', $val))
         ->when($filters['end_date'] ?? null, fn($q, $val) => $q->whereDate('end_date', '<=', $val))
-        ->when($filters['media_plan'] ?? null, fn($q, $val) => $q->where('media_plan', $val))
+        ->when($filters['media'] ?? null, fn($q, $val) => $q->where('media_plan', $val))
         ->when($filters['city'] ?? null, fn($q, $val) => $q->where('city', 'like', "%$val%"))
         ->when($filters['media_placement'] ?? null, fn($q, $val) => $q->where('media_placement', 'like', "%$val%"))
         ->get();

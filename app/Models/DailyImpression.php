@@ -7,7 +7,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class DailyImpression extends Model
 {
-    protected $fillable = ['admin_traffic_id', 'date', 'impression'];
+    protected $fillable = ['admin_traffic_id','media_statistic_id', 'date', 'impression'];
+    protected $casts = [
+        'date' => 'date',
+    ];
+
 
     public function adminTraffic(): BelongsTo
     {
@@ -17,5 +21,10 @@ class DailyImpression extends Model
     public function user()
     {
         return $this->adminTraffic->user();
+    }
+
+    public function mediaStatistic()
+    {
+        return $this->belongsTo(MediaStatistic::class);
     }
 }

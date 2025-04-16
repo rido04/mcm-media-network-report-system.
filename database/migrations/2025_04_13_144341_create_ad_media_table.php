@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // company
             $table->foreignId('media_statistic_id')->constrained('media_statistics')->onDelete('cascade'); // Relasi ke media_statistics
             $table->string('image_path'); // gambar iklan
+            $table->string('title');
             $table->text('description')->nullable();
             $table->date('start_date');
             $table->date('end_date');

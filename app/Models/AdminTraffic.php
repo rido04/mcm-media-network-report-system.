@@ -39,4 +39,9 @@ class AdminTraffic extends Model
     {
         return $this->hasMany(AdPerformance::class, 'admin_traffic_id');
     }
+
+    public function dailyImpression()
+    {
+        return $this->hasMany(DailyImpression::class, 'admin_traffic_id');
+    }
 }

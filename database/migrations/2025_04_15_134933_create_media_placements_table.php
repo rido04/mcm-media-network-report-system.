@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('media')->max(10);
             $table->string('space_ads');
             $table->string('size');
-            $table->foreignId('daily_impression_id')->contrained()->onDelete('cascade');
+            $table->foreignId('daily_impression_id')->nullable()->contrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

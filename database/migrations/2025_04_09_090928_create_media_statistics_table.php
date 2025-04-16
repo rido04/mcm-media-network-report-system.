@@ -16,9 +16,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->date('start_date');
             $table->date('end_date');
-            $table->string('media_plan');
+            $table->string('media');
             $table->string('city');
-            $table->string('media_placement', 10);
             $table->timestamps();
         });
     }

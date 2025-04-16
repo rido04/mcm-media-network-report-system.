@@ -27,6 +27,8 @@ class DailyImpressionResource extends Resource
 
     protected static ?string $navigationGroup = 'Media';
 
+    protected static ?string $navigationLabel = 'Impression';
+
     public static function getEloquentQuery(): Builder
 {
     return parent::getEloquentQuery()
@@ -46,6 +48,10 @@ class DailyImpressionResource extends Resource
             Select::make('admin_traffic_id')
                 ->label('Kategori')
                 ->relationship('adminTraffic', 'category')
+                ->required(),
+            Select::make('media_statistic_id')
+                ->label('Media Plan')
+                ->relationship('mediaStatistic', 'media')
                 ->required(),
 
             DatePicker::make('date')

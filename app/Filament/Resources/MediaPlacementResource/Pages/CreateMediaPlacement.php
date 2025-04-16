@@ -9,4 +9,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateMediaPlacement extends CreateRecord
 {
     protected static string $resource = MediaPlacementResource::class;
+
+    public function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

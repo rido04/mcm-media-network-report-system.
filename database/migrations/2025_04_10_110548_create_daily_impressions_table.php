@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('daily_impressions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('admin_traffic_id')->constrained('admin_traffic')->onDelete('cascade'); // Pastikan nama tabel sesuai
+            $table->foreignId('media_statistic_id')->constrained('media_statistics')->onDelete('cascade'); // Pastikan nama tabel sesuai
             $table->date('date');
             $table->integer('impression');
             $table->timestamps();

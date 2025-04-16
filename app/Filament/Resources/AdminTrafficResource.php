@@ -28,17 +28,17 @@ class AdminTrafficResource extends Resource
 
     public static function getPluralLabel():string
     {
-        return 'Traffic';
+        return 'Category';
     }
-    protected static function getCategories():array
-    {
-        return [
-            'Transjakarta' => 'Transjakarta',
-            'Commuterline' => 'Commuterline',
-            'DOOH' => 'DOOH',
-            'OOH' => 'OOH',
-        ];
-    }
+    // protected static function getCategories():array
+    // {
+    //     return [
+    //         'Transjakarta' => 'Transjakarta',
+    //         'Commuterline' => 'Commuterline',
+    //         'DOOH' => 'DOOH',
+    //         'OOH' => 'OOH',
+    //     ];
+    // }
     protected static ?string $navigationGroup = 'Media';
     public static function form(Form $form): Form
     {
@@ -50,9 +50,8 @@ class AdminTrafficResource extends Resource
                     ->pluck('name', 'id')
                 )
                 ->required(),
-                Select::make('category')
+                TextInput::make('category')
                 ->label('Kategori')
-                ->options(self::getCategories())
                 ->required(),
             ]);
     }

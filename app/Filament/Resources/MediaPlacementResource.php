@@ -5,14 +5,17 @@ namespace App\Filament\Resources;
 use Filament\Forms;
 use App\Models\User;
 use Filament\Tables;
+use Filament\Forms\Get;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\AdminTraffic;
 use App\Models\MediaPlacement;
+use App\Models\DailyImpression;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\MediaPlacementResource\Pages;
@@ -39,7 +42,7 @@ class MediaPlacementResource extends Resource
                 ->label('Kategori')
                 ->options(function (callable $get) {
                     $userId = $get('user_id');
-                    
+
                     if (!$userId) {
                         return [];
                     }
@@ -62,10 +65,24 @@ class MediaPlacementResource extends Resource
                 TextInput::make('space_ads')
                 ->label('Space Ads')
                 ->required(),
-                TextInput::make('daily_impression_id')
-                ->numeric()
-                ->label('Impression')
-                ->required(),
+                Select::make('daily_impression_id')
+                ->label('Daily Impression')
+                ->required()
+                ->options(function (Get $get) {
+                    $adminTrafficId = $get('admin_traffic_id');
+
+                    if (!$adminTrafficId) {
+                        return [];
+                    }
+
+                    return DailyImpression::where('admin_traffic_id', $adminTrafficId)
+                        ->orderBy('date', 'desc')
+                        ->get()
+                        ->pluck('impression', 'id');
+                })
+                ->searchable()
+                ->live(),
+
             ]);
     }
 
@@ -81,6 +98,7 @@ class MediaPlacementResource extends Resource
                 ->label('Media')
                 ->sortable()
                 ->searchable(),
+                TextColumn::make('adminTraffic.category')->label('Kategori'),
                 TextColumn::make('size')
                 ->label('Size')
                 ->sortable()
@@ -89,7 +107,7 @@ class MediaPlacementResource extends Resource
                 ->label('Space Ads')
                 ->sortable()
                 ->searchable(),
-                TextColumn::make('daily_impression_id')
+                TextColumn::make('dailyImpression.impression')
                 ->label('Daily Impression')
                 ->sortable()
                 ->searchable(),
@@ -99,6 +117,7 @@ class MediaPlacementResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                DeleteAction::make()
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

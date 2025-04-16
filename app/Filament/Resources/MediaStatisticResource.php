@@ -30,7 +30,7 @@ class MediaStatisticResource extends Resource
 
     public static function getPluralLabel(): ?string
     {
-        return 'Media Statistik';
+        return 'Media Plan';
     }
 
     protected static ?string $navigationGroup = 'Media';
@@ -45,7 +45,9 @@ class MediaStatisticResource extends Resource
                     ->pluck('name', 'id'))
                 ->searchable()
                 ->required(),
-
+                TextInput::make('media')
+                ->label('Media')
+                ->required(),
             DatePicker::make('start_date')
                 ->label('Tanggal Mulai')
                 ->required(),
@@ -54,50 +56,76 @@ class MediaStatisticResource extends Resource
                 ->label('Tanggal Selesai')
                 ->required(),
 
-            Select::make('media_plan')
-                ->label('Media Plan')
-                ->options([
-                    'Commuterline' => 'Commuterline',
-                    'Transjakarta' => 'Transjakarta',
-                    'Sosial Media' => 'Sosial Media',
-                ])
-                ->required(),
-
             TextInput::make('city')
                 ->label('Kota/Distrik')
-                ->required(),
-
-            TextInput::make('media_placement')
-                ->label('Media Placement')
-                ->maxLength(10)
                 ->required(),
             ]);
     }
 
     public static function table(Table $table): Table
-    {
-        return $table
-            ->columns([
-                TextColumn::make('user.name')->label('Perusahaan'),
-                TextColumn::make('media_plan')->label('Media Plan'),
-                TextColumn::make('media_placement')->label('Media Placement'),
-                TextColumn::make('city')->label('Kota/Distrik'),
-                TextColumn::make('start_date')->label('Mulai')->date(),
-                TextColumn::make('end_date')->label('Selesai')->date(),
-            ])
-            ->filters([
-                //
-            ])
-            ->actions([
-                EditAction::make(),
-                DeleteAction::make()
-            ])
-            ->bulkActions([
-                BulkActionGroup::make([
+{
+    return $table
+        ->query(
+            MediaStatistic::query()
+                ->with(['user', 'dailyImpressions'])
+                ->selectRaw('media_statistics.*,
+                    (SELECT SUM(impression) FROM daily_impressions
+                     WHERE daily_impressions.media_statistic_id = media_statistics.id) as total_impression')
+        )
+        ->columns([
+            TextColumn::make('user.name')
+                ->label('Perusahaan')
+                ->sortable(),
+
+            TextColumn::make('media')
+                ->label('Media')
+                ->sortable()
+                ->searchable(),
+
+            TextColumn::make('city')
+                ->label('Kota/Distrik')
+                ->sortable()
+                ->searchable(),
+
+            TextColumn::make('start_date')
+                ->label('Mulai')
+                ->date()
+                ->sortable(),
+
+            TextColumn::make('end_date')
+                ->label('Selesai')
+                ->date()
+                ->sortable(),
+
+            // Total Impression
+            TextColumn::make('total_impression')
+                ->label('Total Impression')
+                ->numeric()
+                ->sortable()
+                ->toggleable(),
+
+            // Rata-rata per hari (contoh tambahan)
+            TextColumn::make('avg_impression')
+                ->label('Rata-rata/Hari')
+                ->state(function ($record) {
+                    $days = $record->dailyImpressions->count();
+                    return $days > 0 ? number_format($record->total_impression / $days, 2) : 0;
+                })
+                ->toggleable(isToggledHiddenByDefault: true),
+        ])
+        ->filters([
+            // Tambahkan filter jika perlu
+        ])
+        ->actions([
+            EditAction::make(),
+            DeleteAction::make()
+        ])
+        ->bulkActions([
+            BulkActionGroup::make([
                 DeleteBulkAction::make(),
-                ]),
-            ]);
-    }
+            ]),
+        ]);
+}
 
     public static function getRelations(): array
     {

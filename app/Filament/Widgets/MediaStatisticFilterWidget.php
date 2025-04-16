@@ -21,9 +21,8 @@ class MediaStatisticFilterWidget extends Widget implements HasForms
     public $filters = [
         'start_date' => null,
         'end_date' => null,
-        'media_plan' => null,
+        'media' => null,
         'city' => null,
-        'media_placement' => null,
     ];
 
     public function applyFilters()
@@ -46,13 +45,13 @@ class MediaStatisticFilterWidget extends Widget implements HasForms
         DatePicker::make('filters.end_date')
             ->label('Tanggal Selesai'),
 
-            Select::make('filters.media_plan')
+            Select::make('filters.media')
             ->label('Media Plan')
             ->placeholder('Media Plan')
             ->options(fn () => MediaStatistic::query()
-            ->select('media_plan')
+            ->select('media')
             ->distinct()
-            ->pluck('media_plan', 'media_plan')),
+            ->pluck('media', 'media')),
 
         Select::make('filters.city')
             ->label('Kota')
@@ -61,13 +60,6 @@ class MediaStatisticFilterWidget extends Widget implements HasForms
             ->select('city')
             ->distinct()
             ->pluck('city', 'city')),
-
-            Select::make('filters.media_placement')
-            ->label('Media Placement')
-            ->options(fn () => MediaStatistic::query()
-            ->select('media_placement')
-            ->distinct()
-            ->pluck('media_placement', 'media_placement')),
     ];
     }
 

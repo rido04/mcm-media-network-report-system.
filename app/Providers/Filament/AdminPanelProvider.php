@@ -62,7 +62,7 @@ class AdminPanelProvider extends PanelProvider
                 AdMediaResource::class,
                 AdPerformanceResource::class,
                 MediaPlacementResource::class,
-                MediaPlanResource::class,
+                // MediaPlanResource::class,
                 PlayLogResource::class,
                 DocumentationResource::class,
             ])

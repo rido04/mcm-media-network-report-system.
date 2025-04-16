@@ -1,3 +1,4 @@
+<x-filament-widgets::widget>
 <div class="w-full space-y-4">
     @foreach($this->getRecords() as $ad)
         <div class="w-full bg-white dark:bg-gray-800 rounded-xl shadow overflow-hidden">
@@ -27,3 +28,4 @@
         </div>
     @endforeach
 </div>
+</x-filament-widgets::widget>

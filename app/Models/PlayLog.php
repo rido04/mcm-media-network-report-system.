@@ -9,10 +9,15 @@ class PlayLog extends Model
     protected $fillable = [
         'device_id',
         'media_name',
-        'playdate',
+        'play_date',
         'longitude',
         'latitude',
         'location',
         'user_id'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

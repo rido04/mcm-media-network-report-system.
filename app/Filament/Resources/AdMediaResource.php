@@ -64,7 +64,7 @@ class AdMediaResource extends Resource
                     $userId = $get('user_id');
                     return $userId
                         ? MediaStatistic::where('user_id', $userId)
-                            ->pluck('media_plan', 'id') // Ambil ID dan nama media_plan
+                            ->pluck('media', 'id') // Ambil ID dan nama media_plan
                         : [];
                 })
                 ->searchable()
@@ -96,8 +96,8 @@ class AdMediaResource extends Resource
         return $table
             ->columns([
             TextColumn::make('user.name')->label('Company'),
-            TextColumn::make('mediaStatistic.media_plan')->label('Media Plan'),
-            ImageColumn::make('image_path')->circular(),
+            TextColumn::make('mediaStatistic.media')->label('Media Plan'),
+            ImageColumn::make('image_path'),
             TextColumn::make('start_date')->date(),
             TextColumn::make('end_date')->date(),
             ])->defaultSort('start_date', 'desc')
