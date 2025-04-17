@@ -29,7 +29,7 @@ class MediaPlanTableWidget extends BaseWidget
                         ->with(['user', 'dailyImpressions'])
                         ->selectRaw('media_statistics.*,
                             (SELECT SUM(impression) FROM daily_impressions
-                             WHERE daily_impressions.media_statistic_id = media_statistics.id) as total_impression')
+                            WHERE daily_impressions.media_statistic_id = media_statistics.id) as total_impression')
             )
             ->columns([
                 TextColumn::make('media')->label('Media'),

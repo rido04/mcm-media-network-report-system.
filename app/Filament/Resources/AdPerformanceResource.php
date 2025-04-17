@@ -30,7 +30,7 @@ class AdPerformanceResource extends Resource
 
     public static function getPluralLabel():string
     {
-        return 'Storage';
+        return 'Availability Storage';
     }
 
     protected static ?string $navigationGroup = 'Media';

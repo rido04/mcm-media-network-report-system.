@@ -35,6 +35,7 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Filament\Company\Widgets\MediaStatisticOverview;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use App\Filament\Company\Resources\MediaStatisticResource;
+use App\Filament\Widgets\CustomAccountWidget;
 use App\Filament\Widgets\DashboardTabsWidget;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -47,6 +48,7 @@ class CompanyPanelProvider extends PanelProvider
     {
         return $panel
             ->id('company')
+            ->font('poppins')
             ->path('company')
             ->favicon(asset('/storage/image/logo_mcm.png'))
             ->login()
@@ -83,7 +85,7 @@ class CompanyPanelProvider extends PanelProvider
                 Pages\Dashboard::class,
             ])
             ->widgets([
-                Widgets\AccountWidget::class,
+                CustomAccountWidget::class, // custom account widget
                 LogoWidget::class, // logo widget
                 MediaStatisticFilterWidget::class, // filter widget for statistic overview
                 MediaStatisticOverview::class, // statistic overview widget

@@ -12,6 +12,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\FileUpload;
 use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Resources\Pages\CreateRecord;
@@ -20,13 +21,15 @@ use Filament\Tables\Actions\DeleteBulkAction;
 use App\Filament\Resources\UserResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\UserResource\RelationManagers;
+use Filament\Tables\Columns\ImageColumn;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
     protected static ?string $navigationGroup = 'User Management';
-    protected static ?string $navigationIcon = 'heroicon-o-building-office-2';
+    protected static ?string $navigationIcon = 'heroicon-o-briefcase';
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->role('company'); //query client menjadi role company
@@ -58,6 +61,19 @@ class UserResource extends Resource
                 TextInput::make('company_phone')
                     ->label('Phone')
                     ->required(),
+                FileUpload::make('company_logo')
+                    ->label('Company Logo')
+                    ->disk('public')
+                    ->directory('logos')
+                    ->visibility('public')
+                    ->image()
+                    ->imageEditor()
+                    ->nullable()
+                    ->saveUploadedFileUsing(function (TemporaryUploadedFile $file) {
+                        $filename = $file->hashName(); // Generate unique filename
+                        $path = $file->storeAs('logos', $filename, 'public'); // Simpan dengan path lengkap
+                        return 'logos/'.$filename; // Simpan full path ke database
+                    })
             ]);
     }
 
@@ -76,6 +92,11 @@ class UserResource extends Resource
             TextColumn::make('company_phone')
                 ->label('Phone')
                 ->searchable(),
+            ImageColumn::make('company_logo')
+                ->label('Company Logo')
+                ->disk('public')
+                ->size(50)
+                ->circular()
         ])
             ->filters([
                 //

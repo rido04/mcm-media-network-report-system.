@@ -53,7 +53,7 @@ class AdminTrafficResource extends Resource
                     ->options(fn () => User::whereHas('roles', fn($query) => $query->where('name', 'company'))
                         ->pluck('name', 'id')
                     )
-                ->required(),
+                    ->required(),
                 TextInput::make('category')
                     ->label('Category')
                     ->required(),

@@ -39,6 +39,7 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
+            ->font('poppins')
             ->id('admin')
             ->path('admin')
             ->favicon(asset('/storage/image/logo_mcm.png'))

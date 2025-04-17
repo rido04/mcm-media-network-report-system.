@@ -11,7 +11,7 @@ class MediaStatChart extends ChartWidget
     protected static ?int $sort = 7;
     public function getColumnSpan(): array|int|string
     {
-        return 'full'; // Gunakan 12 untuk lebar penuh, 6 untuk setengah, dll.
+        return 'full'; // //use 'full' to make the chart full width
     }
 
     public function getMaxHeight(): string|null
@@ -41,7 +41,6 @@ class MediaStatChart extends ChartWidget
         ],
     ];
 }
-
 
     protected function getData(): array
     {
@@ -74,22 +73,20 @@ class MediaStatChart extends ChartWidget
 
         foreach ($data as $row) {
             $labels[] = $row->label;
-            $barValues[] = $row->total; // Data untuk bar chart
-            $lineValues[] = $row->total * 1.2; // Contoh data untuk line chart (modifikasi sesuai kebutuhan)
+            $barValues[] = $row->total; // Data for bar chart
+            $lineValues[] = $row->total * 1.2; // data for line chart
         }
 
         return [
             'datasets' => [
                 [
-                    'type' => 'bar', // Dataset untuk bar chart
+                    'type' => 'bar', // Dataset for bar chart
                     'label' => 'Bar Data',
                     'data' => $barValues,
-                    'backgroundColor' => '#3b82f6', //biru
-                    'borderColor' => '#e5e7eb',
                     'borderWidth' => 1,
                 ],
                 [
-                    'type' => 'line', // Dataset untuk line chart
+                    'type' => 'line', // Dataset for line chart
                     'label' => 'Line Data',
                     'data' => $lineValues,
                     'borderColor' => 'rgba(255, 99, 132, 1)',

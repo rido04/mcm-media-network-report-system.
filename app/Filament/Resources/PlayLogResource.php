@@ -24,7 +24,7 @@ use App\Filament\Resources\PlayLogResource\RelationManagers;
 class PlayLogResource extends Resource
 {
     protected static ?string $model = PlayLog::class;
-    protected static ?string $navigationIcon = 'heroicon-o-document-chart-bar';
+    protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-check';
     protected static ?string $navigationGroup = 'Table Log';
     public static function form(Form $form): Form
     {

@@ -11,7 +11,7 @@ use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 
 class MediaStatisticOverview extends BaseWidget
 {
-    protected static ?string $pollingInterval = '5s'; // Auto-refresh setiap 5 detik
+    protected static ?string $pollingInterval = '5s'; // automatically refresh every 5 seconds
     protected static ?int $sort = 2;
     protected $listeners = ['refreshStatsWidget' => '$refresh'];
     protected function getCards(): array
@@ -20,19 +20,12 @@ class MediaStatisticOverview extends BaseWidget
 
         $filtersData = session('filters', []);
         $filters = $filtersData['filters'] ?? [];
-        Log::info('FILTER FINAL YANG DIPAKAI DI QUERY', $filters);
-
-        Log::info('Session filters di widget statistik:', $filters);
-
         $mediaStats = MediaStatistic::where('user_id', $user->id)
         ->when($filters['start_date'] ?? null, fn($q, $val) => $q->whereDate('start_date', '>=', $val))
         ->when($filters['end_date'] ?? null, fn($q, $val) => $q->whereDate('end_date', '<=', $val))
-        ->when($filters['media'] ?? null, fn($q, $val) => $q->where('media_plan', $val))
+        ->when($filters['media'] ?? null, fn($q, $val) => $q->where('media', $val))
         ->when($filters['city'] ?? null, fn($q, $val) => $q->where('city', 'like', "%$val%"))
-        ->when($filters['media_placement'] ?? null, fn($q, $val) => $q->where('media_placement', 'like', "%$val%"))
         ->get();
-
-
 
         $totalMediaPlan = $mediaStats->count();
         $totalInventory = $mediaStats->pluck('media_placement')->count();
@@ -47,7 +40,7 @@ class MediaStatisticOverview extends BaseWidget
             $now = now();
             $end = Carbon::parse($item->end_date);
 
-            // Hanya tambahkan jika tanggal sekarang <= end_date
+            // Only use if now date <= end date
             if ($now->lessThanOrEqualTo($end)) {
                 $carry += floor($now->diffInDays($end));
             }

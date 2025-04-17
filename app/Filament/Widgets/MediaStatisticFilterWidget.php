@@ -33,7 +33,6 @@ class MediaStatisticFilterWidget extends Widget implements HasForms
         ]);
 
         $this->dispatch('refreshStatsWidget');
-        Log::info('Filters applied', $this->filters);
     }
 
     protected function getFormSchema(): array
