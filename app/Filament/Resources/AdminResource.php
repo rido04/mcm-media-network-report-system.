@@ -21,40 +21,39 @@ use App\Filament\Resources\AdminResource\RelationManagers;
 class AdminResource extends Resource
 {
     protected static ?string $model = User::class;
-
     protected static ?string $navigationGroup = 'User Management';
-
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
-
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->role('admin'); //query client menjadi role company
+        return parent::getEloquentQuery()->role('admin'); //query client menjadi role admin
     }
-
     public static function getPluralLabel(): ?string
     {
         return 'Admin';
     }
-
-
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                TextInput::make('name')->label('Name')->required(),
+                TextInput::make('name')
+                    ->label('Name')
+                    ->required(),
                 TextInput::make('email')
-                ->label('Email')
-                ->email()
-                ->required(),
+                    ->label('Email')
+                    ->email()
+                    ->required(),
                 TextInput::make('password')
                     ->password()
                     ->label('Password')
                     ->required(fn ($livewire) => $livewire instanceof CreateRecord)
                     ->dehydrated(fn ($state) => filled($state))
                     ->dehydrateStateUsing(fn ($state) => bcrypt($state)),
-                Textarea::make('company_address')->label('Address')->required(),
-                TextInput::make('company_phone')->label('Phone')->required(),
-
+                Textarea::make('company_address')
+                    ->label('Address')
+                    ->required(),
+                TextInput::make('company_phone')
+                    ->label('Phone')
+                    ->required(),
             ]);
     }
 
@@ -63,20 +62,25 @@ class AdminResource extends Resource
         return $table
             ->columns([
             TextColumn::make('name')
-            ->label('Name'),
-            TextColumn::make('email'),
-            TextColumn::make('company_address')->label('Address'),
-            TextColumn::make('company_phone')->label('Phone'),
+                ->label('Name')
+                ->searchable(),
+            TextColumn::make('email')
+                ->searchable(),
+            TextColumn::make('company_address')
+                ->label('Address')
+                ->searchable(),
+            TextColumn::make('company_phone')
+                ->label('Phone')
+                ->searchable(),
         ])
             ->filters([
                 //
             ])
             ->actions([
+                //
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                //
             ]);
     }
 

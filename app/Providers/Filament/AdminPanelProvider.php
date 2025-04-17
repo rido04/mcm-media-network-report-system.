@@ -8,10 +8,12 @@ use Filament\Widgets;
 use Filament\PanelProvider;
 use Filament\Enums\ThemeMode;
 use Filament\Support\Colors\Color;
+use App\Filament\Widgets\LogoWidget;
 use App\Filament\Resources\UserResource;
+use App\Filament\Resources\AdminResource;
 use Filament\Http\Middleware\Authenticate;
 use App\Filament\Resources\AdMediaResource;
-use App\Filament\Resources\AdminResource;
+use App\Filament\Resources\PlayLogResource;
 use App\Filament\Resources\MediaPlanResource;
 use App\Filament\Resources\TrafficStatResource;
 use Illuminate\Session\Middleware\StartSession;
@@ -23,7 +25,6 @@ use Filament\Http\Middleware\AuthenticateSession;
 use App\Filament\Resources\MediaPlacementResource;
 use App\Filament\Resources\MediaStatisticResource;
 use App\Filament\Resources\DailyImpressionResource;
-use App\Filament\Resources\PlayLogResource;
 use App\Filament\Widgets\MediaStatisticFilterWidget;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
@@ -42,7 +43,6 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->favicon(asset('/storage/image/logo_mcm.png'))
             ->brandName('MCM Media Networks')
-            // ->viteTheme('resources/css/filament/admin/theme.css')
             ->login()
             ->authMiddleware([
                 'role:admin', // tambahan role check
@@ -57,17 +57,16 @@ class AdminPanelProvider extends PanelProvider
                 'warning' => Color::Orange,
             ])
             ->resources([
-                AdminResource::class,
-                UserResource::class,
-                MediaStatisticResource::class,
-                AdminTrafficResource::class,
-                DailyImpressionResource::class,
-                AdMediaResource::class,
-                AdPerformanceResource::class,
-                MediaPlacementResource::class,
-                // MediaPlanResource::class,
-                PlayLogResource::class,
-                DocumentationResource::class,
+                AdminResource::class, // admin user management
+                UserResource::class, // client user management
+                MediaStatisticResource::class, // media plan management
+                AdminTrafficResource::class, // category management
+                DailyImpressionResource::class, // impression management
+                AdMediaResource::class, // media display management
+                AdPerformanceResource::class, // media storage manaegement
+                MediaPlacementResource::class, // media placement management
+                PlayLogResource::class, // play log management
+                DocumentationResource::class, //documnetation management
             ])
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
@@ -75,6 +74,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->widgets([
                 Widgets\AccountWidget::class,
+                LogoWidget::class, // logo widget
             ])
             ->middleware([
                 EncryptCookies::class,

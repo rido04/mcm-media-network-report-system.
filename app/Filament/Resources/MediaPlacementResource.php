@@ -13,10 +13,13 @@ use App\Models\MediaPlacement;
 use App\Models\DailyImpression;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\MediaPlacementResource\Pages;
 use App\Filament\Resources\MediaPlacementResource\RelationManagers;
@@ -33,56 +36,51 @@ class MediaPlacementResource extends Resource
         return $form
             ->schema([
                 Select::make('user_id')
-                ->label('Client')
-                ->options(User::whereHas('roles', fn($q) => $q->where('name', 'company'))
-                    ->pluck('name', 'id'))
-                ->searchable()
-                ->required(),
+                    ->label('Client')
+                    ->options(User::whereHas('roles', fn($q) => $q->where('name', 'company'))
+                        ->pluck('name', 'id'))
+                    ->searchable()
+                    ->required(),
                 Select::make('admin_traffic_id')
-                ->label('Category')
-                ->options(function (callable $get) {
-                    $userId = $get('user_id');
-
-                    if (!$userId) {
-                        return [];
-                    }
-
-                    return AdminTraffic::query()
-                        ->where('user_id', $userId)
-                        ->get()
-                        ->pluck('category', 'id')
-                        ->toArray();
-                })
-                ->searchable()
-                ->required()
-                ->live(),
+                    ->label('Category')
+                    ->options(function (callable $get) {
+                        $userId = $get('user_id');
+                        if (!$userId) {
+                            return [];
+                        }
+                        return AdminTraffic::query()
+                    ->where('user_id', $userId)
+                    ->get()
+                    ->pluck('category', 'id')
+                    ->toArray();
+                    })
+                    ->searchable()
+                    ->required()
+                    ->live(),
                 TextInput::make('media')
-                ->label('Media')
-                ->required(),
+                    ->label('Media')
+                    ->required(),
                 TextINput::make('size')
-                ->label('Size')
-                ->required(),
+                    ->label('Size')
+                    ->required(),
                 TextInput::make('space_ads')
-                ->label('Space Ads')
-                ->required(),
+                    ->label('Space Ads')
+                    ->required(),
                 Select::make('daily_impression_id')
-                ->label('Daily Impression')
-                ->required()
-                ->options(function (Get $get) {
-                    $adminTrafficId = $get('admin_traffic_id');
-
-                    if (!$adminTrafficId) {
-                        return [];
-                    }
-
-                    return DailyImpression::where('admin_traffic_id', $adminTrafficId)
-                        ->orderBy('date', 'desc')
-                        ->get()
-                        ->pluck('impression', 'id');
-                })
-                ->searchable()
-                ->live(),
-
+                    ->label('Daily Impression')
+                    ->required()
+                    ->options(function (Get $get) {
+                        $adminTrafficId = $get('admin_traffic_id');
+                        if (!$adminTrafficId) {
+                            return [];
+                        }
+                        return DailyImpression::where('admin_traffic_id', $adminTrafficId)
+                    ->orderBy('date', 'desc')
+                    ->get()
+                    ->pluck('impression', 'id');
+                    })
+                    ->searchable()
+                    ->live(),
             ]);
     }
 
@@ -91,37 +89,38 @@ class MediaPlacementResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('user.name')
-                ->label('Client')
-                ->sortable()
-                ->searchable(),
+                    ->label('Client')
+                    ->sortable()
+                    ->searchable(),
                 TextColumn::make('media')
-                ->label('Media')
-                ->sortable()
-                ->searchable(),
-                TextColumn::make('adminTraffic.category')->label('Category'),
+                    ->label('Media')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('adminTraffic.category')
+                    ->label('Category'),
                 TextColumn::make('size')
-                ->label('Size')
-                ->sortable()
-                ->searchable(),
+                    ->label('Size')
+                    ->sortable()
+                    ->searchable(),
                 TextColumn::make('space_ads')
-                ->label('Space Ads')
-                ->sortable()
-                ->searchable(),
+                    ->label('Space Ads')
+                    ->sortable()
+                    ->searchable(),
                 TextColumn::make('dailyImpression.impression')
-                ->label('Daily Impression')
-                ->sortable()
-                ->searchable(),
+                    ->label('Daily Impression')
+                    ->sortable()
+                    ->searchable(),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                EditAction::make(),
                 DeleteAction::make()
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                DeleteBulkAction::make(),
                 ]),
             ]);
     }

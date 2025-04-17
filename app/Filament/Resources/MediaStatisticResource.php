@@ -39,23 +39,21 @@ class MediaStatisticResource extends Resource
     {
         return $form
             ->schema([
-                Select::make('user_id')
+            Select::make('user_id')
                 ->label('Client')
                 ->options(User::whereHas('roles', fn($q) => $q->where('name', 'company'))
                     ->pluck('name', 'id'))
                 ->searchable()
                 ->required(),
-                TextInput::make('media')
+            TextInput::make('media')
                 ->label('Media')
                 ->required(),
             DatePicker::make('start_date')
                 ->label('Start Date')
                 ->required(),
-
             DatePicker::make('end_date')
                 ->label('End Date')
                 ->required(),
-
             TextInput::make('city')
                 ->label('City/District')
                 ->required(),
@@ -68,43 +66,36 @@ class MediaStatisticResource extends Resource
         ->query(
             MediaStatistic::query()
                 ->with(['user', 'dailyImpressions'])
+                // query form realtion with media_statistics
                 ->selectRaw('media_statistics.*,
                     (SELECT SUM(impression) FROM daily_impressions
-                     WHERE daily_impressions.media_statistic_id = media_statistics.id) as total_impression')
-        )
-        ->columns([
+                    WHERE daily_impressions.media_statistic_id = media_statistics.id) as total_impression')
+                )
+                ->columns([
             TextColumn::make('user.name')
                 ->label('Client')
                 ->sortable(),
-
             TextColumn::make('media')
                 ->label('Media')
                 ->sortable()
                 ->searchable(),
-
             TextColumn::make('city')
                 ->label('City/District')
                 ->sortable()
                 ->searchable(),
-
             TextColumn::make('start_date')
                 ->label('Start')
                 ->date()
                 ->sortable(),
-
             TextColumn::make('end_date')
                 ->label('End')
                 ->date()
                 ->sortable(),
-
-            // Total Impression
             TextColumn::make('total_impression')
                 ->label('Total Impression')
                 ->numeric()
                 ->sortable()
                 ->toggleable(),
-
-            // Rata-rata per hari (contoh tambahan)
             TextColumn::make('avg_impression')
                 ->label('Total Impression per Day')
                 ->state(function ($record) {
@@ -122,7 +113,7 @@ class MediaStatisticResource extends Resource
         ])
         ->bulkActions([
             BulkActionGroup::make([
-                DeleteBulkAction::make(),
+            DeleteBulkAction::make(),
             ]),
         ]);
 }

@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * THIS MODEL IS FOR MEDIA PLACEMENT MANAGEMENT
+ */
 namespace App\Models;
 
 use App\Models\DailyImpression;

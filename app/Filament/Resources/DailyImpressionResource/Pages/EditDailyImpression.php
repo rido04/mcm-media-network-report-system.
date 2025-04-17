@@ -9,6 +9,7 @@ use Filament\Resources\Pages\EditRecord;
 class EditDailyImpression extends EditRecord
 {
     protected static string $resource = DailyImpressionResource::class;
+    protected static ?string $title = 'Edit Impression';
 
     protected function getHeaderActions(): array
     {

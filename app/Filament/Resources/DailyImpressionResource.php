@@ -10,11 +10,14 @@ use Filament\Tables\Table;
 use App\Models\DailyImpression;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\DailyImpressionResource\Pages;
 use App\Filament\Resources\DailyImpressionResource\RelationManagers;
@@ -69,24 +72,32 @@ class DailyImpressionResource extends Resource
     {
         return $table
             ->columns([
-            TextColumn::make('adminTraffic.user.name')->label('Client'),
-            TextColumn::make('adminTraffic.category')->label('Category'),
-            TextColumn::make('date')->label('Date')->date(),
-            TextColumn::make('impression')->label('Total Impression'),
-            ])->defaultSort('date', 'desc')
-            ->filters([
+            TextColumn::make('adminTraffic.user.name')
+                ->label('Client')
+                ->searchable(),
+            TextColumn::make('adminTraffic.category')
+                ->label('Category')
+                ->searchable(),
+            TextColumn::make('date')
+                ->label('Date')
+                ->date(),
+            TextColumn::make('impression')
+                ->label('Total Impression'),
+                ])->defaultSort('date', 'desc')
+                ->filters([
                 SelectFilter::make('admin_traffic_id')
                     ->label('Client')
-                    ->relationship('adminTraffic.user', 'name')
+                    ->options(fn () => User::whereHas('roles', fn ($query) => $query->where('name', 'company'))
+                        ->pluck('name', 'id'))
                     ->searchable()
                     ->preload()
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                DeleteBulkAction::make(),
                 ]),
             ]);
     }

@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Widgets\DocumentationWidget;
+use App\Filament\Widgets\LogoWidget;
 use Dom\Document;
 use Filament\Pages;
 use Filament\Panel;
@@ -49,7 +50,7 @@ class CompanyPanelProvider extends PanelProvider
             ->path('company')
             ->favicon(asset('/storage/image/logo_mcm.png'))
             ->login()
-            ->sidebarCollapsibleOnDesktop()
+            ->sidebarFullyCollapsibleOnDesktop()
             ->authMiddleware([
                 'role:company', // role check
             ])
@@ -62,6 +63,18 @@ class CompanyPanelProvider extends PanelProvider
                 'primary' => Color::Indigo,
                 'success' => Color::Emerald,
                 'warning' => Color::Orange,
+                'custom' => [
+                        50 => '#fffbeb',
+                        100 => '#fef3c7',
+                        200 => '#fde68a',
+                        300 => '#fcd34d',
+                        400 => '#fbbf24',
+                        500 => '#f59e0b', // Amber 500
+                        600 => '#d97706',
+                        700 => '#b45309',
+                        800 => '#92400e',
+                        900 => '#78350f',
+                    ],
             ])
             ->resources([
             ])
@@ -71,7 +84,7 @@ class CompanyPanelProvider extends PanelProvider
             ])
             ->widgets([
                 Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                LogoWidget::class, // logo widget
                 MediaStatisticFilterWidget::class, // filter widget for statistic overview
                 MediaStatisticOverview::class, // statistic overview widget
                 MediaStatChart::class, //total impression widget chart

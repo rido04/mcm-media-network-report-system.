@@ -11,10 +11,13 @@ use App\Models\AdminTraffic;
 use App\Models\AdPerformance;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\AdPerformanceResource\Pages;
 use App\Filament\Resources\AdPerformanceResource\RelationManagers;
@@ -36,38 +39,38 @@ class AdPerformanceResource extends Resource
         return $form
             ->schema([
                 Select::make('user_id')
-                ->label('Client')
-                ->options(fn () => User::whereHas('roles', fn($query) => $query->where('name', 'company'))
-                ->pluck('name', 'id'))
-                ->searchable()
-                ->required()
-                ->reactive()
+                    ->label('Client')
+                    ->options(fn () => User::whereHas('roles', fn($query) => $query->where('name', 'company'))
+                    ->pluck('name', 'id'))
+                    ->searchable()
+                    ->required()
+                    ->reactive()
                 ,
                 Select::make('admin_traffic_id')
-                ->label('Category')
-                ->options(function (callable $get) {
-                    $userId = $get('user_id');
+                    ->label('Category')
+                    ->options(function (callable $get) {
+                        $userId = $get('user_id');
 
-                    if (!$userId) {
-                        return [];
-                    }
+                        if (!$userId) {
+                            return [];
+                        }
 
-                    return AdminTraffic::query()
-                        ->where('user_id', $userId)
-                        ->get()
-                        ->pluck('category', 'id')
-                        ->toArray();
-                })
-                ->searchable()
-                ->required()
-                ->live(),
+                        return AdminTraffic::query()
+                            ->where('user_id', $userId)
+                            ->get()
+                            ->pluck('category', 'id')
+                            ->toArray();
+                    })
+                    ->searchable()
+                    ->required()
+                    ->live(),
             TextInput::make('used_placement')
-                ->label('Used Placement')
-                ->required(),
+                    ->label('Used Placement')
+                    ->required(),
             TextInput::make('available_placement')
-                ->label('Available Placement')
-                ->numeric()
-                ->required(),
+                    ->label('Available Placement')
+                    ->numeric()
+                    ->required(),
         ]);
     }
 
@@ -75,20 +78,24 @@ class AdPerformanceResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('adminTraffic.category')->label('Category'),
-                TextColumn::make('adminTraffic.user.name')->label('Client'),
-                TextColumn::make('used_placement')->label('Used Placement'),
-                TextColumn::make('available_placement')->label('Available Placement'),
+                TextColumn::make('adminTraffic.category')
+                    ->label('Category'),
+                TextColumn::make('adminTraffic.user.name')
+                    ->label('Client'),
+                TextColumn::make('used_placement')
+                    ->label('Used Placement'),
+                TextColumn::make('available_placement')
+                    ->label('Available Placement'),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                DeleteBulkAction::make(),
                 ]),
             ]);
     }

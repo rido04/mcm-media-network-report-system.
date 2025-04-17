@@ -9,7 +9,7 @@ use Filament\Resources\Pages\EditRecord;
 class EditAdPerformance extends EditRecord
 {
     protected static string $resource = AdPerformanceResource::class;
-
+    protected static ?string $title = 'Edit Storage';
     protected function getHeaderActions(): array
     {
         return [

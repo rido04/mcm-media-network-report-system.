@@ -9,7 +9,7 @@ use Filament\Resources\Pages\EditRecord;
 class EditDocumentation extends EditRecord
 {
     protected static string $resource = DocumentationResource::class;
-
+    protected static ?string $title = 'Edit Documentation';
     protected function getHeaderActions(): array
     {
         return [

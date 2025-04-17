@@ -9,7 +9,7 @@ use Filament\Resources\Pages\EditRecord;
 class EditPlayLog extends EditRecord
 {
     protected static string $resource = PlayLogResource::class;
-
+    protected static ?string $title = 'Edit Play Log';
     protected function getHeaderActions(): array
     {
         return [

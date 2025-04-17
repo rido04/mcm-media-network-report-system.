@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * THIS MODEL IS FOR DOCUMENTATION MANAGEMENT
+ */
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;

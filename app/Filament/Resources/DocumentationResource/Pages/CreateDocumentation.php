@@ -9,7 +9,7 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateDocumentation extends CreateRecord
 {
     protected static string $resource = DocumentationResource::class;
-
+    protected static ?string $title = 'Add Documentation';
     public function getRedirectUrl(): string
     {
         return $this->getResource()::getUrl('index');

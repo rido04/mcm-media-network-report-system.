@@ -9,6 +9,7 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateAdminTraffic extends CreateRecord
 {
     protected static string $resource = AdminTrafficResource::class;
+    protected static ?string $title = 'Add Category';
 
     public function getRedirectUrl(): string
     {

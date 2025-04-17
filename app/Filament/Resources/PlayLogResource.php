@@ -8,22 +8,23 @@ use Filament\Tables;
 use App\Models\PlayLog;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Actions\EditAction;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
 use App\Filament\Resources\PlayLogResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\PlayLogResource\RelationManagers;
-use Filament\Tables\Columns\TextColumn;
 
 class PlayLogResource extends Resource
 {
     protected static ?string $model = PlayLog::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-document-chart-bar';
-
     protected static ?string $navigationGroup = 'Table Log';
     public static function form(Form $form): Form
     {
@@ -83,17 +84,16 @@ class PlayLogResource extends Resource
                 TextColumn::make('location')
                 ->label('Location')
                 ->searchable(),
-
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                DeleteBulkAction::make(),
                 ]),
             ]);
     }

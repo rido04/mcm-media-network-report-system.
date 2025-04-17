@@ -9,6 +9,7 @@ use Filament\Resources\Pages\EditRecord;
 class EditMediaStatistic extends EditRecord
 {
     protected static string $resource = MediaStatisticResource::class;
+    protected static ?string $title = 'Edit Media Plan';
 
     protected function getHeaderActions(): array
     {

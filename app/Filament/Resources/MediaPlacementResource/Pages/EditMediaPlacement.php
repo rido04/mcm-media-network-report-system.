@@ -9,7 +9,7 @@ use Filament\Resources\Pages\EditRecord;
 class EditMediaPlacement extends EditRecord
 {
     protected static string $resource = MediaPlacementResource::class;
-
+    protected static ?string $title = 'Edit Media Placement';
     protected function getHeaderActions(): array
     {
         return [

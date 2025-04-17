@@ -20,10 +20,12 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
 use App\Filament\Resources\AdMediaResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\AdMediaResource\RelationManagers;
 use Filament\Actions\DeleteAction as ActionsDeleteAction;
+use App\Filament\Resources\AdMediaResource\RelationManagers;
 
 /*
 Resource for managing ad media/media display
@@ -99,22 +101,28 @@ class AdMediaResource extends Resource
     {
         return $table
             ->columns([
-            TextColumn::make('user.name')->label('Client'),
-            TextColumn::make('mediaStatistic.media')->label('Media Plan'),
-            ImageColumn::make('image_path'),
-            TextColumn::make('start_date')->date(),
-            TextColumn::make('end_date')->date(),
+                TextColumn::make('user.name')
+                    ->label('Client')
+                    ->searchable(),
+                TextColumn::make('mediaStatistic.media')
+                    ->label('Media Plan')
+                    ->searchable(),
+                ImageColumn::make('image_path'),
+                TextColumn::make('start_date')
+                    ->date(),
+                TextColumn::make('end_date')
+                    ->date(),
             ])->defaultSort('start_date', 'desc')
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                EditAction::make(),
                 DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                DeleteBulkAction::make(),
                 ]),
             ]);
     }

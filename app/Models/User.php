@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * THIS MODEL IS FOR CLIENT USER AND ADMIN USER MANAGEMENT
+ */
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;

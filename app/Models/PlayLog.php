@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * THIS MODEL IS FOR PLAY LOGS MANAGEMENT
+ */
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;

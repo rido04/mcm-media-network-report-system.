@@ -9,11 +9,14 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Textarea;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Resources\Pages\CreateRecord;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
 use App\Filament\Resources\UserResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\UserResource\RelationManagers;
@@ -22,40 +25,39 @@ use App\Filament\Resources\UserResource\RelationManagers;
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
-
     protected static ?string $navigationGroup = 'User Management';
-
     protected static ?string $navigationIcon = 'heroicon-o-building-office-2';
-
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->role('company'); //query client menjadi role company
     }
-
     public static function getPluralLabel(): ?string
     {
         return 'Client';
     }
-
-
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                TextInput::make('name')->label('Client Name')->required(),
+                TextInput::make('name')
+                    ->label('Client Name')
+                    ->required(),
                 TextInput::make('email')
-                ->label('Email')
-                ->email()
-                ->required(),
+                    ->label('Email')
+                    ->email()
+                    ->required(),
                 TextInput::make('password')
                     ->password()
                     ->label('Password')
                     ->required(fn ($livewire) => $livewire instanceof CreateRecord)
                     ->dehydrated(fn ($state) => filled($state))
                     ->dehydrateStateUsing(fn ($state) => bcrypt($state)),
-                Textarea::make('company_address')->label('Address')->required(),
-                TextInput::make('company_phone')->label('Phone')->required(),
-
+                Textarea::make('company_address')
+                    ->label('Address')
+                    ->required(),
+                TextInput::make('company_phone')
+                    ->label('Phone')
+                    ->required(),
             ]);
     }
 
@@ -64,21 +66,27 @@ class UserResource extends Resource
         return $table
             ->columns([
             TextColumn::make('name')
-            ->label('Client Name'),
-            TextColumn::make('email'),
-            TextColumn::make('company_address')->label('Address'),
-            TextColumn::make('company_phone')->label('Phone'),
+                ->label('Client Name')
+                ->searchable(),
+            TextColumn::make('email')
+                ->searchable(),
+            TextColumn::make('company_address')
+                ->label('Address')
+                ->searchable(),
+            TextColumn::make('company_phone')
+                ->label('Phone')
+                ->searchable(),
         ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                EditAction::make(),
                 DeleteAction::make()
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                DeleteBulkAction::make(),
                 ]),
             ]);
     }

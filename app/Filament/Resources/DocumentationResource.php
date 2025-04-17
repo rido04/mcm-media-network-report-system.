@@ -10,18 +10,21 @@ use Filament\Tables\Table;
 use App\Models\Documentation;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
+use function Laravel\Prompts\textarea;
+use Filament\Forms\Components\Textarea;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Forms\Components\FileUpload;
+use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Actions\BulkActionGroup;
+
+use Filament\Tables\Actions\DeleteBulkAction;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\DocumentationResource\Pages;
 use App\Filament\Resources\DocumentationResource\RelationManagers;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\TextInput;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Columns\ImageColumn;
-use Filament\Tables\Columns\TextColumn;
-
-use function Laravel\Prompts\textarea;
 
 class DocumentationResource extends Resource
 {
@@ -35,21 +38,21 @@ class DocumentationResource extends Resource
         return $form
             ->schema([
                 Select::make('user_id')
-                ->label('Client')
-                ->options(User::whereHas('roles', fn($q) => $q->where('name', 'company'))
-                    ->pluck('name', 'id'))
-                ->searchable()
-                ->required(),
+                    ->label('Client')
+                    ->options(User::whereHas('roles', fn($q) => $q->where('name', 'company'))
+                        ->pluck('name', 'id'))
+                    ->searchable()
+                    ->required(),
                 FileUpload::make('image_path')
-                ->label('Masukan Gambar Dokumentasi')
-                ->image()
-                ->disk('public')
-                ->directory('image')
-                ->visibility('public')
-                ->required(),
+                    ->label('Masukan Gambar Dokumentasi')
+                    ->image()
+                    ->disk('public')
+                    ->directory('image')
+                    ->visibility('public')
+                    ->required(),
                 Textarea::make('description')
-                ->label('Description')
-                ->required()
+                    ->label('Description')
+                    ->required()
             ]);
     }
 
@@ -58,24 +61,24 @@ class DocumentationResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('user.name')
-                ->label('Client')
-                ->searchable(),
+                    ->label('Client')
+                    ->searchable(),
                 ImageColumn::make('image_path')
-                ->label('Image'),
+                    ->label('Image'),
                 TextColumn::make('description')
-                ->label('Description')
+                    ->label('Description')
 
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                EditAction::make(),
                 DeleteAction::make()
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                DeleteBulkAction::make(),
                 ]),
             ]);
     }

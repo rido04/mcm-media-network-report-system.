@@ -9,7 +9,7 @@ use Filament\Resources\Pages\EditRecord;
 class EditAdminTraffic extends EditRecord
 {
     protected static string $resource = AdminTrafficResource::class;
-
+    protected static ?string $title = 'Edit Category';
     protected function getHeaderActions(): array
     {
         return [

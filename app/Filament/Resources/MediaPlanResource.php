@@ -11,10 +11,13 @@ use App\Models\MediaPlan;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
 use App\Filament\Resources\MediaPlanResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\MediaPlanResource\RelationManagers;
@@ -22,7 +25,6 @@ use App\Filament\Resources\MediaPlanResource\RelationManagers;
 class MediaPlanResource extends Resource
 {
     protected static ?string $model = MediaPlan::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationGroup = 'Table Log';
     public static function form(Form $form): Form
@@ -30,20 +32,20 @@ class MediaPlanResource extends Resource
         return $form
             ->schema([
                 Select::make('user_id')
-                ->label('Client')
-                ->options(User::whereHas('roles', fn($q) => $q->where('name', 'company'))
-                    ->pluck('name', 'id'))
-                ->searchable()
-                ->required(),
+                    ->label('Client')
+                    ->options(User::whereHas('roles', fn($q) => $q->where('name', 'company'))
+                        ->pluck('name', 'id'))
+                    ->searchable()
+                    ->required(),
                 TextInput::make('media')
-                ->label('Media')
-                ->required(),
+                    ->label('Media')
+                    ->required(),
                 DatePicker::make('start-date')
-                ->label('Start Date')
-                ->required(),
+                    ->label('Start Date')
+                    ->required(),
                 DatePicker::make('end-date')
-                ->label('End Date')
-                ->required(),
+                    ->label('End Date')
+                    ->required(),
             ]);
     }
 
@@ -87,11 +89,11 @@ class MediaPlanResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                DeleteBulkAction::make(),
                 ]),
             ]);
     }

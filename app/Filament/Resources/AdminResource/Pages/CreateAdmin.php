@@ -9,7 +9,7 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateAdmin extends CreateRecord
 {
     protected static string $resource = AdminResource::class;
-
+    protected static ?string $title = 'Add Admin';
     protected function afterCreate(): void
     {
         $this->record->assignRole('admin');
