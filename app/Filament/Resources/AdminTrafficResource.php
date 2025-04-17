@@ -35,6 +35,15 @@ class AdminTrafficResource extends Resource
         return 'Category';
     }
     protected static ?string $navigationGroup = 'Media';
+    public static function getEloquentQuery(): Builder // eager loading
+    {
+        return parent::getEloquentQuery()
+            ->with(['user'])
+            ->withAvg('dailyImpressions', 'impression')
+            ->withMax('dailyImpressions', 'impression')
+            ->withMin('dailyImpressions', 'impression');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -57,17 +66,15 @@ class AdminTrafficResource extends Resource
             ->columns([
                 TextColumn::make('name')
                     ->label('Client')
-                    ->searchable()
                     ->getStateUsing(fn ($record) => $record->user?->name ?? '-'),
-                TextColumn::make('category')
-                    ->label('Category')
-                    ->searchable(),
-                TextColumn::make('highest_impression')
+                TextColumn::make('category')->label('Category'),
+                TextColumn::make('daily_impressions_max_impression')
                     ->label('Highest'),
-                TextColumn::make('lowest_impression')
+                TextColumn::make('daily_impressions_min_impression')
                     ->label('Lowest'),
-                TextColumn::make('average_impression')
-                    ->label('Average'),
+                TextColumn::make('daily_impressions_avg_impression')
+                    ->label('Average')
+                    ->formatStateUsing(fn ($state) => number_format($state, 2)),
             ])
             ->filters([
                 SelectFilter::make('user_id')

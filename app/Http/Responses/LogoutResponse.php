@@ -9,7 +9,7 @@ class LogoutResponse implements Responsable
 {
     public function toResponse($request): RedirectResponse
     {
-        // change this to your desired route
+        // desired redirect after logout
         return redirect()->route('login');
     }
 }
