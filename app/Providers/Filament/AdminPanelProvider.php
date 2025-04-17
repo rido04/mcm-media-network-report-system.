@@ -11,6 +11,7 @@ use Filament\Support\Colors\Color;
 use App\Filament\Resources\UserResource;
 use Filament\Http\Middleware\Authenticate;
 use App\Filament\Resources\AdMediaResource;
+use App\Filament\Resources\AdminResource;
 use App\Filament\Resources\MediaPlanResource;
 use App\Filament\Resources\TrafficStatResource;
 use Illuminate\Session\Middleware\StartSession;
@@ -39,6 +40,7 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
+            ->favicon(asset('/storage/image/logo_mcm.png'))
             ->brandName('MCM Media Networks')
             // ->viteTheme('resources/css/filament/admin/theme.css')
             ->login()
@@ -55,6 +57,7 @@ class AdminPanelProvider extends PanelProvider
                 'warning' => Color::Orange,
             ])
             ->resources([
+                AdminResource::class,
                 UserResource::class,
                 MediaStatisticResource::class,
                 AdminTrafficResource::class,

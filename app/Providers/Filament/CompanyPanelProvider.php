@@ -47,6 +47,7 @@ class CompanyPanelProvider extends PanelProvider
         return $panel
             ->id('company')
             ->path('company')
+            ->favicon(asset('/storage/image/logo_mcm.png'))
             ->login()
             ->sidebarCollapsibleOnDesktop()
             ->authMiddleware([
