@@ -2,9 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login - MCM Portal</title>
+    <title>MCM Portal</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="{{ asset('storage/image/logo_mcm.png') }}" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style type="text/tailwindcss">
         @layer utilities {
@@ -128,7 +131,7 @@
             }
 
             .logo-img {
-                width: 130px;
+                width: 200px;
             }
 
             /* Improved spacing for mobile */
@@ -149,7 +152,7 @@
         }
     </style>
 </head>
-<body class="font-poppins flex flex-col md:flex-row min-h-screen overflow-x-hidden bg-slate-950">
+<body class="font-[Montserrat] flex flex-col md:flex-row min-h-screen overflow-x-hidden bg-slate-950">
     <!-- Left Section with Hero Content - added more specific class name -->
     <div class="hero-section flex-1 flex items-center justify-center p-4 md:p-8 w-full md:w-1/2">
         <div class="max-w-[250px] md:max-w-[380px] w-full flex flex-col items-center text-center">
@@ -208,6 +211,9 @@
         tailwind.config = {
             theme: {
                 extend: {
+                    fontFamily: {
+                        'sans': ['Montserrat', 'sans-serif'],
+                    },
                     colors: {
                         twitter: {
                             blue: '#1D9BF0',
