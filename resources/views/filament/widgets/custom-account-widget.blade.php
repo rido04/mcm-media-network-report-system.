@@ -1,6 +1,7 @@
 <x-filament-widgets::widget>
     <x-filament::section style="background-color: rgb(24, 26, 59) !important;">
-        
+        <x-slot name="header"></x-slot> <!-- Ini akan kasih padding-top -->
+
         @php
             $user = $this->getUser();
         @endphp
@@ -39,5 +40,6 @@
                 </button>
             </form>
         </div>
+        <x-slot name="footer"></x-slot> <!-- Ini akan kasih padding-bottom -->
     </x-filament::section>
 </x-filament-widgets::widget>
