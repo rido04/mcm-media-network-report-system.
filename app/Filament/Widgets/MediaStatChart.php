@@ -4,6 +4,7 @@ namespace App\Filament\Widgets;
 
 use App\Models\DailyImpression;
 use Filament\Widgets\ChartWidget;
+use Illuminate\Support\Facades\Auth;
 
 class MediaStatChart extends ChartWidget
 {
@@ -44,7 +45,9 @@ class MediaStatChart extends ChartWidget
 
     protected function getData(): array
     {
-        $query = DailyImpression::query();
+        $query = DailyImpression::whereHas('adminTraffic', function ($q) {
+            $q->where('user_id', Auth::id());
+        });
 
         switch ($this->filter) {
             case 'yearly':

@@ -2,10 +2,11 @@
 
 namespace App\Filament\Widgets;
 
-use App\Models\MediaStatistic;
 use Filament\Forms;
 use Filament\Widgets\Widget;
+use App\Models\MediaStatistic;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Components\DatePicker;
@@ -37,25 +38,38 @@ class MediaStatisticFilterWidget extends Widget implements HasForms
 
     protected function getFormSchema(): array
     {
+        $query = MediaStatistic::query()
+          ->where('user_id', Auth::id()); // get user id
+
+        if ($this->filters['start_date']) {
+            $query->whereDate('created_at', '>=', $this->filters['start_date']);
+        }
+
+        if ($this->filters['end_date']) {
+            $query->whereDate('created_at', '<=', $this->filters['end_date']);
+        }
+
         return [
         DatePicker::make('filters.start_date')
-            ->label('Tanggal Mulai'),
+            ->label('Start Date'),
 
         DatePicker::make('filters.end_date')
-            ->label('Tanggal Selesai'),
+            ->label('End Date'),
 
-            Select::make('filters.media')
+        Select::make('filters.media')
             ->label('Media Plan')
             ->placeholder('Media Plan')
             ->options(fn () => MediaStatistic::query()
+            ->where('user_id', Auth::id()) // get auth user id
             ->select('media')
             ->distinct()
             ->pluck('media', 'media')),
 
         Select::make('filters.city')
-            ->label('Kota')
-            ->placeholder('Pilih Kota')
+            ->label('City')
+            ->placeholder('City')
             ->options(fn () => MediaStatistic::query()
+            ->where('user_id', Auth::id())
             ->select('city')
             ->distinct()
             ->pluck('city', 'city')),

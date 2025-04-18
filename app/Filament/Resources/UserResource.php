@@ -68,7 +68,7 @@ class UserResource extends Resource
                     ->visibility('public')
                     ->image()
                     ->imageEditor()
-                    ->nullable()
+                    ->required()
                     ->saveUploadedFileUsing(function (TemporaryUploadedFile $file) {
                         $filename = $file->hashName(); // Generate unique filename
                         $path = $file->storeAs('logos', $filename, 'public'); // Simpan dengan path lengkap

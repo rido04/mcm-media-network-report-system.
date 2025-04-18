@@ -143,7 +143,7 @@
                 <div class="p-4">
                     <h4 class="text-sm font-medium text-gray-900 dark:text-white truncate">{{ $doc->description }}</h4>
                     <p class="text-xs text-black dark:text-white. dark:text-gray-400 mt-1">Client: {{ $doc->user->name ?? '-' }}</p>
-                    <p class="text-xs text-black dark:text-white. dark:text-gray-400 mt-1">Upload: {{ $doc->created_at->format('d M Y') }}</p>
+                    <p class="text-xs text-black dark:text-white. dark:text-gray-400 mt-1">Uploaded at: {{ $doc->created_at->format('d M Y') }}</p>
                 </div>
             </div>
             @empty

@@ -49,20 +49,16 @@ class MediaStatisticOverview extends BaseWidget
         }, 0);
 
         return [
-            Card::make('Total Media Plan', $totalMediaPlan)
-                ->description('Media plan aktif')
+            Card::make('Media Plan', $totalMediaPlan)
                 ->color('primary'),
 
-            Card::make('Total Inventory', $totalInventory)
-                ->description('Media placement')
+            Card::make('Placement', $totalInventory)
                 ->color('success'),
 
-            Card::make('Durasi Penayangan', "{$totalDuration} Hari")
-                ->description('Total durasi')
+            Card::make('Broadcast Duration', "{$totalDuration} Days")
                 ->color('info'),
 
-            Card::make('Sisa Hari Penayangan', "{$remainingDays} Hari")
-                ->description('Iklan yang masih aktif')
+            Card::make('Remaining Days', "{$remainingDays} Days")
                 ->color('warning'),
         ];
     }

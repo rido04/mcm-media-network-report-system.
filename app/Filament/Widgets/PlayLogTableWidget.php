@@ -6,6 +6,7 @@ use Filament\Tables;
 use App\Models\PlayLog;
 use Filament\Tables\Table;
 use App\Models\MediaPlacement;
+use Illuminate\Support\Facades\Auth;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Widgets\TableWidget as BaseWidget;
@@ -16,7 +17,9 @@ class PlayLogTableWidget extends BaseWidget
     protected static ?string $heading = 'Play Log';
     protected function getTableQuery(): Builder
     {
-        return PlayLog::query()->latest();
+        return PlayLog::query()
+        ->where('user_id', Auth::id())
+        ->latest();
     }
 
     protected int|string|array $columnSpan = 'full';
