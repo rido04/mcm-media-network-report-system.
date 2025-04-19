@@ -44,7 +44,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->favicon(asset('/storage/image/logo_mcm.png'))
             ->brandName('MCM Media Networks')
-            ->login()
+            ->login(fn () => redirect('/login'))
             ->authMiddleware([
                 'role:admin', // tambahan role check
                 ])

@@ -51,7 +51,7 @@ class CompanyPanelProvider extends PanelProvider
             ->font('poppins')
             ->path('company')
             ->favicon(asset('/storage/image/logo_mcm.png'))
-            ->login()
+            ->login(fn () => redirect('/login'))
             ->sidebarFullyCollapsibleOnDesktop()
             ->authMiddleware([
                 'role:company', // role check
