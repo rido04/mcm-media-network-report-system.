@@ -66,21 +66,13 @@ class MediaPlacementResource extends Resource
                 TextInput::make('space_ads')
                     ->label('Space Ads')
                     ->required(),
-                Select::make('daily_impression_id')
-                    ->label('Daily Impression')
+                TextInput::make('avg_daily_impression')
+                    ->label('Avg Daily Impression')
+                    ->numeric()
                     ->required()
-                    ->options(function (Get $get) {
-                        $adminTrafficId = $get('admin_traffic_id');
-                        if (!$adminTrafficId) {
-                            return [];
-                        }
-                        return DailyImpression::where('admin_traffic_id', $adminTrafficId)
-                    ->orderBy('date', 'desc')
-                    ->get()
-                    ->pluck('impression', 'id');
-                    })
-                    ->searchable()
-                    ->live(),
+                    ->minValue(0)
+                    ->step(0.01)
+                    ->default(0),
             ]);
     }
 
@@ -106,10 +98,10 @@ class MediaPlacementResource extends Resource
                     ->label('Space Ads')
                     ->sortable()
                     ->searchable(),
-                TextColumn::make('dailyImpression.impression')
-                    ->label('Daily Impression')
-                    ->sortable()
-                    ->searchable(),
+                TextColumn::make('avg_daily_impression')
+                    ->numeric(2)
+                    ->label('Avg Impression')
+                    ->sortable(),
             ])
             ->filters([
                 //

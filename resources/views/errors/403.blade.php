@@ -148,8 +148,8 @@
 
                 <!-- Action button styled like a VIP pass -->
                 <a href="{{ url('/login') }}" class="inline-block group">
-                    <div class="bg-gradient-to-r from-yellow-400 to-yellow-600 px-8 py-3 rounded-md transform transition-all duration-300 group-hover:scale-105 shadow-lg">
-                        <span class="text-black font-bold">LOGIN ACCESS</span>
+                    <div class="bg-gradient-to-r from-blue-600 to-blue-600 px-8 py-3 rounded-md transform transition-all duration-300 group-hover:scale-105 shadow-lg">
+                        <span class="text-red-700 font-bold">BACK TO LOGIN</span>
                     </div>
                 </a>
             </div>

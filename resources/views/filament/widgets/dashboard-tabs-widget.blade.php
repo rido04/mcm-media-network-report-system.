@@ -38,7 +38,7 @@
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black dark:text-white. dark:text-gray-300 uppercase tracking-wider">Category</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black dark:text-white. dark:text-gray-300 uppercase tracking-wider">Space Ads</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black dark:text-white. dark:text-gray-300 uppercase tracking-wider">Size</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black dark:text-white. dark:text-gray-300 uppercase tracking-wider">Avg. Impression</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black dark:text-white. dark:text-gray-300 uppercase tracking-wider">Avg daily Impression</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
@@ -48,7 +48,9 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-black dark:text-white. dark:text-gray-300">{{ $item->adminTraffic->category ?? '-' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-black dark:text-white. dark:text-gray-300">{{ $item->space_ads ?? '-' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-black dark:text-white. dark:text-gray-300">{{ $item->size ?? '-' }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-black dark:text-white. dark:text-gray-300">{{ number_format($item->dailyImpression->avg('impression'), 2) ?? '0.00' }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-black dark:text-white. dark:text-gray-300">
+                            {{ number_format($item->avg_daily_impression, 2) }}
+                        </td>
                     </tr>
                     @empty
                     <tr>

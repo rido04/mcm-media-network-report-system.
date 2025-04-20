@@ -15,6 +15,7 @@ class MediaPlacement extends Model
         'admin_traffic_id',
         'user_id',
         'daily_impression_id',
+        'avg_daily_impression',
         'media',
         'size',
         'space_ads',
