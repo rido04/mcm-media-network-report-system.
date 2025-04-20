@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('admin_traffic', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Relasi ke model User
-            $table->string('category');
-            $table->timestamps();
+        Schema::table('admin_traffic', function (Blueprint $table) {
+            $table->foreignId('media_statistic_id')->constrained('media_statistics')->onDelete('cascade');
+
         });
     }
 
@@ -24,6 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('admin_traffic');
+        Schema::table('admin_traffic', function (Blueprint $table) {
+            //
+        });
     }
 };

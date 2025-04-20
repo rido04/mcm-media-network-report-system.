@@ -9,6 +9,7 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\AdminTraffic;
 use App\Models\AdPerformance;
+use App\Models\MediaStatistic;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Actions\EditAction;
@@ -44,26 +45,36 @@ class AdPerformanceResource extends Resource
                     ->pluck('name', 'id'))
                     ->searchable()
                     ->required()
-                    ->reactive()
-                ,
+                    ->reactive(),
+                Select::make('media_statistic_id')
+                ->label('City')
+                ->reactive()
+                ->options(function (callable $get) {
+                    $userId = $get('user_id');
+                    if (!$userId) {
+                        return [];
+                    }
+                    return MediaStatistic::where('user_id', $userId)
+                        ->select('id', 'city')
+                        ->distinct()
+                        ->pluck('city', 'id'); // key = value
+                })
+                ->required(),
                 Select::make('admin_traffic_id')
-                    ->label('Category')
-                    ->options(function (callable $get) {
-                        $userId = $get('user_id');
+                ->label('Category')
+                ->reactive()
+                ->options(function (callable $get) {
+                    $cityId = $get('media_statistic_id');
 
-                        if (!$userId) {
-                            return [];
-                        }
+                    if (!$cityId) {
+                        return [];
+                    }
 
-                        return AdminTraffic::query()
-                            ->where('user_id', $userId)
-                            ->get()
-                            ->pluck('category', 'id')
-                            ->toArray();
-                    })
-                    ->searchable()
-                    ->required()
-                    ->live(),
+                    // Sesuaikan query ini dengan struktur database Anda
+                    return AdminTraffic::whereHas('mediaStatistic', function ($query) use ($cityId) {
+                        $query->where('id', $cityId);
+                    })->pluck('Category', 'id');
+                    }),
             TextInput::make('used_placement')
                     ->label('Used Placement')
                     ->required(),
@@ -78,6 +89,8 @@ class AdPerformanceResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('mediaStatistic.city')
+                    ->label('City/District'),
                 TextColumn::make('adminTraffic.category')
                     ->label('Category'),
                 TextColumn::make('adminTraffic.user.name')

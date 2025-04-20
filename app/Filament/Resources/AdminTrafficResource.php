@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\AdminTrafficResource\Pages;
 use App\Filament\Resources\AdminTrafficResource\RelationManagers;
 use App\Filament\Resources\AdminTrafficResource\RelationManagers\DailyImpressionsRelationManager;
+use App\Models\MediaStatistic;
 
 class AdminTrafficResource extends Resource
 {
@@ -53,11 +54,28 @@ class AdminTrafficResource extends Resource
                     ->options(fn () => User::whereHas('roles', fn($query) => $query->where('name', 'company'))
                         ->pluck('name', 'id')
                     )
+                    ->reactive()
                     ->required(),
                 TextInput::make('category')
                     ->label('Category')
                     ->required(),
-                ]);
+                Select::make('media_statistic_id')
+                    ->label('City')
+                    ->reactive()
+                    ->options(function (callable $get) {
+                        $userId = $get('user_id');
+
+                        if (!$userId) {
+                            return [];
+                        }
+
+                        return MediaStatistic::where('user_id', $userId)
+                            ->select('id', 'city')
+                            ->distinct()
+                            ->pluck('city', 'id'); // key = value
+                    })
+                    ->required(),
+            ]);
     }
 
     public static function table(Table $table): Table
@@ -68,6 +86,7 @@ class AdminTrafficResource extends Resource
                     ->label('Client')
                     ->getStateUsing(fn ($record) => $record->user?->name ?? '-'),
                 TextColumn::make('category')->label('Category'),
+                TextColumn::make('mediaStatistic.city')->label('City/District'),
                 TextColumn::make('daily_impressions_max_impression')
                     ->label('Highest'),
                 TextColumn::make('daily_impressions_min_impression')

@@ -3,6 +3,7 @@
 namespace App\Filament\Widgets;
 
 use App\Models\DailyImpression;
+use App\Models\MediaStatistic;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,6 +13,7 @@ class CommuterlineChart extends ChartWidget
     protected int | string | array $columnSpan = 'full';
     public static ?int $sort = 5;
     public ?string $filter = 'daily';
+    public ?string $cityFilter = null; // Tambahkan filter untuk kota
 
     protected function getFilters(): ?array
     {
@@ -23,11 +25,36 @@ class CommuterlineChart extends ChartWidget
         ];
     }
 
+    // Tambahkan method untuk filter city
+    protected function getExtraFilters(): ?array
+    {
+        $userId = Auth::id();
+
+        // Ambil semua kota dari media statistics untuk user yang sedang login
+        $cities = MediaStatistic::where('user_id', $userId)
+            ->select('city')
+            ->distinct()
+            ->pluck('city')
+            ->toArray();
+
+        $options = ['all' => 'All Cities'];
+
+        foreach ($cities as $city) {
+            $options[$city] = $city;
+        }
+
+        return [
+            'cityFilter' => [
+                'label' => 'City',
+                'options' => $options,
+            ],
+        ];
+    }
+
     public function getMaxHeight(): string|null
     {
         return '200px';
     }
-
 
     protected function getData(): array
     {
@@ -39,6 +66,13 @@ class CommuterlineChart extends ChartWidget
                 $q->where('user_id', $userId)
                   ->where('category', $category);
             });
+
+        // Tambahkan filter berdasarkan city jika dipilih dan bukan 'all'
+        if ($this->cityFilter && $this->cityFilter !== 'all') {
+            $query->whereHas('mediaStatistic', function ($q) {
+                $q->where('city', $this->cityFilter);
+            });
+        }
 
         switch ($this->filter) {
             case 'yearly':
@@ -67,6 +101,13 @@ class CommuterlineChart extends ChartWidget
         foreach ($data as $row) {
             $labels[] = $row->label;
             $values[] = $row->total;
+        }
+
+        // Tambahkan city ke heading jika ada filter city
+        if ($this->cityFilter && $this->cityFilter !== 'all') {
+            static::$heading = "Commuterline User - {$this->cityFilter}";
+        } else {
+            static::$heading = "Commuterline User";
         }
 
         return [

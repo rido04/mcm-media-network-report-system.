@@ -3,6 +3,7 @@
 namespace App\Filament\Widgets;
 
 use App\Models\AdPerformance;
+use App\Models\MediaStatistic;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Facades\Auth;
 use Filament\Support\RawJs;
@@ -13,16 +14,47 @@ class AdPerformanceChart extends ChartWidget
     protected static ?int $sort = 2;
     protected int|string|array $columnSpan = 'full';
 
+    // Tambahkan property untuk filter
+    protected static bool $isFilterable = true;
+    public ?string $filter = null;
+
     public function getMaxHeight(): ?string
     {
         return '500px';
     }
 
+    // Tambahkan method untuk mendapatkan opsi filter
+    protected function getFilters(): ?array
+    {
+        $cities = MediaStatistic::where('user_id', Auth::id())
+            ->select('city')
+            ->distinct()
+            ->pluck('city')
+            ->toArray();
+
+        $options = ['all' => 'All Cities'];
+
+        foreach ($cities as $city) {
+            $options[$city] = $city;
+        }
+
+        return $options;
+    }
+
     protected function getData(): array
     {
-        $data = AdPerformance::with('adminTraffic')
-            ->whereHas('adminTraffic', fn ($q) => $q->where('user_id', Auth::id()))
-            ->get()
+        // Query dasar
+        $query = AdPerformance::with(['adminTraffic', 'mediaStatistic'])
+            ->whereHas('adminTraffic', fn ($q) => $q->where('user_id', Auth::id()));
+
+        // Tambahkan filter by city jika ada dan bukan 'all'
+        if ($this->filter && $this->filter !== 'all') {
+            $query->whereHas('mediaStatistic', function ($q) {
+                $q->where('city', $this->filter);
+            });
+        }
+
+        $data = $query->get()
             ->groupBy(fn ($item) => $item->adminTraffic->category ?? 'Unknown');
 
         $labels = [];

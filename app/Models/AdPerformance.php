@@ -13,6 +13,7 @@ class AdPerformance extends Model
         'admin_traffic_id',
         'used_placement',
         'available_placement',
+        'media_statistic_id',
     ];
 
     public function adminTraffic()
@@ -23,5 +24,10 @@ class AdPerformance extends Model
     public function user()
     {
         return $this->hasOneThrough(User::class, AdminTraffic::class, 'id', 'id', 'admin_traffic_id', 'user_id');
+    }
+
+    public function mediaStatistic()
+    {
+        return $this->belongsTo(MediaStatistic::class);
     }
 }

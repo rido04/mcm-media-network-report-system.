@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Filament\Widgets;
 
 use Filament\Forms;
@@ -19,6 +18,8 @@ class MediaStatisticFilterWidget extends Widget implements HasForms
     protected static string $view = 'filament.widgets.media-statistic-filter-widget';
 
     protected static ?int $sort = 1;
+
+    // Definisikan semua kunci dengan null sebagai default
     public $filters = [
         'start_date' => null,
         'end_date' => null,
@@ -28,7 +29,7 @@ class MediaStatisticFilterWidget extends Widget implements HasForms
 
     public function applyFilters()
     {
-        $this->filters = $this->form->getState(); // Ambil data dari form
+        $this->filters = $this->form->getState();
         session([
             'filters' => $this->filters,
         ]);
@@ -38,49 +39,40 @@ class MediaStatisticFilterWidget extends Widget implements HasForms
 
     protected function getFormSchema(): array
     {
-        $query = MediaStatistic::query()
-          ->where('user_id', Auth::id()); // get user id
-
-        if ($this->filters['start_date']) {
-            $query->whereDate('created_at', '>=', $this->filters['start_date']);
-        }
-
-        if ($this->filters['end_date']) {
-            $query->whereDate('created_at', '<=', $this->filters['end_date']);
-        }
-
         return [
-        DatePicker::make('filters.start_date')
-            ->label('Start Date'),
+            DatePicker::make('filters.start_date')
+                ->label('Start Date'),
 
-        DatePicker::make('filters.end_date')
-            ->label('End Date'),
+            DatePicker::make('filters.end_date')
+                ->label('End Date'),
 
-        Select::make('filters.media')
-            ->label('Media Plan')
-            ->placeholder('Media Plan')
-            ->options(fn () => MediaStatistic::query()
-            ->where('user_id', Auth::id()) // get auth user id
-            ->select('media')
-            ->distinct()
-            ->pluck('media', 'media')),
+            Select::make('filters.media')
+                ->label('Media Plan')
+                ->placeholder('Media Plan')
+                ->options(fn () => MediaStatistic::query()
+                    ->where('user_id', Auth::id())
+                    ->select('media')
+                    ->distinct()
+                    ->pluck('media', 'media')),
 
-        Select::make('filters.city')
-            ->label('City')
-            ->placeholder('City')
-            ->options(fn () => MediaStatistic::query()
-            ->where('user_id', Auth::id())
-            ->select('city')
-            ->distinct()
-            ->pluck('city', 'city')),
-    ];
+            Select::make('filters.city')
+                ->label('City')
+                ->placeholder('City')
+                ->options(fn () => MediaStatistic::query()
+                    ->where('user_id', Auth::id())
+                    ->select('city')
+                    ->distinct()
+                    ->pluck('city', 'city')),
+        ];
     }
 
     public function mount(): void
-        {
-        $this->form->fill(
-            $this->filters = session('filters', [])
-        );
-        }
+    {
+        // Ambil filters dari session dan merge dengan default
+        $sessionFilters = session('filters', []);
+        $this->filters = array_merge($this->filters, $sessionFilters);
 
+        // Isi form dengan data yang sudah dimerge
+        $this->form->fill($this->filters);
+    }
 }

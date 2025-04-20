@@ -7,6 +7,8 @@ use App\Models\User;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Models\AdminTraffic;
+use App\Models\MediaStatistic;
 use App\Models\DailyImpression;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
@@ -43,14 +45,43 @@ class DailyImpressionResource extends Resource
         return $form
             ->schema([
             Select::make('user_id')
-                ->label('Client')
-                ->options(fn () => User::whereHas('roles', fn($query) => $query->where('name', 'company'))
+            ->label('Client')
+            ->options(fn () => User::whereHas('roles', fn($query) => $query->where('name', 'company'))
                 ->pluck('name', 'id')
-                )
+            )
+            ->reactive()
+            ->required(),
+            Select::make('media_statistic_id')
+                ->label('City')
+                ->reactive()
+                ->options(function (callable $get) {
+                    $userId = $get('user_id');
+
+                    if (!$userId) {
+                        return [];
+                    }
+
+                    return MediaStatistic::where('user_id', $userId)
+                        ->select('id', 'city')
+                        ->distinct()
+                        ->pluck('city', 'id'); // key = value
+                })
                 ->required(),
-            Select::make('admin_traffic_id')
+                Select::make('admin_traffic_id')
                 ->label('Category')
-                ->relationship('adminTraffic', 'Category')
+                ->reactive()
+                ->options(function (callable $get) {
+                    $cityId = $get('media_statistic_id');
+
+                    if (!$cityId) {
+                        return [];
+                    }
+
+                    // Sesuaikan query ini dengan struktur database Anda
+                    return AdminTraffic::whereHas('mediaStatistic', function ($query) use ($cityId) {
+                        $query->where('id', $cityId);
+                    })->pluck('Category', 'id');
+                })
                 ->required(),
             Select::make('media_statistic_id')
                 ->label('Media Plan')
@@ -74,6 +105,9 @@ class DailyImpressionResource extends Resource
             ->columns([
             TextColumn::make('adminTraffic.user.name')
                 ->label('Client')
+                ->searchable(),
+            TextColumn::make('mediaStatistic.city')
+                ->label('City/District')
                 ->searchable(),
             TextColumn::make('adminTraffic.category')
                 ->label('Category')
