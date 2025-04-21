@@ -37,7 +37,7 @@ class MediaStatChart extends ChartWidget
     return [
         'plugins' => [
             'background' => [
-                'color' => 'grey', // Warna background widget
+                'color' => 'grey', 
             ],
         ],
     ];
@@ -103,12 +103,12 @@ class MediaStatChart extends ChartWidget
 
     protected function getType(): string
     {
-        return 'bar'; // Tipe utama chart
+        return 'bar';
     }
     protected function getExtraAttributes(): array
 {
     return [
-        'class' => 'bg-white dark:bg-gray-800', // Light: putih, Dark: gray-800
+        'class' => 'bg-gray-800 dark:bg-gray-800', // Light: white, Dark: gray-800
     ];
 }
 }

@@ -52,7 +52,7 @@ class AdminTrafficResource extends Resource
                 Select::make('user_id')
                     ->label('Client')
                     ->options(fn () => User::whereHas('roles', fn($query) => $query->where('name', 'company'))
-                        ->pluck('name', 'id')
+                    ->pluck('name', 'id')
                     )
                     ->reactive()
                     ->required(),

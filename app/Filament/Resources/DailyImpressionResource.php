@@ -116,7 +116,7 @@ class DailyImpressionResource extends Resource
                 ->sortable()
                 ->date(),
             TextColumn::make('impression')
-                ->label('Total Impression'),
+                ->label('Daily Impression'),
                 ])->defaultSort('date', 'desc')
             ->filters([
                 SelectFilter::make('client')

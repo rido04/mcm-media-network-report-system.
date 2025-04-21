@@ -187,7 +187,8 @@
         color: #3e17cc;
         font-weight: 500;
         z-index: 2;
-        background-color: rgba(255, 255, 255, 0.8);
+        background-color: rgb(255, 255, 255);
+        border-radius: 5px;
         }
 
         .form-input::placeholder {

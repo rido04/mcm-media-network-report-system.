@@ -39,7 +39,7 @@ class MediaPlacementResource extends Resource
                 Select::make('user_id')
                     ->label('Client')
                     ->options(User::whereHas('roles', fn($q) => $q->where('name', 'company'))
-                        ->pluck('name', 'id'))
+                    ->pluck('name', 'id'))
                     ->searchable()
                     ->required(),
                 Select::make('admin_traffic_id')

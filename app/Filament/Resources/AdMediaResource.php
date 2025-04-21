@@ -35,26 +35,21 @@ Resource for managing ad media/media display
 class AdMediaResource extends Resource
 {
     protected static ?string $model = AdMedia::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-play-pause';
-
     public static function getEloquentQuery():Builder
     {
         return parent::getEloquentQuery()
             ->with(['user', 'mediaStatistic']); // Eager loading
     }
-
     public static function  getPluralLabel(): string
     {
         return 'Media Display';
     }
-
     public static function getNavigationLabel(): string
     {
         return 'Media Display';
     }
     protected static ?string $navigationGroup = 'Media';
-
     public static function form(Form $form): Form
     {
         return $form

@@ -119,7 +119,7 @@ class AdPerformanceResource extends Resource
                             $query->whereIn('users.id', $data['values']);
                         });
                     }),
-                    SelectFilter::make('category')
+                SelectFilter::make('category')
                     ->label('Category')  
                     ->options(function() {
                         // Mengambil daftar kategori yang unik dari AdminTraffic
@@ -136,8 +136,8 @@ class AdPerformanceResource extends Resource
                         });
                     }),
                 SelectFilter::make('mediaStatistic.city')
-                ->label('City/District')
-                ->relationship('mediaStatistic','city')
+                    ->label('City/District')
+                    ->relationship('mediaStatistic','city')
                 
             ])
             ->actions([
