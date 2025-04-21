@@ -58,6 +58,7 @@ class AdminTrafficResource extends Resource
                     ->required(),
                 TextInput::make('category')
                     ->label('Category')
+                    ->placeholder('Commuterline, Transjakarta, etc....')
                     ->required(),
                 Select::make('media_statistic_id')
                     ->label('City')
@@ -107,10 +108,12 @@ class AdminTrafficResource extends Resource
             ->filters([
                 SelectFilter::make('user_id')
                     ->label('Client')
+                    ->multiple()
                     ->options(fn () => User::whereHas('roles', fn ($query) => $query->where('name', 'company'))
                         ->pluck('name', 'id')),
                 SelectFilter::make('category')
                     ->label('Category')
+                    ->multiple()
                     ->options(fn () => AdminTraffic::pluck('category', 'category')),
             ])
             ->actions([

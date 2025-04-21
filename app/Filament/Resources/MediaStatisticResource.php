@@ -15,6 +15,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteBulkAction;
@@ -46,7 +47,7 @@ class MediaStatisticResource extends Resource
                 ->searchable()
                 ->required(),
             TextInput::make('media')
-                ->label('Media')
+                ->label('Media Plan')
                 ->required(),
             DatePicker::make('start_date')
                 ->label('Start Date')
@@ -66,7 +67,7 @@ class MediaStatisticResource extends Resource
         ->query(
             MediaStatistic::query()
                 ->with(['user', 'dailyImpressions'])
-                // query form realtion with media_statistics
+                // query form relation with media_statistics
                 ->selectRaw('media_statistics.*,
                     (SELECT SUM(impression) FROM daily_impressions
                     WHERE daily_impressions.media_statistic_id = media_statistics.id) as total_impression')
@@ -74,9 +75,10 @@ class MediaStatisticResource extends Resource
                 ->columns([
             TextColumn::make('user.name')
                 ->label('Client')
+                ->searchable()
                 ->sortable(),
             TextColumn::make('media')
-                ->label('Media')
+                ->label('Media Plan')
                 ->sortable()
                 ->searchable(),
             TextColumn::make('city')
@@ -105,7 +107,31 @@ class MediaStatisticResource extends Resource
                 ->toggleable(isToggledHiddenByDefault: true),
         ])
         ->filters([
-            // Tambahkan filter jika perlu
+            SelectFilter::make('client')
+                ->label('Client')
+                //query to user with role company permission
+                ->options(fn () => User::whereHas('roles', fn($query) => $query->where('name', 'company'))
+                    ->pluck('name', 'id')
+                )
+                ->query(function (Builder $query, array $data) {
+                    if (!$data['value']) {
+                        return $query;
+                    }
+                    
+                    return $query->where('user_id', $data['value']);
+                }),
+                SelectFilter::make('city')
+                ->label('City')
+                ->options(function () {
+                    return MediaStatistic::distinct()->pluck('city', 'city');
+                })
+                ->query(function (Builder $query, array $data) {
+                    if (!$data['value']) {
+                        return $query;
+                    }
+                    
+                    return $query->where('city', $data['value']);
+                })
         ])
         ->actions([
             EditAction::make(),

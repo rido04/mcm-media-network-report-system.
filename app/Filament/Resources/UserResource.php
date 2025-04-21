@@ -70,9 +70,9 @@ class UserResource extends Resource
                     ->imageEditor()
                     ->required()
                     ->saveUploadedFileUsing(function (TemporaryUploadedFile $file) {
-                        $filename = $file->hashName(); // Generate unique filename
-                        $path = $file->storeAs('logos', $filename, 'public'); // Simpan dengan path lengkap
-                        return 'logos/'.$filename; // Simpan full path ke database
+                        $filename = $file->hashName(); 
+                        $path = $file->storeAs('logos', $filename, 'public'); 
+                        return 'logos/'.$filename; 
                     })
             ]);
     }

@@ -52,7 +52,7 @@ class MediaStatisticOverview extends BaseWidget
             Card::make('Media Plan', $totalMediaPlan)
                 ->color('primary'),
 
-            Card::make('Placement', $totalInventory)
+            Card::make('Media Placement', $totalInventory)
                 ->color('success'),
 
             Card::make('Broadcast Duration', "{$totalDuration} Days")

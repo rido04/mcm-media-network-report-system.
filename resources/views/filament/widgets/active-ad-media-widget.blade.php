@@ -6,7 +6,7 @@
                 <div class="w-full md:w-2/5 lg:w-1/3 p-4">
                     <img src="{{ Storage::url($ad->image_path) }}"
                         alt="{{ $ad->title }}"
-                        class="w-full h-48 object-cover rounded-lg shadow-sm"
+                        class="w-ful24l h-24 object-cover rounded-lg shadow-sm"
                         onerror="this.src='{{ asset('images/default-ad.jpg') }}'">
                 </div>
                 <div class="w-full md:w-3/5 lg:w-2/3 p-4">

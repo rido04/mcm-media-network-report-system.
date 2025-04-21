@@ -71,7 +71,6 @@ class AdPerformanceResource extends Resource
                         return [];
                     }
 
-                    // Sesuaikan query ini dengan struktur database Anda
                     return AdminTraffic::whereHas('mediaStatistic', function ($query) use ($cityId) {
                         $query->where('id', $cityId);
                     })->pluck('Category', 'id');
@@ -90,25 +89,55 @@ class AdPerformanceResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('adminTraffic.user.name')
+                    ->label('Client')
+                    ->searchable(),
                 TextColumn::make('mediaStatistic.city')
                     ->label('City/District')
                     ->searchable(),
                 TextColumn::make('adminTraffic.category')
                     ->label('Category')
-                    ->searchable(),
-                TextColumn::make('adminTraffic.user.name')
-                    ->label('Client')
-                    ->searchable(),
+                    ->searchable(),               
                 TextColumn::make('used_placement')
                     ->label('Used Placement'),
                 TextColumn::make('available_placement')
                     ->label('Available Placement'),
             ])
             ->filters([
-                SelectFilter::make('category')
-                ->relationship('adminTraffic','category' )
-                ->label('Category')
-                
+                SelectFilter::make('client')
+                    ->label('Client')
+                    ->multiple()
+                    ->options(fn () => User::whereHas('roles', fn($query) => $query->where('name', 'company'))
+                        ->pluck('name', 'id')
+                    )
+                    ->query(function (Builder $query, array $data) {
+                        if (empty($data['values'])) {
+                            return $query;
+                        }
+                        
+                        return $query->whereHas('adminTraffic.user', function ($query) use ($data) {
+                            $query->whereIn('users.id', $data['values']);
+                        });
+                    }),
+                    SelectFilter::make('category')
+                    ->label('Category')  
+                    ->options(function() {
+                        // Mengambil daftar kategori yang unik dari AdminTraffic
+                        return AdminTraffic::distinct()
+                            ->pluck('category', 'category');
+                    })
+                    ->query(function (Builder $query, array $data) {
+                        if (empty($data['value'])) {
+                            return $query;
+                        }
+                        
+                        return $query->whereHas('adminTraffic', function ($query) use ($data) {
+                            $query->where('category', $data['value']);
+                        });
+                    }),
+                SelectFilter::make('mediaStatistic.city')
+                ->label('City/District')
+                ->relationship('mediaStatistic','city')
                 
             ])
             ->actions([

@@ -26,6 +26,7 @@ use App\Filament\Resources\AdMediaResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Actions\DeleteAction as ActionsDeleteAction;
 use App\Filament\Resources\AdMediaResource\RelationManagers;
+use Filament\Tables\Filters\SelectFilter;
 
 /*
 Resource for managing ad media/media display
@@ -107,14 +108,21 @@ class AdMediaResource extends Resource
                 TextColumn::make('mediaStatistic.media')
                     ->label('Media Plan')
                     ->searchable(),
-                ImageColumn::make('image_path'),
+                TextColumn::make('title')
+                    ->label('Title'),
+                ImageColumn::make('image_path')
+                    ->label('image'),
                 TextColumn::make('start_date')
                     ->date(),
                 TextColumn::make('end_date')
                     ->date(),
             ])->defaultSort('start_date', 'desc')
             ->filters([
-                //
+                SelectFilter::make('user_id')
+                    ->label('Client')
+                    ->options(User::whereHas('roles', fn($q) => $q->where('name', 'company'))
+                    ->pluck('name', 'id'))
+                    ->label('Client')
             ])
             ->actions([
                 EditAction::make(),

@@ -23,6 +23,7 @@ use Filament\Tables\Actions\DeleteBulkAction;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\MediaPlacementResource\Pages;
 use App\Filament\Resources\MediaPlacementResource\RelationManagers;
+use Filament\Tables\Filters\SelectFilter;
 
 class MediaPlacementResource extends Resource
 {
@@ -59,6 +60,7 @@ class MediaPlacementResource extends Resource
                     ->live(),
                 TextInput::make('media')
                     ->label('Media')
+                    ->placeholder('XXX001')
                     ->required(),
                 TextINput::make('size')
                     ->label('Size')
@@ -85,11 +87,12 @@ class MediaPlacementResource extends Resource
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('media')
-                    ->label('Media')
+                    ->label('Media')                   
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('adminTraffic.category')
-                    ->label('Category'),
+                    ->label('Category')
+                    ->searchable(),
                 TextColumn::make('size')
                     ->label('Size')
                     ->sortable()
@@ -104,7 +107,21 @@ class MediaPlacementResource extends Resource
                     ->sortable(),
             ])
             ->filters([
-                //
+                SelectFilter::make('user.name')
+                    ->relationship('user', 'name')
+                    ->label('Client'),
+                SelectFilter::make('media')
+                    ->options(function () {
+                        return MediaPlacement::distinct()->pluck('media', 'media');
+                    })
+                    ->query(function (Builder $query, array $data) {
+                        if (!$data['value']) {
+                            return $query;
+                        }
+                        
+                        return $query->where('media', $data['value']);
+                    })
+                    ->label('Media'),
             ])
             ->actions([
                 EditAction::make(),

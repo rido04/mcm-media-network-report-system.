@@ -27,13 +27,9 @@ use App\Filament\Resources\DailyImpressionResource\RelationManagers;
 class DailyImpressionResource extends Resource
 {
     protected static ?string $model = DailyImpression::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-presentation-chart-line';
-
     protected static ?string $navigationGroup = 'Media';
-
     protected static ?string $navigationLabel = 'Impression';
-
     public static function getEloquentQuery(): Builder
 {
     return parent::getEloquentQuery()
@@ -43,14 +39,14 @@ class DailyImpressionResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
+        ->schema([
             Select::make('user_id')
-            ->label('Client')
-            ->options(fn () => User::whereHas('roles', fn($query) => $query->where('name', 'company'))
-                ->pluck('name', 'id')
-            )
-            ->reactive()
-            ->required(),
+                ->label('Client')
+                ->options(fn () => User::whereHas('roles', fn($query) => $query->where('name', 'company'))
+                    ->pluck('name', 'id')
+                )
+                ->reactive()
+                ->required(),
             Select::make('media_statistic_id')
                 ->label('City')
                 ->reactive()
@@ -64,7 +60,7 @@ class DailyImpressionResource extends Resource
                     return MediaStatistic::where('user_id', $userId)
                         ->select('id', 'city')
                         ->distinct()
-                        ->pluck('city', 'id'); // key = value
+                        ->pluck('city', 'id'); // key = value that you input
                 })
                 ->required(),
             Select::make('admin_traffic_id')
@@ -77,7 +73,7 @@ class DailyImpressionResource extends Resource
                         return [];
                     }
 
-                    // Sesuaikan query ini dengan struktur database Anda
+                    // adjust query
                     return AdminTraffic::whereHas('mediaStatistic', function ($query) use ($cityId) {
                         $query->where('id', $cityId);
                     })->pluck('Category', 'id');
@@ -106,6 +102,9 @@ class DailyImpressionResource extends Resource
             TextColumn::make('adminTraffic.user.name')
                 ->label('Client')
                 ->searchable(),
+            TextColumn::make('mediaStatistic.media')
+                ->label('Media Plan')
+                ->searchable(),
             TextColumn::make('mediaStatistic.city')
                 ->label('City/District')
                 ->searchable(),
@@ -114,17 +113,33 @@ class DailyImpressionResource extends Resource
                 ->searchable(),
             TextColumn::make('date')
                 ->label('Date')
+                ->sortable()
                 ->date(),
             TextColumn::make('impression')
                 ->label('Total Impression'),
                 ])->defaultSort('date', 'desc')
-                ->filters([
-            SelectFilter::make('admin_traffic_id')
-                    ->label('Client')
-                    ->options(fn () => User::whereHas('roles', fn ($query) => $query->where('name', 'company'))
-                        ->pluck('name', 'id'))
-                    ->searchable()
-                    ->preload()
+            ->filters([
+                SelectFilter::make('client')
+                ->label('Client')
+                ->multiple()
+                ->options(fn () => User::whereHas('roles', fn($query) => $query->where('name', 'company'))
+                    ->pluck('name', 'id')
+                )
+                ->query(function (Builder $query, array $data) {
+                    if (empty($data['values'])) {
+                        return $query;
+                    }
+                    
+                    return $query->whereHas('adminTraffic.user', function ($query) use ($data) {
+                        $query->whereIn('users.id', $data['values']);
+                    });
+                }),
+            SelectFilter::make('category')
+                ->label('Category')
+                ->relationship('adminTraffic','category'),
+            SelectFilter::make('mediaStatistic.city')
+                ->relationship('mediaStatistic', 'city')
+                ->label('City/District')
             ])
             ->actions([
                 EditAction::make(),

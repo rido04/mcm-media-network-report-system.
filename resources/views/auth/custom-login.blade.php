@@ -25,18 +25,15 @@
             }
         }
 
-        /* Custom CSS for the circular animation */
         .logo-animation-container {
             position: relative;
             width: 100%;
             aspect-ratio: 1/1;
             z-index: 1;
-            /* Reduce max height to prevent excessive space */
             max-height: 300px;
             margin: 0 auto;
         }
 
-        /* Container for the logo and rings */
         .radio-container {
             position: absolute;
             top: 50%;
@@ -50,16 +47,17 @@
             align-items: center;
             justify-content: center;
             z-index: 1;
+            box-shadow: 0 0 15px rgba(62, 23, 204, 0.4);
         }
 
-        /* Radio signal rings */
         .radio-ring {
             position: absolute;
             border-radius: 50%;
-            border: 2px solid #3e17cc;
+            border: 4px solid #3e17cc; 
             opacity: 0;
             animation: radioPulse 2s infinite ease-out;
             z-index: 0;
+            box-shadow: 0 0 10px rgba(62, 23, 204, 0.5);
         }
 
         .radio-ring:nth-child(1) {
@@ -95,7 +93,7 @@
         @keyframes radioPulse {
             0% {
                 transform: scale(0.8);
-                opacity: 0.8;
+                opacity: 1;
             }
             100% {
                 transform: scale(1);
@@ -109,15 +107,14 @@
             width: 200px;
             height: auto;
             max-width: 100%;
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
         }
 
-        /* Add higher z-index to form container */
         .login-form-container {
             position: relative;
             z-index: 10;
         }
 
-        /* Improved responsive layout */
         @media (max-width: 767px) {
             /* More compact layout for mobile */
             .hero-section {
@@ -150,9 +147,72 @@
                 width: 300px;
             }
         }
+
+        .form-input-container {
+        position: relative;
+        margin-bottom: 1.5rem;
+        }
+
+        .form-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 2px solid #CFD9DE;
+        border-radius: 0.5rem;
+        background-color: rgba(255, 255, 255, 0.8);
+        transition: all 0.3s ease;
+        z-index: 1;
+        }
+
+        .form-input:focus {
+        border-color: #3e17cc;
+        box-shadow: 0 0 0 3px rgba(62, 23, 204, 0.2);
+        background-color: white;
+        }
+
+        .form-label {
+        position: absolute;
+        left: 1rem;
+        top: 0.75rem;
+        color: #536471;
+        pointer-events: none;
+        transition: all 0.2s ease;
+        z-index: 0;
+        background-color: transparent;
+        padding: 0 4px;
+        }
+
+        .form-input:focus + .form-label,
+        .form-input:not(:placeholder-shown) + .form-label {
+        transform: translateY(-1.4rem) scale(0.85);
+        color: #3e17cc;
+        font-weight: 500;
+        z-index: 2;
+        background-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .form-input::placeholder {
+        color: transparent;
+        opacity: 0;
+        }
+
+        .login-btn {
+          background: linear-gradient(135deg, #3e17cc, #4c6ef5);
+          transition: all 0.3s ease;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .login-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 5px 15px rgba(62, 23, 204, 0.4);
+        }
+
+        .login-btn:active {
+          transform: translateY(0);
+        }
     </style>
 </head>
-<body class="font-[Montserrat] flex flex-col md:flex-row min-h-screen overflow-x-hidden bg-slate-950">
+<body class="font-[Montserrat] flex flex-col md:flex-row min-h-screen overflow-x-hidden bg-gradient-to-br from-slate-950 to-slate-800">
     <!-- Left Section with Hero Content - added more specific class name -->
     <div class="hero-section flex-1 flex items-center justify-center p-4 md:p-8 w-full md:w-1/2">
         <div class="max-w-[250px] md:max-w-[380px] w-full flex flex-col items-center text-center">
@@ -178,29 +238,48 @@
 
     <!-- Right Section with Login Form -->
     <div class="flex-1 flex flex-col justify-center p-4 md:p-8 w-full md:w-1/2 mx-auto login-form-container">
-        <div class="max-w-md w-full mx-auto rounded-lg shadow-md p-6 md:p-8 backdrop-opacity-100 bg-white/70">
-            <h2 class="text-2xl md:text-3xl font-medium mb-4 text-twitter-dark">MCM Portal</h2>
-            <h4 class="text-lg md:text-xl font-medium mb-6 text-twitter-dark">Login to your account</h4>
+        <div class="max-w-md w-full mx-auto rounded-2xl shadow-lg p-6 md:p-8 backdrop-blur-md bg-white/90 border border-white/20">
+            <h2 class="text-2xl md:text-3xl font-semibold mb-2 text-gray-800">MCM Portal</h2>
+            <h4 class="text-lg md:text-xl font-medium mb-8 text-gray-600">login to your account</h4>
 
             @if ($errors->any())
-                <div class="text-red-600 text-sm mb-4">
-                    {{ $errors->first() }}
+                <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-red-600">{{ $errors->first() }}</p>
+                        </div>
+                    </div>
                 </div>
             @endif
 
             <form method="POST" action="{{ route('login') }}">
                 @csrf
-                <div class="mb-4">
-                    <input type="email" name="email" value="{{ old('email') }}"
-                        class="w-full p-3 border border-twitter rounded text-twitter-dark bg-white/70 focus:outline focus:outline-1 focus-outline-twitter"
-                        placeholder="Email" required>
+                <div class="form-input-container">
+                    <input type="email" name="email" value="{{ old('email') }}" class="form-input" id="email" placeholder="Email" required>
+                    <label for="email" class="form-label">Email</label>
                 </div>
-                <div class="mb-6">
-                    <input type="password" name="password"
-                        class="w-full p-3 border border-twitter rounded text-twitter-dark bg-white/70 focus:outline focus:outline-1 focus-outline-twitter"
-                        placeholder="Password" required>
+                
+                <div class="form-input-container">
+                    <input type="password" name="password" class="form-input" id="password" placeholder="Password" required>
+                    <label for="password" class="form-label">Password</label>
                 </div>
-                <button type="submit" class="w-full py-3 rounded-full font-bold cursor-pointer border-none text-white bg-blue-400 mb-4 hover:text-black hover:bg-white transition duration-300 ease-in-out">
+                
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center">
+                        <input type="checkbox" id="remember" name="remember" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                        <label for="remember" class="ml-2 block text-sm text-gray-700">Remember me</label>
+                    </div>
+                    <div class="text-sm">
+                        <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium">Forgot password?</a>
+                    </div>
+                </div>
+                
+                <button type="submit" class="login-btn w-full py-3 px-4 rounded-xl font-bold text-white mb-4 transition duration-300 ease-in-out">
                     Login
                 </button>
             </form>

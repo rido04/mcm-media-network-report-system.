@@ -30,10 +30,9 @@ use Filament\Tables\Filters\SelectFilter;
 class DocumentationResource extends Resource
 {
     protected static ?string $model = Documentation::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-camera';
-
     protected static ?string $navigationGroup = 'Table Log';
+    protected static ?string $navigationLabel = 'Documnetation';
     public static function form(Form $form): Form
     {
         return $form
@@ -72,9 +71,9 @@ class DocumentationResource extends Resource
             ])
             ->filters([
                 SelectFilter::make('user_id')
-                ->label('Client')
-                ->options(User::whereHas('roles', fn($q) => $q->where('name', 'company'))
-                        ->pluck('name', 'id'))
+                    ->label('Client')
+                    ->options(User::whereHas('roles', fn($q) => $q->where('name', 'company'))
+                            ->pluck('name', 'id'))
             ])
             ->actions([
                 EditAction::make(),
