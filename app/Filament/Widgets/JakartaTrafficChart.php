@@ -73,7 +73,7 @@ class JakartaTrafficChart extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Impressions',
+                    'label' => 'Traffic',
                     'data' => $values,
                 ],
             ],

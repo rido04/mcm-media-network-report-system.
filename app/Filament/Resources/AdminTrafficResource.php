@@ -84,9 +84,18 @@ class AdminTrafficResource extends Resource
             ->columns([
                 TextColumn::make('name')
                     ->label('Client')
+                    ->searchable(query: function (Builder $query, string $search): Builder {
+                        return $query->whereHas('user', function (Builder $query) use ($search) {
+                            $query->where('name', 'like', "%{$search}%");
+                        });
+                    })
                     ->getStateUsing(fn ($record) => $record->user?->name ?? '-'),
-                TextColumn::make('category')->label('Category'),
-                TextColumn::make('mediaStatistic.city')->label('City/District'),
+                TextColumn::make('category')
+                    ->label('Category')
+                    ->searchable(),
+                TextColumn::make('mediaStatistic.city')
+                    ->label('City/District')
+                    ->searchable(),
                 TextColumn::make('daily_impressions_max_impression')
                     ->label('Highest'),
                 TextColumn::make('daily_impressions_min_impression')
@@ -100,6 +109,9 @@ class AdminTrafficResource extends Resource
                     ->label('Client')
                     ->options(fn () => User::whereHas('roles', fn ($query) => $query->where('name', 'company'))
                         ->pluck('name', 'id')),
+                SelectFilter::make('category')
+                    ->label('Category')
+                    ->options(fn () => AdminTraffic::pluck('category', 'category')),
             ])
             ->actions([
                 EditAction::make(),

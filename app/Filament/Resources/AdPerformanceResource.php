@@ -22,6 +22,7 @@ use Filament\Tables\Actions\DeleteBulkAction;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\AdPerformanceResource\Pages;
 use App\Filament\Resources\AdPerformanceResource\RelationManagers;
+use Filament\Tables\Filters\SelectFilter;
 
 class AdPerformanceResource extends Resource
 {
@@ -47,23 +48,23 @@ class AdPerformanceResource extends Resource
                     ->required()
                     ->reactive(),
                 Select::make('media_statistic_id')
-                ->label('City')
-                ->reactive()
-                ->options(function (callable $get) {
-                    $userId = $get('user_id');
-                    if (!$userId) {
-                        return [];
-                    }
-                    return MediaStatistic::where('user_id', $userId)
-                        ->select('id', 'city')
-                        ->distinct()
-                        ->pluck('city', 'id'); // key = value
-                })
-                ->required(),
+                    ->label('City')
+                    ->reactive()
+                    ->options(function (callable $get) {
+                        $userId = $get('user_id');
+                        if (!$userId) {
+                            return [];
+                        }
+                        return MediaStatistic::where('user_id', $userId)
+                            ->select('id', 'city')
+                            ->distinct()
+                            ->pluck('city', 'id'); // key = value
+                    })
+                    ->required(),
                 Select::make('admin_traffic_id')
-                ->label('Category')
-                ->reactive()
-                ->options(function (callable $get) {
+                    ->label('Category')
+                    ->reactive()
+                    ->options(function (callable $get) {
                     $cityId = $get('media_statistic_id');
 
                     if (!$cityId) {
@@ -75,10 +76,10 @@ class AdPerformanceResource extends Resource
                         $query->where('id', $cityId);
                     })->pluck('Category', 'id');
                     }),
-            TextInput::make('used_placement')
+                TextInput::make('used_placement')
                     ->label('Used Placement')
                     ->required(),
-            TextInput::make('available_placement')
+                TextInput::make('available_placement')
                     ->label('Available Placement')
                     ->numeric()
                     ->required(),
@@ -90,18 +91,25 @@ class AdPerformanceResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('mediaStatistic.city')
-                    ->label('City/District'),
+                    ->label('City/District')
+                    ->searchable(),
                 TextColumn::make('adminTraffic.category')
-                    ->label('Category'),
+                    ->label('Category')
+                    ->searchable(),
                 TextColumn::make('adminTraffic.user.name')
-                    ->label('Client'),
+                    ->label('Client')
+                    ->searchable(),
                 TextColumn::make('used_placement')
                     ->label('Used Placement'),
                 TextColumn::make('available_placement')
                     ->label('Available Placement'),
             ])
             ->filters([
-                //
+                SelectFilter::make('category')
+                ->relationship('adminTraffic','category' )
+                ->label('Category')
+                
+                
             ])
             ->actions([
                 EditAction::make(),

@@ -67,7 +67,7 @@ class DailyImpressionResource extends Resource
                         ->pluck('city', 'id'); // key = value
                 })
                 ->required(),
-                Select::make('admin_traffic_id')
+            Select::make('admin_traffic_id')
                 ->label('Category')
                 ->reactive()
                 ->options(function (callable $get) {
@@ -119,7 +119,7 @@ class DailyImpressionResource extends Resource
                 ->label('Total Impression'),
                 ])->defaultSort('date', 'desc')
                 ->filters([
-                SelectFilter::make('admin_traffic_id')
+            SelectFilter::make('admin_traffic_id')
                     ->label('Client')
                     ->options(fn () => User::whereHas('roles', fn ($query) => $query->where('name', 'company'))
                         ->pluck('name', 'id'))

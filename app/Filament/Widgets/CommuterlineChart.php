@@ -13,7 +13,11 @@ class CommuterlineChart extends ChartWidget
     protected int | string | array $columnSpan = 'full';
     public static ?int $sort = 5;
     public ?string $filter = 'daily';
-    public ?string $cityFilter = null; // Tambahkan filter untuk kota
+    public ?string $startDate = null;
+    public ?string $endDate = null;
+    public ?string $cityFilter = null; 
+    protected $listeners = ['refreshStatsWidget' => 'refreshFromSession']; // listener for global filter
+
 
     protected function getFilters(): ?array
     {
@@ -23,6 +27,16 @@ class CommuterlineChart extends ChartWidget
             'weekly' => 'Weekly',
             'daily' => 'Daily',
         ];
+    }
+
+    public function refreshFromSession()
+    {
+        $this->filter = session('filters')['filter'] ?? 'daily';
+        $this->cityFilter = session('filters')['city'] ?? null;
+        $this->startDate = session('filters')['start_date'] ?? null;
+        $this->endDate = session('filters')['end_date'] ?? null;
+
+        $this->dispatch('$refresh');
     }
 
     // Tambahkan method untuk filter city
@@ -74,6 +88,15 @@ class CommuterlineChart extends ChartWidget
             });
         }
 
+        if ($this->startDate) {
+            $query->whereDate('date', '>=', $this->startDate);
+        }
+        
+        if ($this->endDate) {
+            $query->whereDate('date', '<=', $this->endDate);
+        }
+        
+
         switch ($this->filter) {
             case 'yearly':
                 $query->selectRaw('YEAR(date) as label, SUM(impression) as total')
@@ -113,7 +136,7 @@ class CommuterlineChart extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Impressions',
+                    'label' => 'People',
                     'data' => $values,
                 ],
             ],

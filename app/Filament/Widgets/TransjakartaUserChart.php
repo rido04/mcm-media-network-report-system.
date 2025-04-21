@@ -73,7 +73,7 @@ class TransjakartaUserChart extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Impressions',
+                    'label' => 'People',
                     'data' => $values,
                 ],
             ],

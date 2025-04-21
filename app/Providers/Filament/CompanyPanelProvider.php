@@ -37,6 +37,7 @@ use Filament\Http\Middleware\DisableBladeIconComponents;
 use App\Filament\Company\Resources\MediaStatisticResource;
 use App\Filament\Widgets\CustomAccountWidget;
 use App\Filament\Widgets\DashboardTabsWidget;
+use App\Filament\Widgets\ImpressionStats;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Filament\Forms\Components\DatePicker as DateRangePicker;
@@ -96,6 +97,7 @@ class CompanyPanelProvider extends PanelProvider
                 ActiveAdMediaWidget::class, // active ad media widget
                 AdPerformanceChart::class, // ad performance chart widget
                 DashboardTabsWidget::class, // table with tabs widget
+                ImpressionStats::class, // impression stats widget
                 ])
                 ->middleware([
                 EncryptCookies::class,

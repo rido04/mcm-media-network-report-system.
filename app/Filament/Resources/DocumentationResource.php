@@ -25,6 +25,7 @@ use Filament\Tables\Actions\DeleteBulkAction;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\DocumentationResource\Pages;
 use App\Filament\Resources\DocumentationResource\RelationManagers;
+use Filament\Tables\Filters\SelectFilter;
 
 class DocumentationResource extends Resource
 {
@@ -70,7 +71,10 @@ class DocumentationResource extends Resource
 
             ])
             ->filters([
-                //
+                SelectFilter::make('user_id')
+                ->label('Client')
+                ->options(User::whereHas('roles', fn($q) => $q->where('name', 'company'))
+                        ->pluck('name', 'id'))
             ])
             ->actions([
                 EditAction::make(),

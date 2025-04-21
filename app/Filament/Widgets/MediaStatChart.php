@@ -84,13 +84,13 @@ class MediaStatChart extends ChartWidget
             'datasets' => [
                 [
                     'type' => 'bar', // Dataset for bar chart
-                    'label' => 'Bar Data',
+                    'label' => 'Reach',
                     'data' => $barValues,
                     'borderWidth' => 1,
                 ],
                 [
                     'type' => 'line', // Dataset for line chart
-                    'label' => 'Line Data',
+                    'label' => 'Impression',
                     'data' => $lineValues,
                     'borderColor' => 'rgba(255, 99, 132, 1)',
                     'backgroundColor' => 'rgba(255, 99, 132, 0.2)',

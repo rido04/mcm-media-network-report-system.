@@ -14,7 +14,7 @@ class AdPerformanceChart extends ChartWidget
     protected static ?int $sort = 2;
     protected int|string|array $columnSpan = 'full';
 
-    // Tambahkan property untuk filter
+    // add filter
     protected static bool $isFilterable = true;
     public ?string $filter = null;
 
@@ -23,7 +23,7 @@ class AdPerformanceChart extends ChartWidget
         return '500px';
     }
 
-    // Tambahkan method untuk mendapatkan opsi filter
+    // Add filter method
     protected function getFilters(): ?array
     {
         $cities = MediaStatistic::where('user_id', Auth::id())
@@ -43,11 +43,11 @@ class AdPerformanceChart extends ChartWidget
 
     protected function getData(): array
     {
-        // Query dasar
+        // Query
         $query = AdPerformance::with(['adminTraffic', 'mediaStatistic'])
             ->whereHas('adminTraffic', fn ($q) => $q->where('user_id', Auth::id()));
 
-        // Tambahkan filter by city jika ada dan bukan 'all'
+        // Add filter by ciiy for current user
         if ($this->filter && $this->filter !== 'all') {
             $query->whereHas('mediaStatistic', function ($q) {
                 $q->where('city', $this->filter);
@@ -106,14 +106,6 @@ class AdPerformanceChart extends ChartWidget
                     'enabled' => true,
                     'mode' => 'index',
                     'intersect' => false,
-                    'callbacks' => [
-                        'label' => RawJs::make(<<<'JS'
-                            function(context) {
-                                const value = context.parsed.y !== undefined ? context.parsed.y : context.parsed;
-                                return context.dataset.label + ": " + value + " placements";
-                            }
-                        JS),
-                    ],
                 ],
             ],
             'scales' => [

@@ -19,7 +19,7 @@ class MediaStatisticFilterWidget extends Widget implements HasForms
 
     protected static ?int $sort = 1;
 
-    // Definisikan semua kunci dengan null sebagai default
+    // Define the filters as public properties
     public $filters = [
         'start_date' => null,
         'end_date' => null,
@@ -42,10 +42,8 @@ class MediaStatisticFilterWidget extends Widget implements HasForms
         return [
             DatePicker::make('filters.start_date')
                 ->label('Start Date'),
-
             DatePicker::make('filters.end_date')
                 ->label('End Date'),
-
             Select::make('filters.media')
                 ->label('Media Plan')
                 ->placeholder('Media Plan')
@@ -54,25 +52,23 @@ class MediaStatisticFilterWidget extends Widget implements HasForms
                     ->select('media')
                     ->distinct()
                     ->pluck('media', 'media')),
-
             Select::make('filters.city')
                 ->label('City')
                 ->placeholder('City')
                 ->options(fn () => MediaStatistic::query()
                     ->where('user_id', Auth::id())
-                    ->select('city')
-                    ->distinct()
-                    ->pluck('city', 'city')),
+                    ->select('id', 'city')
+                    ->pluck('city', 'city')),                
         ];
     }
 
     public function mount(): void
     {
-        // Ambil filters dari session dan merge dengan default
+        // Get filters from session and merge with default
         $sessionFilters = session('filters', []);
         $this->filters = array_merge($this->filters, $sessionFilters);
 
-        // Isi form dengan data yang sudah dimerge
+        // Initialize the form with the filters
         $this->form->fill($this->filters);
     }
 }
