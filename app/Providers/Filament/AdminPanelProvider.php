@@ -26,6 +26,8 @@ use App\Filament\Resources\MediaPlacementResource;
 use App\Filament\Resources\MediaStatisticResource;
 use App\Filament\Resources\DailyImpressionResource;
 use App\Filament\Widgets\MediaStatisticFilterWidget;
+use Filament\FontProviders\GoogleFontProvider;
+use Filament\FontProviders\LocalFontProvider;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -39,11 +41,17 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
-            ->font('poppins')
+            ->font(
+                'Roboto',
+                url: asset('css/font.css'),
+                provider: LocalFontProvider::class,
+            )
             ->id('admin')
             ->path('admin')
             ->favicon(asset('/storage/image/logo_mcm.png'))
-            ->brandName('MCM Media Networks')
+            ->unsavedChangesAlerts()
+            ->brandLogo(asset('/storage/image/logo_mcm.png'))
+            ->brandLogoHeight('2.5rem')
             ->login(fn () => redirect('/login'))
             ->authMiddleware([
                 'role:admin', // tambahan role check

@@ -22,7 +22,7 @@ Route::post('/login', function (Request $request) {
         $user = Auth::user();
 
         // Redirect sesuai role
-        if ($user->hasRole('admin')) { // Perbaiki pemanggilan hasRole
+        if ($user->hasRole('admin')) { // Ignore the hasRole Erro if shown up, cause VScode dont know if this is a Model
             return redirect()->intended('/admin');
         }
 
@@ -45,3 +45,5 @@ Route::post('/filament/logout', function () {
     Auth::logout();
     return redirect('/login');
 })->name('logout');
+
+

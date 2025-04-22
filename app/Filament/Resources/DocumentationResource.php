@@ -9,6 +9,7 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\Documentation;
 use Filament\Resources\Resource;
+use Filament\Tables\Grouping\Group;
 use Filament\Forms\Components\Select;
 use function Laravel\Prompts\textarea;
 use Filament\Forms\Components\Textarea;
@@ -18,14 +19,14 @@ use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\FileUpload;
 use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Filters\SelectFilter;
+
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Actions\BulkActionGroup;
-
 use Filament\Tables\Actions\DeleteBulkAction;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\DocumentationResource\Pages;
 use App\Filament\Resources\DocumentationResource\RelationManagers;
-use Filament\Tables\Filters\SelectFilter;
 
 class DocumentationResource extends Resource
 {
@@ -59,6 +60,11 @@ class DocumentationResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->emptyStateIcon('heroicon-o-camera')
+            ->groups([
+                Group::make('user.name')
+                    ->label('Company')
+            ])
             ->columns([
                 TextColumn::make('user.name')
                     ->label('Client')

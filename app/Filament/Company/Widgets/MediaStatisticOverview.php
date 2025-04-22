@@ -3,6 +3,7 @@
 namespace App\Filament\Company\Widgets;
 
 use App\Models\MediaStatistic;
+use Filament\Support\Enums\IconPosition;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -50,15 +51,23 @@ class MediaStatisticOverview extends BaseWidget
 
         return [
             Card::make('Media Plan', $totalMediaPlan)
+                ->description('Registered')
+                ->descriptionIcon('heroicon-o-play-circle', IconPosition::After)
                 ->color('primary'),
 
             Card::make('Media Placement', $totalInventory)
+                ->description('Your Placement')
+                ->descriptionIcon('heroicon-o-building-office-2', IconPosition::After)
                 ->color('success'),
 
             Card::make('Broadcast Duration', "{$totalDuration} Days")
+                ->description('Total')
+                ->descriptionIcon('heroicon-o-calendar-days', IconPosition::After)
                 ->color('info'),
 
             Card::make('Remaining Days', "{$remainingDays} Days")
+                ->description('Remaining')
+                ->descriptionIcon('heroicon-o-clock', IconPosition::After)
                 ->color('warning'),
         ];
     }

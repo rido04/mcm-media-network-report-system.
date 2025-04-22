@@ -11,6 +11,7 @@ use App\Models\AdminTraffic;
 use App\Models\MediaStatistic;
 use App\Models\DailyImpression;
 use Filament\Resources\Resource;
+use Filament\Tables\Grouping\Group;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
@@ -81,7 +82,18 @@ class DailyImpressionResource extends Resource
                 ->required(),
             Select::make('media_statistic_id')
                 ->label('Media Plan')
-                ->relationship('mediaStatistic', 'media')
+                ->options(function (callable $get) {
+                    $userId = $get('user_id');
+
+                    if (!$userId) {
+                        return [];
+                    }
+
+                    return MediaStatistic::where('user_id', $userId)
+                        ->select('id', 'media')
+                        ->distinct()
+                        ->pluck('media', 'id');
+                    })
                 ->required(),
 
             DatePicker::make('date')
@@ -98,6 +110,10 @@ class DailyImpressionResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+        ->groups([
+            Group::make('adminTraffic.category')
+            ->label('Category')
+        ])
             ->columns([
             TextColumn::make('adminTraffic.user.name')
                 ->label('Client')
@@ -129,7 +145,7 @@ class DailyImpressionResource extends Resource
                     if (empty($data['values'])) {
                         return $query;
                     }
-                    
+
                     return $query->whereHas('adminTraffic.user', function ($query) use ($data) {
                         $query->whereIn('users.id', $data['values']);
                     });

@@ -8,7 +8,9 @@ use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\AdminTraffic;
+use App\Models\MediaStatistic;
 use Filament\Resources\Resource;
+use Filament\Tables\Grouping\Group;
 use function Laravel\Prompts\search;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Actions\EditAction;
@@ -23,7 +25,6 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\AdminTrafficResource\Pages;
 use App\Filament\Resources\AdminTrafficResource\RelationManagers;
 use App\Filament\Resources\AdminTrafficResource\RelationManagers\DailyImpressionsRelationManager;
-use App\Models\MediaStatistic;
 
 class AdminTrafficResource extends Resource
 {
@@ -82,6 +83,10 @@ class AdminTrafficResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+        ->groups([
+            Group::make('user.name')
+                ->label('Company')
+        ])
             ->columns([
                 TextColumn::make('name')
                     ->label('Client')

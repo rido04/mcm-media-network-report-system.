@@ -2,8 +2,6 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Widgets\DocumentationWidget;
-use App\Filament\Widgets\LogoWidget;
 use Dom\Document;
 use Filament\Pages;
 use Filament\Panel;
@@ -12,16 +10,22 @@ use CompanyTabsWidget;
 use Filament\PanelProvider;
 use Filament\Enums\ThemeMode;
 use Filament\Support\Colors\Color;
+use App\Filament\Widgets\LogoWidget;
 use Filament\Forms\Components\Select;
 use App\Filament\Widgets\MediaPlanTable;
 use App\Filament\Widgets\MediaStatChart;
 use Filament\Forms\Components\TextInput;
+use App\Filament\Widgets\ImpressionStats;
 use Filament\Http\Middleware\Authenticate;
 use App\Filament\Widgets\CommuterlineChart;
 use App\Filament\Widgets\AdPerformanceChart;
 use App\Filament\Widgets\PlayLogTableWidget;
 use App\Filament\Widgets\ActiveAdMediaWidget;
+use App\Filament\Widgets\CustomAccountWidget;
+use App\Filament\Widgets\DashboardTabsWidget;
+use App\Filament\Widgets\DocumentationWidget;
 use App\Filament\Widgets\JakartaTrafficChart;
+use Filament\FontProviders\LocalFontProvider;
 use App\Filament\Widgets\MediaPlanTableWidget;
 use App\Filament\Widgets\TransjakartaUserChart;
 use Illuminate\Session\Middleware\StartSession;
@@ -35,9 +39,6 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Filament\Company\Widgets\MediaStatisticOverview;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use App\Filament\Company\Resources\MediaStatisticResource;
-use App\Filament\Widgets\CustomAccountWidget;
-use App\Filament\Widgets\DashboardTabsWidget;
-use App\Filament\Widgets\ImpressionStats;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Filament\Forms\Components\DatePicker as DateRangePicker;
@@ -49,7 +50,11 @@ class CompanyPanelProvider extends PanelProvider
     {
         return $panel
             ->id('company')
-            ->font('poppins')
+            ->font(
+                'Funnel Display',
+                url: asset('css/font.css'),
+                provider: LocalFontProvider::class,
+            )
             ->path('company')
             ->favicon(asset('/storage/image/logo_mcm.png'))
             ->login(fn () => redirect('/login'))
@@ -57,8 +62,10 @@ class CompanyPanelProvider extends PanelProvider
             ->authMiddleware([
                 'role:company', // role check
             ])
-            ->brandName('MCM Client')
+            ->brandLogo(asset('storage/image/logo_mcm.png'))
+            ->brandLogoHeight('2.5rem')
             ->defaultThemeMode(ThemeMode::Dark)
+            ->unsavedChangesAlerts()
             ->colors([
                 'danger' => Color::Rose,
                 'gray' => Color::Gray,

@@ -58,7 +58,7 @@ class MediaStatisticFilterWidget extends Widget implements HasForms
                 ->options(fn () => MediaStatistic::query()
                     ->where('user_id', Auth::id())
                     ->select('id', 'city')
-                    ->pluck('city', 'city')),                
+                    ->pluck('city', 'city')),
         ];
     }
 
