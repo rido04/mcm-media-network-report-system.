@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use App\Livewire\CompanyDashboard;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Company\DashboardController;
@@ -46,4 +47,6 @@ Route::post('/filament/logout', function () {
     return redirect('/login');
 })->name('logout');
 
-
+Route::middleware(['auth', 'role:company'])->group(function () {
+    Route::get('/company-dashboard', CompanyDashboard::class)->name('company.dashboard');
+});
