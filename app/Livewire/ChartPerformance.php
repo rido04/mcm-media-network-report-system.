@@ -3,62 +3,78 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\AdPerformance;
+use App\Models\MediaStatistic;
 use Illuminate\Support\Facades\Auth;
 
 class ChartPerformance extends Component
 {
-    public $chartFilter = 'all'; // Untuk filter chart berdasarkan kota
-
-    public function updatedChartFilter()
+    public $filter = 'all'; // for city filter
+    public $cities = [];
+    protected $listeners = ['refreshChart' => '$refresh'];
+    public function mount()
     {
-        $this->dispatch('refreshChart', $this->chartData);
+        $this->cities = MediaStatistic::where('user_id', Auth::id())
+            ->select('city')
+            ->distinct()
+            ->pluck('city')
+            ->toArray();
+    }
+    public function updated($propertyName)
+    {
+        if ($propertyName === 'filter') {
+            $this->dispatch('refreshChart');
+        }
     }
     public function getChartDataProperty()
-    {
-        $query = AdPerformance::with(['adminTraffic', 'mediaStatistic'])
-            ->whereHas('adminTraffic', fn ($q) => $q->where('user_id', Auth::id()));
+{
+    $data = AdPerformance::with(['adminTraffic', 'mediaStatistic'])
+        ->whereHas('adminTraffic', fn ($q) => $q->where('user_id', Auth::id()))
+        ->get()
+        ->groupBy(fn ($item) => $item->adminTraffic->category ?? 'Unknown');
 
-        if ($this->chartFilter !== 'all') {
-            $query->whereHas('mediaStatistic', fn ($q) => $q->where('city', $this->chartFilter));
-        }
+    $labels = [];
+    $used = [];
+    $available = [];
+    $cityMap = []; // Simpan city info
 
-        $data = $query->get()
-            ->groupBy(fn ($item) => $item->adminTraffic->category ?? 'Unknown');
+    foreach ($data as $category => $items) {
+        $labels[] = $category;
+        $used[] = $items->sum('used_placement');
+        $available[] = $items->sum('available_placement');
 
-        $labels = [];
-        $used = [];
-        $available = [];
-
-        foreach ($data as $category => $items) {
-            $labels[] = $category;
-            $used[] = $items->sum('used_placement');
-            $available[] = $items->sum('available_placement');
-        }
-
-        return [
-            'labels' =>  $labels,
-            'datasets' => [
-                [
-                    'label' => 'Used Placement',
-                    'data' => $used,
-                    'textColor' => '#FFFFFF',
-                    'backgroundColor' => '#9BD0F5',
-                    'borderRadius' => 4,
-                    'barThickness' => 30,
-                ],
-                [
-                    'label' => 'Available Placement',
-                    'data' => $available,
-                    'textColor' => '#FFFFFF',
-                    'backgroundColor' => '#F7B267',
-                    'borderRadius' => 4,
-                    'barThickness' => 30,
-                ],
-            ],
-        ];
+        // Ambil nama kota dominan (atau pertama) untuk tooltip
+        $cityMap[] = $items->first()?->mediaStatistic->city ?? 'Unknown';
     }
+
+    return [
+        'labels' => $labels,
+        'datasets' => [
+            [
+                'label' => 'Used Placement',
+                'data' => $used,
+                'city' => $cityMap,
+                'backgroundColor' => 'red',
+                'borderRadius' => 4,
+                'barThickness' => 30,
+            ],
+            [
+                'label' => 'Available Placement',
+                'data' => $available,
+                'city' => $cityMap,
+                'backgroundColor' => 'blue',
+                'borderRadius' => 4,
+                'barThickness' => 30,
+            ],
+        ],
+    ];
+}
+
+
     public function render()
     {
-        return view('livewire.chart-performance', ['chartData' => $this->chartData]);
+        return view('livewire.chart-performance', [
+            'chartData' => $this->chartData,
+            'filterOptions' => array_merge(['all' => 'All Cities'], array_combine($this->cities, $this->cities))
+        ]);
     }
 }

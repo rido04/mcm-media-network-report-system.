@@ -1,19 +1,21 @@
+<!-- resources/views/livewire/media-overview.blade.php -->
+<div>
     <!-- Stats Cards Row -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         <!-- Media Plan Card -->
-        <div class="bg-gradient-to-r from-gray-600 to-gray-500 dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+        <div class="bg-gray-600 dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
             <div class="px-6 py-5">
                 <div class="flex justify-between items-center">
                     <div>
                         <h3 class="text-sm font-medium text-white font- dark:text-gray-400 mb-1">Media Plan</h3>
                         <div class="flex items-baseline">
                             <p class="text-2xl font-bold text-white dark:text-white">
-                                {{ $this->stats['totalMediaPlan'] }}
+                                {{ $stats['totalMediaPlan'] }}
                             </p>
                         </div>
                     </div>
                     <div class="rounded-full p-3 bg-blue-100 dark:bg-blue-900/30">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-900 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
@@ -23,14 +25,14 @@
         </div>
 
         <!-- Media Placement Card -->
-        <div class="bg-gradient-to-r from-gray-600 to-gray-500 dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+        <div class="bg-gray-600 dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
             <div class="px-6 py-5">
                 <div class="flex justify-between items-center">
                     <div>
                         <h3 class="text-sm font-medium text-white font- dark:text-gray-400 mb-1">Media Placement</h3>
                         <div class="flex items-baseline">
                             <p class="text-2xl font-bold text-white dark:text-white">
-                                {{ $this->stats['totalInventory'] }}
+                                {{ $stats['totalInventory'] }}
                             </p>
                         </div>
                     </div>
@@ -44,14 +46,14 @@
         </div>
 
         <!-- Broadcast Duration Card -->
-        <div class="bg-gradient-to-r from-gray-600 to-gray-500 dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+        <div class="bg-gray-600 dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
             <div class="px-6 py-5">
                 <div class="flex justify-between items-center">
                     <div>
                         <h3 class="text-sm font-medium text-white dark:text-gray-400 mb-1">Broadcast Duration</h3>
                         <div class="flex items-baseline">
                             <p class="text-2xl font-bold text-white dark:text-white">
-                                {{ $this->stats['totalDuration'] }} <span class="text-sm font-normal">Days</span>
+                                {{ $stats['totalDuration'] }} <span class="text-sm font-normal">Days</span>
                             </p>
                         </div>
                     </div>
@@ -65,14 +67,14 @@
         </div>
 
         <!-- Remaining Days Card -->
-        <div class="bg-gradient-to-r from-gray-600 to-gray-500 dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+        <div class="bg-gray-600 dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
             <div class="px-6 py-5">
                 <div class="flex justify-between items-center">
                     <div>
                         <h3 class="text-sm font-medium text-white font- dark:text-gray-400 mb-1">Remaining Days</h3>
                         <div class="flex items-baseline">
                             <p class="text-2xl font-bold text-white dark:text-white">
-                                {{ $this->stats['remainingDays'] }} <span class="text-sm font-normal">Days</span>
+                                {{ $stats['remainingDays'] }} <span class="text-sm font-normal">Days</span>
                             </p>
                         </div>
                     </div>
@@ -85,3 +87,4 @@
             </div>
         </div>
     </div>
+</div>
