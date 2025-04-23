@@ -1,13 +1,13 @@
 <!-- resources/views/livewire/media-filter.blade.php -->
 
-<div class="bg-gray-600 rounded-lg p-4 w-full"
+<div class="w-full"
      x-data="{
         activeFilter: null,
         toggleFilter(name) {
             this.activeFilter = this.activeFilter === name ? null : name;
         }
      }">
-    <div class="flex flex-wrap items-center gap-2">
+    <div class="flex flex-wrap items-center gap-2 z-0">
         <!-- Date Range Filter -->
         <div class="relative">
             <button @click="toggleFilter('date')" class="flex items-center gap-2 bg-white border border-gray-200 rounded-md px-3 py-2 text-sm text-gray-700 hover:bg-gray-50">

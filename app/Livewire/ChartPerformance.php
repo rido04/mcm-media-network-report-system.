@@ -53,7 +53,7 @@ class ChartPerformance extends Component
                 'label' => 'Used Placement',
                 'data' => $used,
                 'city' => $cityMap,
-                'backgroundColor' => 'red',
+                'backgroundColor' => '#ff4d4d',
                 'borderRadius' => 4,
                 'barThickness' => 30,
             ],
