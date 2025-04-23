@@ -63,6 +63,8 @@ $user = auth()->user();
         <!-- Chart Section -->
         @livewire('chart-performance')
 
+        @livewire('impression-stats')
+
     </div>
 
 </div>
