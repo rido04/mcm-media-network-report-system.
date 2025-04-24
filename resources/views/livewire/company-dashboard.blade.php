@@ -72,7 +72,15 @@
             @livewire('impression-stats')
             @livewire('ad-display')
             @livewire('commuterline-user-chart')
+            <div class="flex flex-col sm:flex-row gap-4">
+                <div class="w-full sm:w-1/2">
+            @livewire('transjakarta')
         </div>
+        <div class="w-full sm:w-1/2">
+            @livewire('road-traffic')
+        </div>
+    </div>
+    </div>
     </main>
 
 </div>

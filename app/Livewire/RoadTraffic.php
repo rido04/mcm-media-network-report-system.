@@ -1,21 +1,19 @@
 <?php
+
 namespace App\Livewire;
 
 use Carbon\Carbon;
 use Livewire\Component;
 use App\Models\DailyImpression;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 
-class CommuterlineUserChart extends Component
+class RoadTraffic extends Component
 {
-    public $timeRange = 'daily'; // daily, weekly, monthly
+    public $timeRange = 'daily'; // defualt filter
 
     public function mount()
     {
-        // Inisialisasi awal tidak diperlukan karena kita akan menghitung range di render()
+        //
     }
-
     public function changeTimeRange($range)
     {
         $this->timeRange = $range;
@@ -44,7 +42,7 @@ class CommuterlineUserChart extends Component
 
         $query = DailyImpression::with(['adminTraffic'])
             ->whereHas('adminTraffic', function($q) {
-                $q->where('category', 'Commuterline');
+                $q->where('category', ['DOOH', 'OOH']);
             })
             ->whereBetween('date', [$startDate, $endDate]);
 
@@ -79,7 +77,7 @@ class CommuterlineUserChart extends Component
 
         $impressions = $data->values()->toArray();
 
-        return view('livewire.commuterline-user-chart', [
+        return view('livewire.road-traffic', [
             'labels' => $labels,
             'impressions' => $impressions,
             'timeRange' => $this->timeRange,

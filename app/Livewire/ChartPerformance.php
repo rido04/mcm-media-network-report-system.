@@ -53,7 +53,7 @@ class ChartPerformance extends Component
                 'label' => 'Used Placement',
                 'data' => $used,
                 'city' => $cityMap,
-                'backgroundColor' => '#ff4d4d',
+                'backgroundColor' => 'rgba(255, 77, 77, 0.7)',  // Soft red with transparency
                 'borderRadius' => 4,
                 'barThickness' => 30,
             ],
@@ -61,7 +61,7 @@ class ChartPerformance extends Component
                 'label' => 'Available Placement',
                 'data' => $available,
                 'city' => $cityMap,
-                'backgroundColor' => 'blue',
+                'backgroundColor' => 'rgba(52, 152, 219, 0.7)',  // Soft blue with transparency
                 'borderRadius' => 4,
                 'barThickness' => 30,
             ],

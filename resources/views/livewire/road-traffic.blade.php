@@ -3,11 +3,9 @@
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
         <div>
             <h3 class="text-xl font-bold text-white">
-                Commuterline Impressions
+                Road Traffic Impressions
             </h3>
         </div>
-
-
     </div>
 
     <!-- Stats Summary - Desktop version (hidden on mobile) -->
@@ -102,7 +100,7 @@
 
         <div class="h-80">
             <canvas
-                id="commuterlineChart-{{ $timeRange }}"
+                id="RoadTrafficChart-{{ $timeRange }}"
                 wire:ignore
                 x-data="{
                     chart: null,
@@ -275,12 +273,12 @@
     });
 
     function downloadChart() {
-        const canvas = document.getElementById('commuterlineChart-{{ $timeRange }}');
+        const canvas = document.getElementById('RoadTrafficChart-{{ $timeRange }}');
         const image = canvas.toDataURL('image/png', 1.0);
 
         // Create download link
         const link = document.createElement('a');
-        link.download = 'commuterline-impressions-{{ $timeRange }}.png';
+        link.download = 'road-traffic-impressions-{{ $timeRange }}.png';
         link.href = image;
         link.click();
     }

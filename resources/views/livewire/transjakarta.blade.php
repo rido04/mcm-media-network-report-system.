@@ -3,11 +3,9 @@
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
         <div>
             <h3 class="text-xl font-bold text-white">
-                Commuterline Impressions
+                Transjakarta Impressions
             </h3>
         </div>
-
-
     </div>
 
     <!-- Stats Summary - Desktop version (hidden on mobile) -->
@@ -84,7 +82,7 @@
 
     <!-- Chart Container with Card UI -->
     <div class="bg-gray-700 rounded-lg p-4">
-    <!-- Time Range Dropdown -->
+        <!-- Time Range Dropdown -->
     <div class="mt-4 md:mt-0">
         <div class="relative inline-block text-left">
             <select
@@ -102,7 +100,7 @@
 
         <div class="h-80">
             <canvas
-                id="commuterlineChart-{{ $timeRange }}"
+                id="TransjakartaChart-{{ $timeRange }}"
                 wire:ignore
                 x-data="{
                     chart: null,
@@ -275,12 +273,12 @@
     });
 
     function downloadChart() {
-        const canvas = document.getElementById('commuterlineChart-{{ $timeRange }}');
+        const canvas = document.getElementById('TransjakartaChart-{{ $timeRange }}');
         const image = canvas.toDataURL('image/png', 1.0);
 
         // Create download link
         const link = document.createElement('a');
-        link.download = 'commuterline-impressions-{{ $timeRange }}.png';
+        link.download = 'transjakarta-impressions-{{ $timeRange }}.png';
         link.href = image;
         link.click();
     }
