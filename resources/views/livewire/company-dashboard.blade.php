@@ -8,7 +8,7 @@
 <div class="bg-slate-950 min-h-screen p-4 sm:p-6">
 
     <!-- Header -->
-    <header class="backdrop-blur-lg bg-gradient-to-r from-slate-700/30 to-slate-600/20 rounded-xl shadow-md p-4 sm:p-6 mb-6 sticky -top-28 z-50">
+    <header class="backdrop-blur-lg bg-gradient-to-r from-slate-700/30 to-slate-600/20 rounded-xl shadow-md p-4 sm:p-6 mb-6 sticky -top-32 sm:-top-28 z-50">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 w-full">
 
             <div class="flex flex-col xs:flex-row items-start xs:items-center gap-3 sm:gap-6 w-full sm:w-auto">
@@ -74,12 +74,14 @@
             @livewire('commuterline-user-chart')
             <div class="flex flex-col sm:flex-row gap-4">
                 <div class="w-full sm:w-1/2">
-            @livewire('transjakarta')
-        </div>
-        <div class="w-full sm:w-1/2">
-            @livewire('road-traffic')
-        </div>
-    </div>
+                    @livewire('transjakarta')
+                </div>
+                <div class="w-full sm:w-1/2">
+                    @livewire('road-traffic')
+                </div>
+            </div>
+            @livewire('total-performance')
+            @livewire('tabs-sum')
     </div>
     </main>
 

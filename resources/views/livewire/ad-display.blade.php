@@ -1,8 +1,7 @@
 <div>
-
     <div class="flex flex-col space-y-6">
         @foreach ($records as $record)
-            <div class="bg-gray-600  rounded-xl shadow-lg overflow-hidden flex flex-col sm:flex-row transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+            <div class="bg-gradient-to-t from-gray-800 to-gray-700 rounded-xl shadow-lg overflow-hidden flex flex-col sm:flex-row transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                 <!-- Image section -->
                 <div class="w-full sm:w-1/3 bg-black flex justify-center items-center">
                     <img src="{{ Storage::url($record->image_path) }}"

@@ -27,7 +27,7 @@
     <!-- Desktop Cards Grid (hidden on mobile) -->
     <div class="hidden sm:grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
         <!-- Media Plan Card -->
-        <div class="bg-gradient-to-br from-gray-600 to-gray-700 dark:from-gray-700 dark:to-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+        <div class="bg-gradient-to-t from-gray-800 to-gray-700 dark:from-gray-700 dark:to-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
             <div class="px-5 py-4">
                 <div class="flex justify-between items-start">
                     <div>
@@ -50,7 +50,7 @@
         </div>
 
         <!-- Media Placement Card -->
-        <div class="bg-gradient-to-br from-gray-600 to-gray-700 dark:from-gray-700 dark:to-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+        <div class="bg-gradient-to-t from-gray-800 to-gray-700 dark:from-gray-700 dark:to-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
             <div class="px-5 py-4">
                 <div class="flex justify-between items-start">
                     <div>
@@ -72,7 +72,7 @@
         </div>
 
         <!-- Broadcast Duration Card -->
-        <div class="bg-gradient-to-br from-gray-600 to-gray-700 dark:from-gray-700 dark:to-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+        <div class="bg-gradient-to-t from-gray-800 to-gray-700 dark:from-gray-700 dark:to-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
             <div class="px-5 py-4">
                 <div class="flex justify-between items-start">
                     <div>
@@ -94,7 +94,7 @@
         </div>
 
         <!-- Remaining Days Card -->
-        <div class="bg-gradient-to-br from-gray-600 to-gray-700 dark:from-gray-700 dark:to-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+        <div class="bg-gradient-to-t from-gray-800 to-gray-700 dark:from-gray-700 dark:to-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
             <div class="px-5 py-4">
                 <div class="flex justify-between items-start">
                     <div>

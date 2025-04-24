@@ -37,7 +37,7 @@ class MediaStatChart extends ChartWidget
     return [
         'plugins' => [
             'background' => [
-                'color' => 'grey', 
+                'color' => 'grey',
             ],
         ],
     ];

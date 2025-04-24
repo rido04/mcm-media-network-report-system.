@@ -1,4 +1,4 @@
-<div class="bg-gradient-to-r from-gray-700 via-gray-600 to-gray-700 rounded-2xl shadow-lg p-4 sm:p-6">
+<div class="bg-gradient-to-t from-gray-800 to-gray-700 rounded-2xl shadow-lg p-4 sm:p-6">
     <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 space-y-2 sm:space-y-0">
         <h3 class="text-lg sm:text-xl font-bold text-white">Placement Overview per City</h3>
     </div>

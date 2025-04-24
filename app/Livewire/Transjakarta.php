@@ -21,7 +21,7 @@ class Transjakarta extends Component
 
     public function render()
     {
-        // Hitung date range berdasarkan timeRange yang dipilih
+        // Count date range choosen
         switch ($this->timeRange) {
             case 'daily':
                 $startDate = now()->subDays(7)->format('Y-m-d');
@@ -32,8 +32,12 @@ class Transjakarta extends Component
                 $endDate = now()->endOfWeek()->format('Y-m-d');
                 break;
             case 'monthly':
-                $startDate = now()->subMonths(6)->startOfMonth()->format('Y-m-d');
+                $startDate = now()->subMonths(11)->startOfMonth()->format('Y-m-d'); // 12 months data
                 $endDate = now()->endOfMonth()->format('Y-m-d');
+                break;
+            case 'yearly':
+                $startDate = now()->subYears(4)->startOfYear()->format('Y-m-d'); // 5 years data
+                $endDate = now()->endOfYear()->format('Y-m-d');
                 break;
             default:
                 $startDate = now()->subWeeks(8)->startOfWeek()->format('Y-m-d');
@@ -42,7 +46,7 @@ class Transjakarta extends Component
 
         $query = DailyImpression::with(['adminTraffic'])
             ->whereHas('adminTraffic', function($q) {
-                $q->where('category', 'Transjakarta');
+                $q->where('category', 'Commuterline');
             })
             ->whereBetween('date', [$startDate, $endDate]);
 
@@ -57,22 +61,33 @@ class Transjakarta extends Component
                     case 'weekly':
                         return $date->startOfWeek()->format('Y-m-d') . ' to ' . $date->endOfWeek()->format('Y-m-d');
                     case 'monthly':
-                        return $date->format('Y-m');
+                        return $date->format('Y-m'); // Format as Year-Month for grouping
+                    case 'yearly':
+                        return $date->format('Y'); // Format as Year only for grouping
                 }
             })
             ->map(function($items) {
                 return $items->sum('impression');
             });
 
-        // Format labels
+        // Format labels for display
         $labels = $data->keys()->map(function($key) {
-            if ($this->timeRange === 'weekly') {
-                $parts = explode(' to ', $key);
-                $start = Carbon::parse($parts[0])->format('M d');
-                $end = Carbon::parse($parts[1])->format('M d');
-                return $start . ' - ' . $end;
+            switch ($this->timeRange) {
+                case 'weekly':
+                    $parts = explode(' to ', $key);
+                    $start = Carbon::parse($parts[0])->format('M d');
+                    $end = Carbon::parse($parts[1])->format('M d');
+                    return $start . ' - ' . $end;
+
+                case 'monthly':
+                    return Carbon::createFromFormat('Y-m', $key)->format('M Y'); // Format as "Month Year"
+
+                case 'yearly':
+                    return $key; // Just the year
+
+                default: // daily
+                    return Carbon::parse($key)->format('M d, Y');
             }
-            return $key;
         })->toArray();
 
         $impressions = $data->values()->toArray();
