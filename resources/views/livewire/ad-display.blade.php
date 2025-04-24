@@ -1,5 +1,4 @@
 <div>
-    <h3 class="text-lg font-semibold text-white mb-4">Media Plan AD</h3>
 
     <div class="flex flex-col space-y-6">
         @foreach ($records as $record)

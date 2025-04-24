@@ -8,8 +8,8 @@ export default {
     theme: {
         extend: {
             colors: {
-                "mcm-purple": "#bdafee", // Warna ungu dari screenshot Anda
-                "mcm-dark": "#0F1419", // Warna dark
+                "mcm-purple": "#bdafee", // Purple Color
+                "mcm-dark": "#0F1419", // Dark Color
             },
         },
     },
