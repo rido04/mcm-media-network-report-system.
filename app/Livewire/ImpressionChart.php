@@ -8,11 +8,11 @@ use App\Models\DailyImpression;
 
 class ImpressionChart extends Component
 {
-    public $timeRange = 'weekly'; // daily, weekly, monthly
+    public $timeRange = 'daily'; // default filter
 
     public function mount()
     {
-        // Inisialisasi awal tidak diperlukan karena kita akan menghitung range di render()
+        //
     }
 
     public function changeTimeRange($range)
@@ -22,7 +22,7 @@ class ImpressionChart extends Component
 
     public function render()
     {
-        // Hitung date range berdasarkan timeRange yang dipilih
+        // Count date range based choosen filter
         switch ($this->timeRange) {
             case 'daily':
                 $startDate = now()->subDays(7)->format('Y-m-d');

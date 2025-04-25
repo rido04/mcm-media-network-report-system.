@@ -1,4 +1,20 @@
-<div>
+<div class="transition-all duration-1000 ease-out transform opacity-0 translate-y-4"
+     x-data="{
+         shown: false,
+         init() {
+             const observer = new IntersectionObserver((entries) => {
+                 entries.forEach(entry => {
+                     this.shown = entry.isIntersecting;
+                     if (entry.isIntersecting) observer.unobserve(this.$el);
+                 });
+             });
+             observer.observe(this.$el);
+         }
+     }"
+     x-bind:class="{
+         'opacity-100 translate-y-0': shown,
+         'opacity-0 translate-y-4': !shown
+     }">
     <div class="flex flex-col space-y-6">
         @foreach ($records as $record)
             <div class="bg-gradient-to-t from-gray-800 to-gray-700 rounded-xl shadow-lg overflow-hidden flex flex-col sm:flex-row transition-all duration-300 hover:shadow-xl hover:-translate-y-1">

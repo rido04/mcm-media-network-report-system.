@@ -1,4 +1,20 @@
-<div>
+<div class="transition-all duration-1000 ease-out transform opacity-0 translate-y-4"
+x-data="{
+    shown: false,
+    init() {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                this.shown = entry.isIntersecting;
+                if (entry.isIntersecting) observer.unobserve(this.$el);
+            });
+        });
+        observer.observe(this.$el);
+    }
+}"
+x-bind:class="{
+    'opacity-100 translate-y-0': shown,
+    'opacity-0 translate-y-4': !shown
+}">
     <div class="bg-gray-600 p-4 rounded-lg shadow mb-4">
         <!-- Time Range Filter -->
         <div class="flex justify-end mb-4">

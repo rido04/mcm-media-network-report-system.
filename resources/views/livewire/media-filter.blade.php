@@ -1,7 +1,5 @@
-<!-- resources/views/livewire/media-filter.blade.php (Improved Version) -->
-
 <div class="w-full"
-     x-data="{
+    x-data="{
         activeFilter: null,
         toggleFilter(name) {
             this.activeFilter = this.activeFilter === name ? null : name;
@@ -9,7 +7,7 @@
         hasFilters() {
             return $wire.filters.start_date || $wire.filters.end_date || $wire.filters.media || $wire.filters.city;
         }
-     }">
+    }">
     <div class="flex flex-wrap items-center gap-3 mb-4">
         <!-- Date Range Filter -->
         <div class="relative">
@@ -26,15 +24,15 @@
             </button>
 
             <div x-show="activeFilter === 'date'"
-                 @click.outside="activeFilter = null"
-                 x-transition:enter="transition ease-out duration-200"
-                 x-transition:enter-start="opacity-0 transform -translate-y-2"
-                 x-transition:enter-end="opacity-100 transform translate-y-0"
-                 x-transition:leave="transition ease-in duration-150"
-                 x-transition:leave-start="opacity-100 transform translate-y-0"
-                 x-transition:leave-end="opacity-0 transform -translate-y-2"
-                 class="absolute z-50 mt-2 bg-white rounded-lg shadow-xl p-5 w-72"
-                 style="display: none;">
+                @click.outside="activeFilter = null"
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 transform -translate-y-2"
+                x-transition:enter-end="opacity-100 transform translate-y-0"
+                x-transition:leave="transition ease-in duration-150"
+                x-transition:leave-start="opacity-100 transform translate-y-0"
+                x-transition:leave-end="opacity-0 transform -translate-y-2"
+                class="absolute z-50 mt-2 bg-white rounded-lg shadow-xl p-5 w-72"
+                style="display: none;">
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
@@ -71,15 +69,15 @@
             </button>
 
             <div x-show="activeFilter === 'media'"
-                 @click.outside="activeFilter = null"
-                 x-transition:enter="transition ease-out duration-200"
-                 x-transition:enter-start="opacity-0 transform -translate-y-2"
-                 x-transition:enter-end="opacity-100 transform translate-y-0"
-                 x-transition:leave="transition ease-in duration-150"
-                 x-transition:leave-start="opacity-100 transform translate-y-0"
-                 x-transition:leave-end="opacity-0 transform -translate-y-2"
-                 class="absolute z-50 mt-2 bg-white rounded-lg shadow-xl p-5 w-72"
-                 style="display: none;">
+                @click.outside="activeFilter = null"
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 transform -translate-y-2"
+                x-transition:enter-end="opacity-100 transform translate-y-0"
+                x-transition:leave="transition ease-in duration-150"
+                x-transition:leave-start="opacity-100 transform translate-y-0"
+                x-transition:leave-end="opacity-0 transform -translate-y-2"
+                class="absolute z-50 mt-2 bg-white rounded-lg shadow-xl p-5 w-72"
+                style="display: none;">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Media Plan</label>
                     <div class="relative">
@@ -122,15 +120,15 @@
             </button>
 
             <div x-show="activeFilter === 'city'"
-                 @click.outside="activeFilter = null"
-                 x-transition:enter="transition ease-out duration-200"
-                 x-transition:enter-start="opacity-0 transform -translate-y-2"
-                 x-transition:enter-end="opacity-100 transform translate-y-0"
-                 x-transition:leave="transition ease-in duration-150"
-                 x-transition:leave-start="opacity-100 transform translate-y-0"
-                 x-transition:leave-end="opacity-0 transform -translate-y-2"
-                 class="absolute z-50 mt-2 bg-white rounded-lg shadow-xl p-5 w-72"
-                 style="display: none;">
+                @click.outside="activeFilter = null"
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 transform -translate-y-2"
+                x-transition:enter-end="opacity-100 transform translate-y-0"
+                x-transition:leave="transition ease-in duration-150"
+                x-transition:leave-start="opacity-100 transform translate-y-0"
+                x-transition:leave-end="opacity-0 transform -translate-y-2"
+                class="absolute z-50 mt-2 bg-white rounded-lg shadow-xl p-5 w-72"
+                style="display: none;">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">City</label>
                     <div class="relative">
@@ -158,36 +156,6 @@
             </div>
         </div>
 
-        <!-- Active Filter Badges -->
-        <div class="flex flex-wrap gap-2" x-show="hasFilters()">
-            <div x-show="$wire.filters.start_date || $wire.filters.end_date" class="bg-blue-50 text-blue-700 px-2 py-1 rounded-md text-xs font-medium flex items-center">
-                <span>Date Range</span>
-                <button wire:click="clearDateFilter" class="ml-1 text-blue-500 hover:text-blue-700 focus:outline-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-
-            <div x-show="$wire.filters.media" class="bg-blue-50 text-blue-700 px-2 py-1 rounded-md text-xs font-medium flex items-center">
-                <span x-text="'Media: ' + $wire.mediaOptions[$wire.filters.media]"></span>
-                <button wire:click="clearMediaFilter" class="ml-1 text-blue-500 hover:text-blue-700 focus:outline-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-
-            <div x-show="$wire.filters.city" class="bg-blue-50 text-blue-700 px-2 py-1 rounded-md text-xs font-medium flex items-center">
-                <span x-text="'City: ' + $wire.cityOptions[$wire.filters.city]"></span>
-                <button wire:click="clearCityFilter" class="ml-1 text-blue-500 hover:text-blue-700 focus:outline-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-        </div>
-
         <!-- Reset Button -->
         <button wire:click="resetFilters"
                 x-show="hasFilters()"
@@ -197,27 +165,5 @@
             </svg>
             <span>Reset All</span>
         </button>
-    </div>
-
-    <!-- Active Filters Summary -->
-    <div x-show="hasFilters()" class="mb-4 bg-gray-50 border border-gray-200 rounded-lg p-3">
-        <div class="text-sm text-gray-700 flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <span>Active filters:</span>
-            <div class="ml-2 space-x-1">
-                <span x-show="$wire.filters.start_date || $wire.filters.end_date" class="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-0.5 rounded">
-                    {{ $filters['start_date'] ? \Carbon\Carbon::parse($filters['start_date'])->format('M d, Y') : now()->startOfYear()->format('M d, Y') }} -
-                    {{ $filters['end_date'] ? \Carbon\Carbon::parse($filters['end_date'])->format('M d, Y') : now()->endOfYear()->format('M d, Y') }}
-                </span>
-                <span x-show="$wire.filters.media" class="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-0.5 rounded">
-                    Media: {{ $mediaOptions[$filters['media']] ?? 'Unknown' }}
-                </span>
-                <span x-show="$wire.filters.city" class="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-0.5 rounded">
-                    City: {{ $cityOptions[$filters['city']] ?? 'Unknown' }}
-                </span>
-            </div>
-        </div>
     </div>
 </div>

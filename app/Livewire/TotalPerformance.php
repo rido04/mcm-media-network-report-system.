@@ -26,24 +26,41 @@ class TotalPerformance extends Component
         $categories = $data->pluck('category')->unique()->values();
         $dates = $data->pluck('date')->unique()->sort()->values();
 
+        $colorPalette = [
+            '#4F46E5', // Indigo-600
+            '#2563EB', // Blue-600
+            '#7C3AED', // Violet-600
+            '#DB2777', // Pink-600
+            '#9333EA', // Purple-600
+            '#10B981', // Emerald-600
+            '#F59E0B', // Amber-500
+            '#EF4444', // Red-500
+            '#06B6D4', // Cyan-500
+            '#8B5CF6', // Purple-500
+        ];
+
         $this->datasets = [];
-        foreach ($categories as $category) {
-            $this->datasets[] = [
-                'label' => $category,
-                'data' => $dates->map(function ($date) use ($data, $category) {
-                    return $data
-                        ->where('date', $date)
-                        ->where('category', $category)
-                        ->sum('total');
-                })->toArray(),
-                'backgroundColor' => '#' . substr(md5($category), 0, 6),
-                'borderColor' => '#' . substr(md5($category), 0, 6),
-                'borderWidth' => 1,
-            ];
+            foreach ($categories as $index => $category) {
+                // Choose colors from colorPalette avriable
+                $colorIndex = $index % count($colorPalette);
+                $color = $colorPalette[$colorIndex];
+
+                $this->datasets[] = [
+                    'label' => $category,
+                    'data' => $dates->map(function ($date) use ($data, $category) {
+                        return $data
+                            ->where('date', $date)
+                            ->where('category', $category)
+                            ->sum('total');
+                    })->toArray(),
+                    'backgroundColor' => $color,
+                    'borderColor' => $color,
+                    'borderWidth' => 1,
+                ];
+            }
+
+            $this->labels = $dates->map(fn ($date) => date('d M', strtotime($date)))->toArray();
+
+            return view('livewire.total-performance');
         }
-
-        $this->labels = $dates->map(fn ($date) => date('d M', strtotime($date)))->toArray();
-
-        return view('livewire.total-performance');
-    }
 }

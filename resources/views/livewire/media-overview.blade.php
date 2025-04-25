@@ -1,6 +1,22 @@
-<div>
+<div class="transition-all duration-1000 ease-out transform opacity-0 translate-y-4"
+x-data="{
+    shown: false,
+    init() {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                this.shown = entry.isIntersecting;
+                if (entry.isIntersecting) observer.unobserve(this.$el);
+            });
+        });
+        observer.observe(this.$el);
+    }
+}"
+x-bind:class="{
+    'opacity-100 translate-y-0': shown,
+    'opacity-0 translate-y-4': !shown
+}">
     <!-- Mobile Summary Card (visible only on small screens) -->
-    <div class="block sm:hidden mb-4 bg-gradient-to-r from-gray-600 to-gray-700 dark:from-gray-700 dark:to-gray-800 rounded-xl shadow-lg overflow-hidden">
+    <div class="block sm:hidden mb-4 bg-gradient-to-t from-gray-800 to-gray-700 dark:from-gray-700 dark:to-gray-800 rounded-xl shadow-lg overflow-hidden">
         <div class="px-4 py-3">
             <h3 class="text-sm font-medium text-gray-200 dark:text-gray-300 mb-2">Media Overview Summary</h3>
             <div class="grid grid-cols-2 gap-3">

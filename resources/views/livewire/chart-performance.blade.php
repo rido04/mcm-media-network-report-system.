@@ -1,6 +1,22 @@
-<div class="bg-gradient-to-t from-gray-800 to-gray-700 rounded-2xl shadow-lg p-4 sm:p-6">
+<div class="bg-gradient-to-t from-gray-800 to-gray-700 rounded-2xl shadow-lg p-4 sm:p-6 transition-all duration-1000 ease-out transform opacity-0 translate-y-4"
+     x-data="{
+         shown: false,
+         init() {
+             const observer = new IntersectionObserver((entries) => {
+                 entries.forEach(entry => {
+                     this.shown = entry.isIntersecting;
+                     if (entry.isIntersecting) observer.unobserve(this.$el);
+                 });
+             });
+             observer.observe(this.$el);
+         }
+     }"
+     x-bind:class="{
+         'opacity-100 translate-y-0': shown,
+         'opacity-0 translate-y-4': !shown
+     }">
     <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 space-y-2 sm:space-y-0">
-        <h3 class="text-lg sm:text-xl font-bold text-white">Placement Overview per City</h3>
+        <h3 class="text-lg sm:text-xl font-bold text-white">Placement Overview each City</h3>
     </div>
 
     <div class="relative w-full h-[200px] sm:h-[300px]">

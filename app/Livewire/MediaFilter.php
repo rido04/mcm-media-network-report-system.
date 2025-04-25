@@ -84,7 +84,37 @@ class MediaFilter extends Component
         $this->dispatch('refreshStatsWidget', $this->filters);
     }
 
-    // Method untuk refresh tampilan filter jika ada perubahan dari komponen lain
+    public function clearDateFilter()
+    {
+        $this->filters['start_date'] = now()->startOfYear()->format('Y-m-d');
+        $this->filters['end_date'] = now()->endOfYear()->format('Y-m-d');
+
+        session(['filters' => $this->filters]);
+
+        // Dispatch event to refresh stats widget
+        $this->dispatch('refreshStatsWidget', $this->filters);
+    }
+
+    public function clearMediaFilter()
+    {
+        $this->filters['media'] = null;
+
+        session(['filters' => $this->filters]);
+
+        // Dispatch event to refresh stats widget
+        $this->dispatch('refreshStatsWidget', $this->filters);
+    }
+
+    public function clearCityFilter()
+    {
+        $this->filters['city'] = null;
+
+        session(['filters' => $this->filters]);
+
+        // Dispatch event to refresh stats widget
+        $this->dispatch('refreshStatsWidget', $this->filters);
+    }
+
     public function refreshFilterDisplay($filters = null)
     {
         if ($filters) {

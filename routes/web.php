@@ -28,7 +28,7 @@ Route::post('/login', function (Request $request) {
         }
 
         if ($user->hasRole('company')) { // Perbaiki pemanggilan hasRole
-            return redirect()->intended('/company');
+            return redirect()->intended('/company-dashboard');
         }
 
         // Jika role tidak dikenali

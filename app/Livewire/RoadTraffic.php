@@ -8,7 +8,7 @@ use App\Models\DailyImpression;
 
 class RoadTraffic extends Component
 {
-    public $timeRange = 'daily'; // defualt filter
+    public $timeRange = 'daily'; // default filter
 
     public function mount()
     {
@@ -46,7 +46,7 @@ class RoadTraffic extends Component
 
         $query = DailyImpression::with(['adminTraffic'])
             ->whereHas('adminTraffic', function($q) {
-                $q->where('category', 'Commuterline');
+                $q->where('category', ['DOOH', 'OOH']);
             })
             ->whereBetween('date', [$startDate, $endDate]);
 

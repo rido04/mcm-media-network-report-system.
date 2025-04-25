@@ -1,4 +1,20 @@
-<div>
+<div class="transition-all duration-1000 ease-out transform opacity-0 translate-y-4"
+x-data="{
+    shown: false,
+    init() {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                this.shown = entry.isIntersecting;
+                if (entry.isIntersecting) observer.unobserve(this.$el);
+            });
+        });
+        observer.observe(this.$el);
+    }
+}"
+x-bind:class="{
+    'opacity-100 translate-y-0': shown,
+    'opacity-0 translate-y-4': !shown
+}">
     <!-- Desktop Stats Grid (Hidden on Mobile) -->
     <div class="hidden md:grid md:grid-cols-4 gap-4">
         <!-- Highest Impression Card -->

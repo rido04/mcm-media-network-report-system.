@@ -46,7 +46,7 @@ class Transjakarta extends Component
 
         $query = DailyImpression::with(['adminTraffic'])
             ->whereHas('adminTraffic', function($q) {
-                $q->where('category', 'Commuterline');
+                $q->where('category', 'Transjakarta');
             })
             ->whereBetween('date', [$startDate, $endDate]);
 

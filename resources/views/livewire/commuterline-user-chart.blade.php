@@ -1,4 +1,20 @@
-<div class="rounded-lg shadow-lg mb-4">
+<div class="rounded-lg shadow-lg mb-4 transition-all duration-1000 ease-out transform opacity-0 translate-y-4"
+     x-data="{
+         shown: false,
+         init() {
+             const observer = new IntersectionObserver((entries) => {
+                 entries.forEach(entry => {
+                     this.shown = entry.isIntersecting;
+                     if (entry.isIntersecting) observer.unobserve(this.$el);
+                 });
+             });
+             observer.observe(this.$el);
+         }
+     }"
+     x-bind:class="{
+         'opacity-100 translate-y-0': shown,
+         'opacity-0 translate-y-4': !shown
+     }">
     <!-- Header with Title and Description -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
         <div>
@@ -6,8 +22,6 @@
                 Commuterline Impressions
             </h3>
         </div>
-
-
     </div>
 
     <!-- Stats Summary - Desktop version (hidden on mobile) -->
@@ -90,8 +104,7 @@
             <select
                 wire:model="timeRange"
                 wire:change="changeTimeRange($event.target.value)"
-                class="block w-full pl-3 pr-10 py-2 text-sm bg-indigo-700 text-white border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-            >
+                class="block w-full pl-3 pr-10 py-2 text-sm bg-indigo-700 text-white border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                 <option value="daily">Daily</option>
                 <option value="weekly">Weekly</option>
                 <option value="monthly">Monthly</option>
