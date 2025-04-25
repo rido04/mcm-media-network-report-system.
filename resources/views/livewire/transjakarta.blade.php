@@ -1,70 +1,11 @@
 <div class="rounded-lg shadow-lg mb-4 transition-all duration-1000 ease-out transform opacity-0 translate-y-4"
     x-data="{
         shown: false,
-        totalValue: 0,
-        averageValue: 0,
-        highestValue: 0,
-        targetTotal: 0,
-        targetAverage: 0,
-        targetHighest: 0,
-        animateNumbers() {
-            this.targetTotal = @js(array_sum($impressions));
-            this.targetAverage = Math.round(@js(array_sum($impressions)) / @js(count($impressions)));
-            this.targetHighest = Math.max(...@js($impressions));
-
-            // Animate Total Impressions
-            const totalDuration = 1500;
-            const totalStartTime = performance.now();
-            const animateTotal = (currentTime) => {
-                const elapsedTime = currentTime - totalStartTime;
-                const progress = Math.min(elapsedTime / totalDuration, 1);
-                this.totalValue = Math.floor(progress * this.targetTotal);
-                if (progress < 1) {
-                    requestAnimationFrame(animateTotal);
-                } else {
-                    this.totalValue = this.targetTotal;
-                }
-            };
-            requestAnimationFrame(animateTotal);
-
-            // Animate Average
-            const avgDuration = 1500;
-            const avgStartTime = performance.now();
-            const animateAvg = (currentTime) => {
-                const elapsedTime = currentTime - avgStartTime;
-                const progress = Math.min(elapsedTime / avgDuration, 1);
-                this.averageValue = Math.floor(progress * this.targetAverage);
-                if (progress < 1) {
-                    requestAnimationFrame(animateAvg);
-                } else {
-                    this.averageValue = this.targetAverage;
-                }
-            };
-            requestAnimationFrame(animateAvg);
-
-            // Animate Highest Value
-            const highDuration = 1500;
-            const highStartTime = performance.now();
-            const animateHigh = (currentTime) => {
-                const elapsedTime = currentTime - highStartTime;
-                const progress = Math.min(elapsedTime / highDuration, 1);
-                this.highestValue = Math.floor(progress * this.targetHighest);
-                if (progress < 1) {
-                    requestAnimationFrame(animateHigh);
-                } else {
-                    this.highestValue = this.targetHighest;
-                }
-            };
-            requestAnimationFrame(animateHigh);
-        },
         init() {
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     this.shown = entry.isIntersecting;
-                    if (entry.isIntersecting) {
-                        observer.unobserve(this.$el);
-                        this.animateNumbers();
-                    }
+                    if (entry.isIntersecting) observer.unobserve(this.$el);
                 });
             });
             observer.observe(this.$el);
@@ -88,17 +29,17 @@
     <div class="hidden md:grid md:grid-cols-3 gap-4 mb-6">
         <div class="bg-gradient-to-t from-gray-800 to-gray-700 p-4 rounded-lg">
             <div class="text-gray-400 text-xs uppercase font-semibold mb-1">Total Impressions</div>
-            <div class="text-2xl font-bold text-white" x-text="new Intl.NumberFormat().format(totalValue)"></div>
+            <div class="text-2xl font-bold text-white" x-text="new Intl.NumberFormat().format(@js(array_sum($impressions)))"></div>
             <div class="text-indigo-400 text-sm mt-1" x-text="'For ' + @js(ucfirst($timeRange)) + ' period'"></div>
         </div>
         <div class="bg-gradient-to-t from-gray-800 to-gray-700 p-4 rounded-lg">
             <div class="text-gray-400 text-xs uppercase font-semibold mb-1">Average</div>
-            <div class="text-2xl font-bold text-white" x-text="new Intl.NumberFormat().format(averageValue)"></div>
+            <div class="text-2xl font-bold text-white" x-text="new Intl.NumberFormat().format(Math.round(@js(array_sum($impressions)) / @js(count($impressions))))"></div>
             <div class="text-indigo-400 text-sm mt-1">Per data point</div>
         </div>
         <div class="bg-gradient-to-t from-gray-800 to-gray-700 p-4 rounded-lg">
             <div class="text-gray-400 text-xs uppercase font-semibold mb-1">Highest Value</div>
-            <div class="text-2xl font-bold text-white" x-text="new Intl.NumberFormat().format(highestValue)"></div>
+            <div class="text-2xl font-bold text-white" x-text="new Intl.NumberFormat().format(Math.max(...@js($impressions)))"></div>
             <div class="text-indigo-400 text-sm mt-1" id="highestDateDesktop">Peak impression</div>
         </div>
     </div>
@@ -109,7 +50,7 @@
             <div class="flex justify-between items-center border-b border-gray-600 pb-3 mb-3">
                 <div class="text-gray-400 text-xs uppercase font-semibold">Transjakarta Summary ({{ ucfirst($timeRange) }})</div>
                 <button @click="isExpanded = !isExpanded" class="text-gray-400 hover:text-white">
-                <svg xmlns="http://www.w3.org/2000/svg"
+                    <svg xmlns="http://www.w3.org/2000/svg"
                         class="h-5 w-5 transform transition-transform duration-200"
                         :class="{ 'rotate-180': !isExpanded }"
                         fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -122,7 +63,7 @@
                 <div class="flex justify-between items-center">
                     <div>
                         <div class="text-sm text-gray-300">Total Impressions</div>
-                        <div class="text-lg font-bold text-white" x-text="new Intl.NumberFormat().format(totalValue)"></div>
+                        <div class="text-lg font-bold text-white" x-text="new Intl.NumberFormat().format(@js(array_sum($impressions)))"></div>
                     </div>
                     <div class="bg-indigo-600 bg-opacity-20 rounded-full p-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -134,7 +75,7 @@
                 <div class="flex justify-between items-center">
                     <div>
                         <div class="text-sm text-gray-300">Average</div>
-                        <div class="text-lg font-bold text-white" x-text="new Intl.NumberFormat().format(averageValue)"></div>
+                        <div class="text-lg font-bold text-white" x-text="new Intl.NumberFormat().format(Math.round(@js(array_sum($impressions)) / @js(count($impressions))))"></div>
                     </div>
                     <div class="bg-indigo-600 bg-opacity-20 rounded-full p-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -146,8 +87,8 @@
                 <div class="flex justify-between items-center">
                     <div>
                         <div class="text-sm text-gray-300">Highest Value</div>
-                        <div class="text-lg font-bold text-white" x-text="new Intl.NumberFormat().format(highestValue)"></div>
-                        <div class="text-xs text-indigo-400 mt-1" id="highestDateMobile">on</div>
+                        <div class="text-lg font-bold text-white" x-text="new Intl.NumberFormat().format(Math.max(...@js($impressions)))"></div>
+                        <div class="text-xs text-indigo-400 mt-1" id="highestDateMobile">Peak impression</div>
                     </div>
                     <div class="bg-indigo-600 bg-opacity-20 rounded-full p-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -159,10 +100,8 @@
         </div>
     </div>
 
-    <!-- Rest of your code continues here... -->
-
     <!-- Chart Container with Card UI -->
-    <div class="bg-gradient-to-t from-gray-800 to-gray-700 rounded-lg p-4">
+    <div class="bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 rounded-lg p-4">
     <!-- Time Range Dropdown -->
     <div class="mt-4 md:mt-0">
         <div class="relative inline-block text-left">
@@ -178,7 +117,7 @@
             </select>
         </div>
     </div>
-        <!-- Transjakarta Chart(canvas) -->
+        <!-- Transjakarta Chart() -->
         <div class="h-80">
             <canvas
                 id="TransjakartaTrafficChart-{{ $timeRange }}"
@@ -197,7 +136,7 @@
                         const data = @js($impressions);
 
                         this.chart = new Chart(ctx, {
-                            type: 'bar',
+                            type: 'line',
                             data: {
                                 labels: labels,
                                 datasets: [{

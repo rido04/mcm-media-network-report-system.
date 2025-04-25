@@ -1,173 +1,285 @@
-<div class="transition-all duration-1000 ease-out transform opacity-0 translate-y-4"
-x-data="{
-    shown: false,
-    counters: {},
-    init() {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                this.shown = entry.isIntersecting;
-                if (entry.isIntersecting) {
-                    observer.unobserve(this.$el);
-                    // Start countup animation
-                    this.$el.querySelectorAll('[data-countup]').forEach(el => {
-                        const target = parseInt(el.getAttribute('data-countup'));
-                        const duration = parseInt(el.getAttribute('data-duration') || 1500);
-                        let start = 0;
-                        const range = target - start;
-                        const increment = Math.ceil(target / (duration / 16));
-                        let current = start;
+<div
+    class="w-full transition-all duration-1200 ease-out transform opacity-0 translate-y-6"
+    x-data="{
+        shown: false,
+        counters: {},
+        init() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    this.shown = entry.isIntersecting;
+                    if (entry.isIntersecting) {
+                        observer.unobserve(this.$el);
 
-                        // Save default value
-                        this.counters[el.id] = current;
-                        // Save real value
-                        el.textContent = current;
+                        // Add staggered fade-in animation for cards
+                        const cards = this.$el.querySelectorAll('.card-animate');
+                        cards.forEach((card, index) => {
+                            setTimeout(() => {
+                                card.classList.add('card-visible');
+                            }, 150 * index);
+                        });
 
-                        const timer = setInterval(() => {
-                            current += increment;
-                            if (current >= target) {
-                                el.textContent = target;
-                                clearInterval(timer);
-                            } else {
-                                el.textContent = current;
-                            }
-                        }, 16); // ~60fps
-                    });
-                }
+                        // Enhanced countup animation with easing
+                        this.$el.querySelectorAll('[data-countup]').forEach(el => {
+                            const target = parseInt(el.getAttribute('data-countup'));
+                            const duration = parseInt(el.getAttribute('data-duration') || 1500);
+                            const start = 0;
+                            const frameDuration = 1000/60; // 60fps
+                            const totalFrames = Math.round(duration / frameDuration);
+                            let frame = 0;
+
+                            // Save initial value
+                            this.counters[el.id] = start;
+                            el.textContent = start;
+
+                            const easeOutQuad = t => t * (2 - t); // Smoother easing function
+
+                            const timer = setInterval(() => {
+                                frame++;
+
+                                // Calculate progress with easing
+                                const progress = easeOutQuad(frame / totalFrames);
+                                const current = Math.round(start + (target - start) * progress);
+
+                                if (frame === totalFrames) {
+                                    el.textContent = target;
+                                    clearInterval(timer);
+                                } else {
+                                    el.textContent = current;
+                                }
+                            }, frameDuration);
+                        });
+                    }
+                });
+            }, {
+                threshold: 0.2 // Trigger earlier when 20% visible
             });
-        });
-        observer.observe(this.$el);
+            observer.observe(this.$el);
+        }
+    }"
+    x-bind:class="{
+        'opacity-100 translate-y-0': shown,
+        'opacity-0 translate-y-6': !shown
+    }"
+>
+    <!-- Container for both mobile and desktop views -->
+    <div class="w-full">
+        <!-- Enhanced Mobile Summary Card -->
+        <div class="block sm:hidden mb-6 bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 dark:from-gray-700 dark:via-gray-800 dark:to-gray-900 rounded-2xl shadow-lg overflow-hidden transform transition-all card-animate">
+            <div class="px-5 py-4 relative overflow-hidden">
+                <!-- Background accent effects -->
+                <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full -mr-16 -mt-16 blur-2xl"></div>
+                <div class="absolute bottom-0 left-0 w-24 h-24 bg-green-500/10 rounded-full -ml-12 -mb-12 blur-xl"></div>
+
+                <h3 class="text-sm font-medium text-gray-200 dark:text-gray-300 mb-3 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                    Media Overview Summary
+                </h3>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-gray-600/30 dark:bg-gray-700/40 backdrop-blur-sm rounded-xl p-3 transform transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+                        <p class="text-xs text-gray-300 dark:text-gray-300 mb-1 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Media Plan
+                        </p>
+                        <p class="text-xl font-bold text-white">
+                            <span id="mobile-count-1" data-countup="{{ $stats['totalMediaPlan'] }}" data-duration="1400">0</span>
+                        </p>
+                    </div>
+
+                    <div class="bg-gray-600/30 dark:bg-gray-700/40 backdrop-blur-sm rounded-xl p-3 transform transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+                        <p class="text-xs text-gray-300 dark:text-gray-300 mb-1 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                            </svg>
+                            Placement
+                        </p>
+                        <p class="text-xl font-bold text-white">
+                            <span id="mobile-count-2" data-countup="{{ $stats['totalInventory'] }}" data-duration="1400">0</span>
+                        </p>
+                    </div>
+
+                    <div class="bg-gray-600/30 dark:bg-gray-700/40 backdrop-blur-sm rounded-xl p-3 transform transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+                        <p class="text-xs text-gray-300 dark:text-gray-300 mb-1 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            Duration
+                        </p>
+                        <p class="text-xl font-bold text-white">
+                            <span id="mobile-count-3" data-countup="{{ $stats['totalDuration'] }}" data-duration="1200">0</span>
+                            <span class="text-xs font-normal ml-1 text-gray-300"> Days</span>
+                        </p>
+                    </div>
+
+                    <div class="bg-gray-600/30 dark:bg-gray-700/40 backdrop-blur-sm rounded-xl p-3 transform transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+                        <p class="text-xs text-gray-300 dark:text-gray-300 mb-1 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Remaining
+                        </p>
+                        <p class="text-xl font-bold text-white">
+                            <span id="mobile-count-4" data-countup="{{ $stats['remainingDays'] }}" data-duration="1200">0</span>
+                            <span class="text-xs font-normal ml-1 text-gray-300"> Days</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enhanced Desktop Cards Grid -->
+        <div class="hidden sm:grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+            <!-- Media Plan Card -->
+            <div class="card-animate opacity-0 transform translate-y-4 transition-all duration-500 bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 dark:from-gray-700 dark:via-gray-800 dark:to-gray-900 rounded-xl shadow-md overflow-hidden hover:shadow-xl hover:-translate-y-2 group relative">
+                <!-- Background accent effect -->
+                <div class="absolute inset-0 bg-blue-500/5 rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+
+                <div class="px-5 py-4 relative">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-300 dark:text-gray-400 mb-1">Media Plan</h3>
+                            <p class="text-2xl font-bold text-white dark:text-white">
+                                <span id="desk-count-1" data-countup="{{ $stats['totalMediaPlan'] }}" data-duration="1800">0</span>
+                            </p>
+                        </div>
+                        <div class="rounded-full p-2 bg-blue-500/20 dark:bg-blue-900/30 backdrop-blur-sm shadow-lg shadow-blue-500/10">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-300 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <span class="text-xs text-gray-300 dark:text-gray-400">Total media plans created</span>
+                    </div>
+
+                    <!-- Progress indicator -->
+                    <div class="w-full h-1 bg-gray-700/50 rounded-full mt-3 overflow-hidden">
+                        <div class="h-full bg-blue-500/50 rounded-full" style="width: 75%; transition: width 1.5s ease-out;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Media Placement Card -->
+            <div class="card-animate opacity-0 transform translate-y-4 transition-all duration-500 bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 dark:from-gray-700 dark:via-gray-800 dark:to-gray-900 rounded-xl shadow-md overflow-hidden hover:shadow-xl hover:-translate-y-2 group relative">
+                <!-- Background accent effect -->
+                <div class="absolute inset-0 bg-green-500/5 rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+
+                <div class="px-5 py-4 relative">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-300 dark:text-gray-400 mb-1">Media Placement</h3>
+                            <p class="text-2xl font-bold text-white dark:text-white">
+                                <span id="desk-count-2" data-countup="{{ $stats['totalInventory'] }}" data-duration="1800">0</span>
+                            </p>
+                        </div>
+                        <div class="rounded-full p-2 bg-green-500/20 dark:bg-green-900/30 backdrop-blur-sm shadow-lg shadow-green-500/10">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-300 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <span class="text-xs text-gray-300 dark:text-gray-400">Total media placements</span>
+                    </div>
+
+                    <!-- Progress indicator -->
+                    <div class="w-full h-1 bg-gray-700/50 rounded-full mt-3 overflow-hidden">
+                        <div class="h-full bg-green-500/50 rounded-full" style="width: 60%; transition: width 1.5s ease-out;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Broadcast Duration Card -->
+            <div class="card-animate opacity-0 transform translate-y-4 transition-all duration-500 bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 dark:from-gray-700 dark:via-gray-800 dark:to-gray-900 rounded-xl shadow-md overflow-hidden hover:shadow-xl hover:-translate-y-2 group relative">
+                <!-- Background accent effect -->
+                <div class="absolute inset-0 bg-cyan-500/5 rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+
+                <div class="px-5 py-4 relative">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-300 dark:text-gray-400 mb-1">Broadcast Duration</h3>
+                            <p class="text-2xl font-bold text-white dark:text-white">
+                                <span id="desk-count-3" data-countup="{{ $stats['totalDuration'] }}" data-duration="1600">0</span>
+                                <span class="text-sm font-normal ml-1"> Days</span>
+                            </p>
+                        </div>
+                        <div class="rounded-full p-2 bg-cyan-500/20 dark:bg-cyan-900/30 backdrop-blur-sm shadow-lg shadow-cyan-500/10">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-cyan-300 dark:text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <span class="text-xs text-gray-300 dark:text-gray-400">Total broadcast duration</span>
+                    </div>
+
+                    <!-- Progress indicator -->
+                    <div class="w-full h-1 bg-gray-700/50 rounded-full mt-3 overflow-hidden">
+                        <div class="h-full bg-cyan-500/50 rounded-full" style="width: 85%; transition: width 1.5s ease-out;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Remaining Days Card -->
+            <div class="card-animate opacity-0 transform translate-y-4 transition-all duration-500 bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 dark:from-gray-700 dark:via-gray-800 dark:to-gray-900 rounded-xl shadow-md overflow-hidden hover:shadow-xl hover:-translate-y-2 group relative">
+                <!-- Background accent effect -->
+                <div class="absolute inset-0 bg-amber-500/5 rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+
+                <div class="px-5 py-4 relative">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-300 dark:text-gray-400 mb-1">Remaining Days</h3>
+                            <p class="text-2xl font-bold text-white dark:text-white">
+                                <span id="desk-count-4" data-countup="{{ $stats['remainingDays'] }}" data-duration="1600">0</span>
+                                <span class="text-sm font-normal ml-1"> Days</span>
+                            </p>
+                        </div>
+                        <div class="rounded-full p-2 bg-amber-500/20 dark:bg-amber-900/30 backdrop-blur-sm shadow-lg shadow-amber-500/10">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-amber-300 dark:text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <span class="text-xs text-gray-300 dark:text-gray-400">Days remaining in campaign</span>
+                    </div>
+
+                    <!-- Progress indicator -->
+                    <div class="w-full h-1 bg-gray-700/50 rounded-full mt-3 overflow-hidden">
+                        <div class="h-full bg-amber-500/50 rounded-full" style="width: 35%; transition: width 1.5s ease-out;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+    /* Custom animations */
+    @keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
-}"
-x-bind:class="{
-    'opacity-100 translate-y-0': shown,
-    'opacity-0 translate-y-4': !shown
-}">
-    <!-- Mobile Summary Card (visible only on small screens) -->
-    <div class="block sm:hidden md:hidden mb-4 bg-gradient-to-t from-gray-800 to-gray-700 dark:from-gray-700 dark:to-gray-800 rounded-xl shadow-lg overflow-hidden">
-        <div class="px-4 py-3">
-            <h3 class="text-sm font-medium text-gray-200 dark:text-gray-300 mb-2">Media Overview Summary</h3>
-            <div class="grid grid-cols-2 gap-3">
-                <div class="bg-gray-500/30 dark:bg-gray-600/30 rounded-lg p-2">
-                    <p class="text-xs text-gray-200 dark:text-gray-300">Media Plan</p>
-                    <p class="text-lg font-bold text-white">
-                        <span id="mobile-count-1" data-countup="{{ $stats['totalMediaPlan'] }}" data-duration="1200">0</span>
-                    </p>
-                </div>
-                <div class="bg-gray-500/30 dark:bg-gray-600/30 rounded-lg p-2">
-                    <p class="text-xs text-gray-200 dark:text-gray-300">Placement</p>
-                    <p class="text-lg font-bold text-white">
-                        <span id="mobile-count-2" data-countup="{{ $stats['totalInventory'] }}" data-duration="1200">0</span>
-                    </p>
-                </div>
-                <div class="bg-gray-500/30 dark:bg-gray-600/30 rounded-lg p-2">
-                    <p class="text-xs text-gray-200 dark:text-gray-300">Duration</p>
-                    <p class="text-lg font-bold text-white">
-                        <span id="mobile-count-3" data-countup="{{ $stats['totalDuration'] }}" data-duration="1000">0</span>
-                        <span class="text-xs font-normal"> Days</span>
-                    </p>
-                </div>
-                <div class="bg-gray-500/30 dark:bg-gray-600/30 rounded-lg p-2">
-                    <p class="text-xs text-gray-200 dark:text-gray-300">Remaining</p>
-                    <p class="text-lg font-bold text-white">
-                        <span id="mobile-count-4" data-countup="{{ $stats['remainingDays'] }}" data-duration="1000">0</span>
-                        <span class="text-xs font-normal"> Days</span>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- Desktop Cards Grid (hidden on mobile) -->
-    <div class="hidden sm:grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
-        <!-- Media Plan Card -->
-        <div class="bg-gradient-to-t from-gray-800 to-gray-700 dark:from-gray-700 dark:to-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-            <div class="px-5 py-4">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-300 dark:text-gray-400 mb-1">Media Plan</h3>
-                        <p class="text-2xl font-bold text-white dark:text-white">
-                            <span id="desk-count-1" data-countup="{{ $stats['totalMediaPlan'] }}" data-duration="1500">0</span>
-                        </p>
-                    </div>
-                    <div class="rounded-full p-2 bg-blue-100/20 dark:bg-blue-900/30 backdrop-blur-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-300 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </div>
-                </div>
-                <div class="mt-2">
-                    <span class="text-xs text-gray-300 dark:text-gray-400">Total media plans created</span>
-                </div>
-            </div>
-        </div>
+    .card-visible {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+    }
 
-        <!-- Media Placement Card -->
-        <div class="bg-gradient-to-t from-gray-800 to-gray-700 dark:from-gray-700 dark:to-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-            <div class="px-5 py-4">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-300 dark:text-gray-400 mb-1">Media Placement</h3>
-                        <p class="text-2xl font-bold text-white dark:text-white">
-                            <span id="desk-count-2" data-countup="{{ $stats['totalInventory'] }}" data-duration="1500">0</span>
-                        </p>
-                    </div>
-                    <div class="rounded-full p-2 bg-green-100/20 dark:bg-green-900/30 backdrop-blur-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-300 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                        </svg>
-                    </div>
-                </div>
-                <div class="mt-2">
-                    <span class="text-xs text-gray-300 dark:text-gray-400">Total media placements</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Broadcast Duration Card -->
-        <div class="bg-gradient-to-t from-gray-800 to-gray-700 dark:from-gray-700 dark:to-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-            <div class="px-5 py-4">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-300 dark:text-gray-400 mb-1">Broadcast Duration</h3>
-                        <p class="text-2xl font-bold text-white dark:text-white">
-                            <span id="desk-count-3" data-countup="{{ $stats['totalDuration'] }}" data-duration="1300">0</span>
-                            <span class="text-sm font-normal"> Days</span>
-                        </p>
-                    </div>
-                    <div class="rounded-full p-2 bg-cyan-100/20 dark:bg-cyan-900/30 backdrop-blur-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-cyan-300 dark:text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                    </div>
-                </div>
-                <div class="mt-2">
-                    <span class="text-xs text-gray-300 dark:text-gray-400">Total broadcast duration</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Remaining Days Card -->
-        <div class="bg-gradient-to-t from-gray-800 to-gray-700 dark:from-gray-700 dark:to-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-            <div class="px-5 py-4">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-300 dark:text-gray-400 mb-1">Remaining Days</h3>
-                        <p class="text-2xl font-bold text-white dark:text-white">
-                            <span id="desk-count-4" data-countup="{{ $stats['remainingDays'] }}" data-duration="1300">0</span>
-                            <span class="text-sm font-normal"> Days</span>
-                        </p>
-                    </div>
-                    <div class="rounded-full p-2 bg-amber-100/20 dark:bg-amber-900/30 backdrop-blur-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-amber-300 dark:text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </div>
-                </div>
-                <div class="mt-2">
-                    <span class="text-xs text-gray-300 dark:text-gray-400">Days remaining in campaign</span>
-                </div>
-            </div>
-        </div>
-    </div>
+    /* Hover effects */
+    .hover\:scale-102:hover {
+        transform: scale(1.02);
+    }
+    </style>
 </div>

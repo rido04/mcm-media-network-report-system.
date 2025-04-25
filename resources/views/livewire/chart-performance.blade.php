@@ -1,4 +1,4 @@
-<div class="bg-gradient-to-t from-gray-800 to-gray-700 rounded-2xl shadow-lg p-4 sm:p-6 transition-all duration-1000 ease-out transform opacity-0 translate-y-4"
+<div class="bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 rounded-2xl shadow-lg p-4 sm:p-6 transition-all duration-1000 ease-out transform opacity-0 translate-y-4"
      x-data="{
          shown: false,
          init() {

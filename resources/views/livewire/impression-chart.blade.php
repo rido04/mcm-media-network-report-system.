@@ -15,7 +15,7 @@ x-bind:class="{
     'opacity-100 translate-y-0': shown,
     'opacity-0 translate-y-4': !shown
 }">
-    <div class="bg-gray-600 p-4 rounded-lg shadow mb-4">
+    <div class="bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 p-4 rounded-lg shadow mb-4">
         <!-- Time Range Filter -->
         <div class="flex justify-end mb-4">
             <div class="inline-flex rounded-md shadow-sm">
