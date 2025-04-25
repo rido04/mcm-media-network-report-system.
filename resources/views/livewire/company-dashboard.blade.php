@@ -6,22 +6,22 @@
 @endphp
 
 <div class="bg-slate-950 min-h-screen p-4 sm:p-6 transition-all duration-1000 ease-out transform opacity-0 translate-y-4"
-     x-data="{
-         shown: false,
-         init() {
-             const observer = new IntersectionObserver((entries) => {
-                 entries.forEach(entry => {
-                     this.shown = entry.isIntersecting;
-                     if (entry.isIntersecting) observer.unobserve(this.$el);
-                 });
-             });
-             observer.observe(this.$el);
-         }
-     }"
-     x-bind:class="{
-         'opacity-100 translate-y-0': shown,
-         'opacity-0 translate-y-4': !shown
-     }">
+    x-data="{
+        shown: false,
+        init() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    this.shown = entry.isIntersecting;
+                    if (entry.isIntersecting) observer.unobserve(this.$el);
+                });
+            });
+            observer.observe(this.$el);
+        }
+    }"
+    x-bind:class="{
+        'opacity-100 translate-y-0': shown,
+        'opacity-0 translate-y-4': !shown
+    }">
 
     <!-- Header -->
     <header class="backdrop-blur-lg bg-gradient-to-r from-slate-700/30 to-slate-600/20 rounded-xl shadow-md p-4 sm:p-6 mb-6 sticky -top-32 sm:-top-28 z-50">
@@ -69,12 +69,12 @@
             </div>
 
             <!-- Company Info -->
-            <div class="flex items-center bg-slate-800 px-4 py-2 rounded-lg shadow-sm w-full sm:w-auto">
+            <a href="https://www.mcmmedianetworks.com/" target="_blank" class="flex items-center bg-slate-800 px-4 py-2 rounded-lg shadow-sm w-full sm:w-auto hover:bg-gradient-to-t from-slate-800 to-blue-700 transition">
                 <img src="{{ asset('storage/image/logo_mcm.png') }}"
-                     alt="MCM Media Network"
-                     class="h-10 w-10 rounded-full object-cover border-2 border-blue-100" />
+                    alt="MCM Media Network"
+                    class="h-10 w-10 rounded-full object-cover border-2 border-blue-100" />
                 <span class="ml-4 text-white text-sm sm:text-base font-semibold">MCM Media Network</span>
-            </div>
+            </a>
         </div>
     </header>
 
@@ -99,8 +99,8 @@
             @livewire('tabs-sum')
         </div>
     </main>
-    <div class="mx-[-1rem] sm:mx-[-1.5rem] -mb-4 sm:-mb-6 mt-6">
-        @livewire('footer')
-    </div>
+        <div class="mx-[-1rem] sm:mx-[-1.5rem] -mb-4 sm:-mb-6 mt-6">
+            @livewire('footer')
+        </div>
 </div>
 @endsection

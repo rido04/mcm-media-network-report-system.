@@ -17,7 +17,7 @@
          'opacity-100 translate-y-0': shown,
          'opacity-0 translate-y-4': !shown
      }">
-        <div class="border-b border-gray-200 dark:border-gray-700 overflow-x-auto scrollbar-hide">
+        <div class="border-b border-gray-500 dark:border-gray-700 overflow-x-auto scrollbar-hide">
             <div class="flex space-x-4 min-w-max">
                 <button @click="tab = 'media_placement'"
                         :class="tab === 'media_placement' ? 'text-blue-600 dark:text-blue-400 font-semibold' : 'text-white dark:text-gray-400 hover:text-blue-200 dark:hover:text-gray-200'"
@@ -58,7 +58,7 @@
          x-transition:leave="transition ease-in duration-200"
          x-transition:leave-start="opacity-100 translate-y-0"
          x-transition:leave-end="opacity-0 translate-y-2" x-cloak>
-        <div class="overflow-x-auto border border-gray-200 dark:border-gray-700 shadow-sm">
+        <div class="overflow-x-auto rounded-md border border-gray-500 dark:border-gray-700 shadow-sm">
             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                 <thead class="bg-slate-800">
                     <tr>
@@ -71,7 +71,7 @@
                 </thead>
                 <tbody class="bg-slate-700 dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                     @forelse ($mediaPlacement as $item)
-                    <tr class="hover:bg-indigo-300 dark:hover:bg-gray-700/50 transition-colors">
+                    <tr class="hover:bg-indigo-400 dark:hover:bg-gray-700/50 transition-colors">
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white dark:text-white">{{ $item->media ?? '-' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-white">{{ $item->adminTraffic->category ?? '-' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-white">{{ $item->space_ads ?? '-' }}</td>
@@ -97,7 +97,7 @@
          x-transition:leave="transition ease-in duration-200"
          x-transition:leave-start="opacity-100 translate-y-0"
          x-transition:leave-end="opacity-0 translate-y-2" x-cloak>
-        <div class="overflow-x-auto border border-gray-200 dark:border-gray-700 shadow-sm">
+        <div class="overflow-x-auto border rounded-md border-gray-600 dark:border-gray-700 shadow-sm">
             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                 <thead class="bg-slate-800">
                     <tr>
@@ -138,13 +138,15 @@
          x-transition:leave="transition ease-in duration-200"
          x-transition:leave-start="opacity-100 translate-y-0"
          x-transition:leave-end="opacity-0 translate-y-2" x-cloak>
-        <div class="overflow-x-auto border border-gray-200 dark:border-gray-700 shadow-sm">
+        <div class="overflow-x-auto border rounded-md border-gray-600 dark:border-gray-700 shadow-sm">
             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                 <thead class="bg-slate-800">
                     <tr>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white dark:text-white uppercase tracking-wider">Device ID</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white dark:text-white uppercase tracking-wider">Media Name</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white dark:text-white uppercase tracking-wider">Play Date</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white dark:text-white uppercase tracking-wider">Longitude</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white dark:text-white uppercase tracking-wider">Latitude</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white dark:text-white uppercase tracking-wider">Location</th>
                     </tr>
                 </thead>
@@ -155,6 +157,12 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-white">{{ $log->media_name }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-white">
                             {{ \Carbon\Carbon::parse($log->play_date)->format('d M Y H:i') }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-white">
+                            {{ $log->longitude }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-white">
+                            {{ $log->latitude }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-white">
                             {{ $log->location ?? $log->latitude.', '.$log->longitude }}
@@ -179,7 +187,7 @@
          x-transition:leave-end="opacity-0 translate-y-2" x-cloak>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @forelse ($documentations as $doc)
-            <div class="group bg-slate-800 shadow-md overflow-hidden border border-gray-200 dark:border-gray-600 hover:shadow-lg transition-all duration-1000 hover:-translate-y-1">
+            <div class="group bg-slate-800 rounded-md shadow-md overflow-hidden border border-gray-600 dark:border-gray-600 hover:shadow-lg transition-all duration-1000 hover:-translate-y-1">
                 <div class="relative h-48 overflow-hidden">
                     <img src="{{ asset('storage/' . $doc->image_path) }}"
                          alt="{{ $doc->description }}"

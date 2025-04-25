@@ -1,11 +1,38 @@
 <div class="transition-all duration-1000 ease-out transform opacity-0 translate-y-4"
 x-data="{
     shown: false,
+    counters: {},
     init() {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 this.shown = entry.isIntersecting;
-                if (entry.isIntersecting) observer.unobserve(this.$el);
+                if (entry.isIntersecting) {
+                    observer.unobserve(this.$el);
+                    // Start countup animation
+                    this.$el.querySelectorAll('[data-countup]').forEach(el => {
+                        const target = parseInt(el.getAttribute('data-countup'));
+                        const duration = parseInt(el.getAttribute('data-duration') || 1500);
+                        let start = 0;
+                        const range = target - start;
+                        const increment = Math.ceil(target / (duration / 16));
+                        let current = start;
+
+                        // Save default value
+                        this.counters[el.id] = current;
+                        // Save real value
+                        el.textContent = current;
+
+                        const timer = setInterval(() => {
+                            current += increment;
+                            if (current >= target) {
+                                el.textContent = target;
+                                clearInterval(timer);
+                            } else {
+                                el.textContent = current;
+                            }
+                        }, 16); // ~60fps
+                    });
+                }
             });
         });
         observer.observe(this.$el);
@@ -16,25 +43,35 @@ x-bind:class="{
     'opacity-0 translate-y-4': !shown
 }">
     <!-- Mobile Summary Card (visible only on small screens) -->
-    <div class="block sm:hidden mb-4 bg-gradient-to-t from-gray-800 to-gray-700 dark:from-gray-700 dark:to-gray-800 rounded-xl shadow-lg overflow-hidden">
+    <div class="block sm:hidden md:hidden mb-4 bg-gradient-to-t from-gray-800 to-gray-700 dark:from-gray-700 dark:to-gray-800 rounded-xl shadow-lg overflow-hidden">
         <div class="px-4 py-3">
             <h3 class="text-sm font-medium text-gray-200 dark:text-gray-300 mb-2">Media Overview Summary</h3>
             <div class="grid grid-cols-2 gap-3">
                 <div class="bg-gray-500/30 dark:bg-gray-600/30 rounded-lg p-2">
                     <p class="text-xs text-gray-200 dark:text-gray-300">Media Plan</p>
-                    <p class="text-lg font-bold text-white">{{ $stats['totalMediaPlan'] }}</p>
+                    <p class="text-lg font-bold text-white">
+                        <span id="mobile-count-1" data-countup="{{ $stats['totalMediaPlan'] }}" data-duration="1200">0</span>
+                    </p>
                 </div>
                 <div class="bg-gray-500/30 dark:bg-gray-600/30 rounded-lg p-2">
                     <p class="text-xs text-gray-200 dark:text-gray-300">Placement</p>
-                    <p class="text-lg font-bold text-white">{{ $stats['totalInventory'] }}</p>
+                    <p class="text-lg font-bold text-white">
+                        <span id="mobile-count-2" data-countup="{{ $stats['totalInventory'] }}" data-duration="1200">0</span>
+                    </p>
                 </div>
                 <div class="bg-gray-500/30 dark:bg-gray-600/30 rounded-lg p-2">
                     <p class="text-xs text-gray-200 dark:text-gray-300">Duration</p>
-                    <p class="text-lg font-bold text-white">{{ $stats['totalDuration'] }} <span class="text-xs font-normal">Days</span></p>
+                    <p class="text-lg font-bold text-white">
+                        <span id="mobile-count-3" data-countup="{{ $stats['totalDuration'] }}" data-duration="1000">0</span>
+                        <span class="text-xs font-normal"> Days</span>
+                    </p>
                 </div>
                 <div class="bg-gray-500/30 dark:bg-gray-600/30 rounded-lg p-2">
                     <p class="text-xs text-gray-200 dark:text-gray-300">Remaining</p>
-                    <p class="text-lg font-bold text-white">{{ $stats['remainingDays'] }} <span class="text-xs font-normal">Days</span></p>
+                    <p class="text-lg font-bold text-white">
+                        <span id="mobile-count-4" data-countup="{{ $stats['remainingDays'] }}" data-duration="1000">0</span>
+                        <span class="text-xs font-normal"> Days</span>
+                    </p>
                 </div>
             </div>
         </div>
@@ -49,7 +86,7 @@ x-bind:class="{
                     <div>
                         <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-300 dark:text-gray-400 mb-1">Media Plan</h3>
                         <p class="text-2xl font-bold text-white dark:text-white">
-                            {{ $stats['totalMediaPlan'] }}
+                            <span id="desk-count-1" data-countup="{{ $stats['totalMediaPlan'] }}" data-duration="1500">0</span>
                         </p>
                     </div>
                     <div class="rounded-full p-2 bg-blue-100/20 dark:bg-blue-900/30 backdrop-blur-sm">
@@ -72,7 +109,7 @@ x-bind:class="{
                     <div>
                         <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-300 dark:text-gray-400 mb-1">Media Placement</h3>
                         <p class="text-2xl font-bold text-white dark:text-white">
-                            {{ $stats['totalInventory'] }}
+                            <span id="desk-count-2" data-countup="{{ $stats['totalInventory'] }}" data-duration="1500">0</span>
                         </p>
                     </div>
                     <div class="rounded-full p-2 bg-green-100/20 dark:bg-green-900/30 backdrop-blur-sm">
@@ -94,7 +131,8 @@ x-bind:class="{
                     <div>
                         <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-300 dark:text-gray-400 mb-1">Broadcast Duration</h3>
                         <p class="text-2xl font-bold text-white dark:text-white">
-                            {{ $stats['totalDuration'] }} <span class="text-sm font-normal">Days</span>
+                            <span id="desk-count-3" data-countup="{{ $stats['totalDuration'] }}" data-duration="1300">0</span>
+                            <span class="text-sm font-normal"> Days</span>
                         </p>
                     </div>
                     <div class="rounded-full p-2 bg-cyan-100/20 dark:bg-cyan-900/30 backdrop-blur-sm">
@@ -116,7 +154,8 @@ x-bind:class="{
                     <div>
                         <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-300 dark:text-gray-400 mb-1">Remaining Days</h3>
                         <p class="text-2xl font-bold text-white dark:text-white">
-                            {{ $stats['remainingDays'] }} <span class="text-sm font-normal">Days</span>
+                            <span id="desk-count-4" data-countup="{{ $stats['remainingDays'] }}" data-duration="1300">0</span>
+                            <span class="text-sm font-normal"> Days</span>
                         </p>
                     </div>
                     <div class="rounded-full p-2 bg-amber-100/20 dark:bg-amber-900/30 backdrop-blur-sm">
