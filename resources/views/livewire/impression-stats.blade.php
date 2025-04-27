@@ -58,6 +58,11 @@ x-bind:class="{
     <div class="hidden md:grid md:grid-cols-4 gap-4">
         <!-- Highest Impression Card -->
         <div class="bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 p-4 rounded-lg shadow-lg text-white relative overflow-hidden group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+            <!-- Shimmer Effect -->
+            <div class="absolute inset-0 overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out"></div>
+            </div>
+
             <!-- Background Decoration -->
             <div class="absolute right-0 bottom-0 opacity-10 transform translate-x-4 translate-y-4 group-hover:translate-x-2 group-hover:translate-y-2 transition-transform duration-300 ">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -83,6 +88,11 @@ x-bind:class="{
 
         <!-- Lowest Impression Card -->
         <div class="bg-gradient-to-t from-gray-800 to-gray-700 p-4 rounded-lg shadow-lg text-white relative overflow-hidden group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+            <!-- Shimmer Effect -->
+            <div class="absolute inset-0 overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out"></div>
+            </div>
+
             <!-- Background Decoration -->
             <div class="absolute right-0 bottom-0 opacity-10 transform translate-x-4 translate-y-4 group-hover:translate-x-2 group-hover:translate-y-2 transition-transform duration-300">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -108,6 +118,11 @@ x-bind:class="{
 
         <!-- Average Impression Card -->
         <div class="bg-gradient-to-t from-gray-800 to-gray-700 p-4 rounded-lg shadow-lg text-white relative overflow-hidden group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+            <!-- Shimmer Effect -->
+            <div class="absolute inset-0 overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out"></div>
+            </div>
+
             <!-- Background Decoration -->
             <div class="absolute right-0 bottom-0 opacity-10 transform translate-x-4 translate-y-4 group-hover:translate-x-2 group-hover:translate-y-2 transition-transform duration-300">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -133,6 +148,11 @@ x-bind:class="{
 
         <!-- Total Impression Card -->
         <div class="bg-gradient-to-t from-gray-800 to-gray-700 p-4 rounded-lg shadow-lg text-white relative overflow-hidden group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+            <!-- Shimmer Effect -->
+            <div class="absolute inset-0 overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out"></div>
+            </div>
+
             <!-- Background Decoration -->
             <div class="absolute right-0 bottom-0 opacity-10 transform translate-x-4 translate-y-4 group-hover:translate-x-2 group-hover:translate-y-2 transition-transform duration-300">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24" fill="none" viewBox="0 0 24 24" stroke="currentColor">

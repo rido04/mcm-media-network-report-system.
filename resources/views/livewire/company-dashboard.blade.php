@@ -69,7 +69,7 @@
             </div>
 
             <!-- Company Info -->
-            <a href="https://www.mcmmedianetworks.com/" target="_blank" class="flex items-center bg-slate-800 px-4 py-2 rounded-lg shadow-sm w-full sm:w-auto hover:bg-gradient-to-t from-slate-800 to-blue-700 transition">
+            <a href="https://www.mcmmedianetworks.com/" target="_blank" class="flex items-center bg-slate-800 px-4 py-2 rounded-lg shadow-sm w-full sm:w-auto hover:bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 transition">
                 <img src="{{ asset('storage/image/logo_mcm.png') }}"
                     alt="MCM Media Network"
                     class="h-10 w-10 rounded-full object-cover border-2 border-blue-100" />
