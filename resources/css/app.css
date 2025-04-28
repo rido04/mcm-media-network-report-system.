@@ -37,3 +37,34 @@
     font-size: 20px !important;
     font-weight: bold;
 }
+
+/* Pastikan container tidak overflow */
+.swiper-container {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Pastikan slide mengikuti lebar parent */
+.swiper-slide {
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Membuat tombol navigasi lebih sesuai */
+.swiper-button-next,
+.swiper-button-prev {
+    color: #ffffff;
+    background: rgba(0, 0, 0, 0.3);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.swiper-button-next:after,
+.swiper-button-prev:after {
+    font-size: 18px;
+}

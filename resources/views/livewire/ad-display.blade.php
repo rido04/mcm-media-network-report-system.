@@ -1,46 +1,18 @@
 <div
     x-data="{
         shown: false,
-        swiperInstance: null,
         init() {
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     this.shown = entry.isIntersecting;
                     if (entry.isIntersecting) {
                         observer.unobserve(this.$el);
-                        // Initialize Swiper after the element is visible
+                        // Trigger custom event when element is visible
                         this.$nextTick(() => {
-                            this.swiperInstance = new Swiper('.swiper-container', {
-                                slidesPerView: 1,
-                                spaceBetween: 20,
-                                loop: true,
-                                autoplay: {
-                                    delay: 5000,
-                                    disableOnInteraction: false,
-                                },
-                                pagination: {
-                                    el: '.swiper-pagination',
-                                    clickable: true,
-                                },
-                                navigation: {
-                                    nextEl: '.swiper-button-next',
-                                    prevEl: '.swiper-button-prev',
-                                },
-                                breakpoints: {
-                                    // when window width is >= 640px
-                                    640: {
-                                        slidesPerView: 1
-                                    },
-                                    // when window width is >= 768px
-                                    768: {
-                                        slidesPerView: 1
-                                    },
-                                    // when window width is >= 1024px
-                                    1024: {
-                                        slidesPerView: 2
-                                    }
-                                }
+                            const event = new CustomEvent('initSwiper', { 
+                                detail: { container: this.$el.querySelector('.swiper-container') } 
                             });
+                            document.dispatchEvent(event);
                         });
                     }
                 });
@@ -54,42 +26,6 @@
     }"
     class="transition-all duration-1000 ease-out transform opacity-0 translate-y-4 w-full"
 >
-    <!-- Link CSS Swiper -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.7/swiper-bundle.min.css">
-    
-    <style>
-        /* Pastikan container tidak overflow */
-        .swiper-container {
-            width: 100%;
-            overflow: hidden;
-            position: relative;
-        }
-        
-        /* Pastikan slide mengikuti lebar parent */
-        .swiper-slide {
-            width: 100%;
-            max-width: 100%;
-        }
-        
-        /* Membuat tombol navigasi lebih sesuai */
-        .swiper-button-next,
-        .swiper-button-prev {
-            color: #ffffff;
-            background: rgba(0, 0, 0, 0.3);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .swiper-button-next:after,
-        .swiper-button-prev:after {
-            font-size: 18px;
-        }
-    </style>
-    
     <div class="swiper-container w-full">
         <div class="swiper-wrapper">
             @foreach ($records as $record)
@@ -136,7 +72,4 @@
         <div class="swiper-button-next"></div>
         <div class="swiper-button-prev"></div>
     </div>
-
-    <!-- Swiper JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.7/swiper-bundle.min.js"></script>
 </div>

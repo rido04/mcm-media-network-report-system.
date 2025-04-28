@@ -1,14 +1,35 @@
 import "./bootstrap";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 // Import Swiper
-import Swiper, { Navigation, Pagination } from "swiper";
+import Swiper, { Navigation, Pagination, Autoplay } from "swiper";
 
-// Impor style Swiper
 import "swiper/swiper-bundle.min.css";
 
-// Kemudian inisialisasi Swiper seperti biasa
 document.addEventListener("DOMContentLoaded", () => {
-    const swiper = new Swiper(".swiper-container", {
-        modules: [Navigation, Pagination],
+    // Listener for all swiper containers on page load
+    const swiperContainers = document.querySelectorAll(".swiper-container");
+    swiperContainers.forEach(initSwiperContainer);
+
+    // Custom event listener for lazy-loaded swiper containers (via Alpine.js)
+    document.addEventListener("initSwiper", (event) => {
+        if (event.detail && event.detail.container) {
+            initSwiperContainer(event.detail.container);
+        }
+    });
+});
+
+// Function to initialize a Swiper container
+function initSwiperContainer(container) {
+    // Check if Swiper has already been initialized on this container
+    if (container.swiper instanceof Swiper) {
+        return;
+    }
+
+    // Initialize new Swiper instance
+    new Swiper(container, {
+        modules: [Navigation, Pagination, Autoplay],
         slidesPerView: 1,
         spaceBetween: 20,
         loop: true,
@@ -44,4 +65,4 @@ document.addEventListener("DOMContentLoaded", () => {
             },
         },
     });
-});
+}
