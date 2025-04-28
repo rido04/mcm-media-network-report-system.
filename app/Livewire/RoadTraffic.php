@@ -5,48 +5,92 @@ namespace App\Livewire;
 use Carbon\Carbon;
 use Livewire\Component;
 use App\Models\DailyImpression;
+use Illuminate\Support\Facades\Auth;
 
 class RoadTraffic extends Component
 {
     public $timeRange = 'daily'; // default filter
+    public $userId;
+    protected $listeners = ['refreshChart'];
 
     public function mount()
     {
-        //
+        // Mengambil ID user yang sedang login
+        $this->userId = Auth::id();
     }
+
     public function changeTimeRange($range)
     {
         $this->timeRange = $range;
+        $this->dispatch('timeRangeChanged');
+    }
+
+    /**
+     * Get date range based on selected time range
+     *
+     * @return array [$startDate, $endDate]
+     */
+    private function getDateRange()
+    {
+        switch ($this->timeRange) {
+            case 'daily':
+                return [
+                    now()->subDays(7)->format('Y-m-d'),
+                    now()->format('Y-m-d')
+                ];
+            case 'weekly':
+                return [
+                    now()->subWeeks(8)->startOfWeek()->format('Y-m-d'),
+                    now()->endOfWeek()->format('Y-m-d')
+                ];
+            case 'monthly':
+                return [
+                    now()->subMonths(11)->startOfMonth()->format('Y-m-d'),
+                    now()->endOfMonth()->format('Y-m-d')
+                ];
+            case 'yearly':
+                return [
+                    now()->subYears(4)->startOfYear()->format('Y-m-d'),
+                    now()->endOfYear()->format('Y-m-d')
+                ];
+            default:
+                return [
+                    now()->subWeeks(8)->startOfWeek()->format('Y-m-d'),
+                    now()->endOfWeek()->format('Y-m-d')
+                ];
+        }
+    }
+
+    /**
+     * Format date for grouping based on time range
+     *
+     * @param Carbon $date
+     * @return string
+     */
+    private function formatDateForGrouping($date)
+    {
+        switch ($this->timeRange) {
+            case 'daily':
+                return $date->format('Y-m-d');
+            case 'weekly':
+                return $date->startOfWeek()->format('Y-m-d') . ' to ' . $date->endOfWeek()->format('Y-m-d');
+            case 'monthly':
+                return $date->format('Y-m');
+            case 'yearly':
+                return $date->format('Y');
+            default:
+                return $date->format('Y-m-d'); // Default to daily format
+        }
     }
 
     public function render()
     {
-        // Count date range choosen
-        switch ($this->timeRange) {
-            case 'daily':
-                $startDate = now()->subDays(7)->format('Y-m-d');
-                $endDate = now()->format('Y-m-d');
-                break;
-            case 'weekly':
-                $startDate = now()->subWeeks(8)->startOfWeek()->format('Y-m-d');
-                $endDate = now()->endOfWeek()->format('Y-m-d');
-                break;
-            case 'monthly':
-                $startDate = now()->subMonths(11)->startOfMonth()->format('Y-m-d'); // 12 months data
-                $endDate = now()->endOfMonth()->format('Y-m-d');
-                break;
-            case 'yearly':
-                $startDate = now()->subYears(4)->startOfYear()->format('Y-m-d'); // 5 years data
-                $endDate = now()->endOfYear()->format('Y-m-d');
-                break;
-            default:
-                $startDate = now()->subWeeks(8)->startOfWeek()->format('Y-m-d');
-                $endDate = now()->endOfWeek()->format('Y-m-d');
-        }
+        [$startDate, $endDate] = $this->getDateRange();
 
         $query = DailyImpression::with(['adminTraffic'])
             ->whereHas('adminTraffic', function($q) {
-                $q->where('category', ['DOOH', 'OOH']);
+                $q->whereIn('category', ['DOOH', 'OOH'])
+                  ->where('user_id', $this->userId); // Filter user_id melalui relasi adminTraffic
             })
             ->whereBetween('date', [$startDate, $endDate]);
 
@@ -54,17 +98,7 @@ class RoadTraffic extends Component
         $data = $query->get()
             ->groupBy(function($item) {
                 $date = Carbon::parse($item->date);
-
-                switch ($this->timeRange) {
-                    case 'daily':
-                        return $date->format('Y-m-d');
-                    case 'weekly':
-                        return $date->startOfWeek()->format('Y-m-d') . ' to ' . $date->endOfWeek()->format('Y-m-d');
-                    case 'monthly':
-                        return $date->format('Y-m'); // Format as Year-Month for grouping
-                    case 'yearly':
-                        return $date->format('Y'); // Format as Year only for grouping
-                }
+                return $this->formatDateForGrouping($date);
             })
             ->map(function($items) {
                 return $items->sum('impression');
@@ -78,13 +112,10 @@ class RoadTraffic extends Component
                     $start = Carbon::parse($parts[0])->format('M d');
                     $end = Carbon::parse($parts[1])->format('M d');
                     return $start . ' - ' . $end;
-
                 case 'monthly':
-                    return Carbon::createFromFormat('Y-m', $key)->format('M Y'); // Format as "Month Year"
-
+                    return Carbon::createFromFormat('Y-m', $key)->format('M Y');
                 case 'yearly':
-                    return $key; // Just the year
-
+                    return $key;
                 default: // daily
                     return Carbon::parse($key)->format('M d, Y');
             }

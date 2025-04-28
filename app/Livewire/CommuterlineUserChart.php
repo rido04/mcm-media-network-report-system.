@@ -48,7 +48,8 @@ class CommuterlineUserChart extends Component
 
         $query = DailyImpression::with(['adminTraffic'])
             ->whereHas('adminTraffic', function($q) {
-                $q->where('category', 'Commuterline');
+                $q->where('category', 'Commuterline')
+                ->where('user_id', Auth::id());
             })
             ->whereBetween('date', [$startDate, $endDate]);
 

@@ -4,6 +4,7 @@ export default {
         "./resources/views/**/*.blade.php",
         "./app/Filament/**/*.php",
         "./vendor/filament/**/*.blade.php",
+        "./vendor/livewire/**/*.blade.php", // Untuk komponen Livewire
     ],
     theme: {
         extend: {

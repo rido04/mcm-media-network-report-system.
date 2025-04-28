@@ -217,36 +217,41 @@
                         // Find highest value date
                         const maxIndex = data.indexOf(Math.max(...data));
                         if (maxIndex !== -1) {
-                            document.getElementById('highestDateDesktop').innerHTML += ' on ' + labels[maxIndex];
-                            document.getElementById('highestDateMobile').innerHTML = 'on ' + labels[maxIndex];
+                            const highestDateDesktop = document.getElementById('highestDateDesktop');
+                            const highestDateMobile = document.getElementById('highestDateMobile');
+
+                            if (highestDateDesktop) {
+                                highestDateDesktop.innerHTML += ' on ' + labels[maxIndex];
+                            }
+
+                            if (highestDateMobile) {
+                                highestDateMobile.innerHTML = 'on ' + labels[maxIndex];
+                            }
                         }
-
-                        // Mobile summary toggle
-                        const toggleButton = document.getElementById('toggleMobileSummary');
-                        const content = document.getElementById('mobileSummaryContent');
-                        let isExpanded = true;
-
-                        toggleButton.addEventListener('click', () => {
-                            isExpanded = !isExpanded;
-                            content.style.display = isExpanded ? 'block' : 'none';
-                            toggleButton.querySelector('svg').classList.toggle('rotate-180', !isExpanded);
-                        });
 
                         // Update chart when Livewire data changes
                         Livewire.on('refreshChart', () => {
                             if (this.chart) {
                                 this.chart.data.labels = @js($labels);
                                 this.chart.data.datasets[0].data = @js($impressions);
-                                this.chart.data.datasets[1].data = @js($impressions);
                                 this.chart.update();
 
                                 // Update highest value date
                                 const newData = @js($impressions);
                                 const newLabels = @js($labels);
                                 const newMaxIndex = newData.indexOf(Math.max(...newData));
+
                                 if (newMaxIndex !== -1) {
-                                    document.getElementById('highestDateDesktop').innerHTML = 'Peak impression on ' + newLabels[newMaxIndex];
-                                    document.getElementById('highestDateMobile').innerHTML = 'on ' + newLabels[newMaxIndex];
+                                    const highestDateDesktop = document.getElementById('highestDateDesktop');
+                                    const highestDateMobile = document.getElementById('highestDateMobile');
+
+                                    if (highestDateDesktop) {
+                                        highestDateDesktop.innerHTML = 'Peak impression on ' + newLabels[newMaxIndex];
+                                    }
+
+                                    if (highestDateMobile) {
+                                        highestDateMobile.innerHTML = 'on ' + newLabels[newMaxIndex];
+                                    }
                                 }
                             }
                         });
@@ -284,13 +289,15 @@
 
     function downloadChart() {
         const canvas = document.getElementById('RoadTrafficChart-{{ $timeRange }}');
-        const image = canvas.toDataURL('image/png', 1.0);
+        if (canvas) {
+            const image = canvas.toDataURL('image/png', 1.0);
 
-        // Create download link
-        const link = document.createElement('a');
-        link.download = 'road-traffic-impressions-{{ $timeRange }}.png';
-        link.href = image;
-        link.click();
+            // Create download link
+            const link = document.createElement('a');
+            link.download = 'road-traffic-impressions-{{ $timeRange }}.png';
+            link.href = image;
+            link.click();
+        }
     }
 </script>
 @endpush

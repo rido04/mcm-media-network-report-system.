@@ -219,23 +219,11 @@
                             document.getElementById('highestDateMobile').innerHTML = 'on ' + labels[maxIndex];
                         }
 
-                        // Mobile summary toggle
-                        const toggleButton = document.getElementById('toggleMobileSummary');
-                        const content = document.getElementById('mobileSummaryContent');
-                        let isExpanded = true;
-
-                        toggleButton.addEventListener('click', () => {
-                            isExpanded = !isExpanded;
-                            content.style.display = isExpanded ? 'block' : 'none';
-                            toggleButton.querySelector('svg').classList.toggle('rotate-180', !isExpanded);
-                        });
-
                         // Update chart when Livewire data changes
                         Livewire.on('refreshChart', () => {
                             if (this.chart) {
                                 this.chart.data.labels = @js($labels);
                                 this.chart.data.datasets[0].data = @js($impressions);
-                                this.chart.data.datasets[1].data = @js($impressions);
                                 this.chart.update();
 
                                 // Update highest value date

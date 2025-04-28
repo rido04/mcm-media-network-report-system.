@@ -4,16 +4,26 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\DailyImpression;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class TotalPerformance extends Component
 {
     public $datasets = [];
     public $labels = [];
+    public $userId;
+
+    public function mount()
+    {
+        // auth user_id
+        $this->userId = Auth::id();
+    }
 
     public function render()
     {
         $data = DailyImpression::with('adminTraffic')
             ->join('admin_traffic', 'daily_impressions.admin_traffic_id', '=', 'admin_traffic.id')
+            // Filter user_id
+            ->where('admin_traffic.user_id', $this->userId)
             ->select([
                 DB::raw('DATE(daily_impressions.date) as date'),
                 'admin_traffic.category',

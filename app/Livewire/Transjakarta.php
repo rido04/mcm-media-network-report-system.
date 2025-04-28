@@ -5,23 +5,26 @@ namespace App\Livewire;
 use Carbon\Carbon;
 use Livewire\Component;
 use App\Models\DailyImpression;
+use Illuminate\Support\Facades\Auth;
 
 class Transjakarta extends Component
 {
-    public $timeRange = 'daily'; // daily, weekly, monthly
+    public $timeRange = 'daily'; // daily, weekly, monthly, yearly
 
     public function mount()
     {
         //
     }
+
     public function changeTimeRange($range)
     {
         $this->timeRange = $range;
+        $this->dispatch('timeRangeChanged');
     }
 
     public function render()
     {
-        // Count date range choosen
+        // Count date range chosen
         switch ($this->timeRange) {
             case 'daily':
                 $startDate = now()->subDays(7)->format('Y-m-d');
@@ -45,9 +48,10 @@ class Transjakarta extends Component
         }
 
         $query = DailyImpression::with(['adminTraffic'])
-            ->whereHas('adminTraffic', function($q) {
-                $q->where('category', 'Transjakarta');
-            })
+                ->whereHas('adminTraffic', function($q) {
+                    $q->where('category', 'Transjakarta')
+                    ->where('user_id', Auth::id());
+                })
             ->whereBetween('date', [$startDate, $endDate]);
 
         // Group data

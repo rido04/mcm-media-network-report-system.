@@ -227,20 +227,9 @@
                         // Find highest value date
                         const maxIndex = data.indexOf(Math.max(...data));
                         if (maxIndex !== -1) {
-                            document.getElementById('highestDateDesktop').innerHTML += ' on ' + labels[maxIndex];
+                            document.getElementById('highestDateDesktop').innerHTML = 'Peak impression on ' + labels[maxIndex];
                             document.getElementById('highestDateMobile').innerHTML = 'on ' + labels[maxIndex];
                         }
-
-                        // Mobile summary toggle
-                        const toggleButton = document.getElementById('toggleMobileSummary');
-                        const content = document.getElementById('mobileSummaryContent');
-                        let isExpanded = true;
-
-                        toggleButton.addEventListener('click', () => {
-                            isExpanded = !isExpanded;
-                            content.style.display = isExpanded ? 'block' : 'none';
-                            toggleButton.querySelector('svg').classList.toggle('rotate-180', !isExpanded);
-                        });
 
                         // Update chart when Livewire data changes
                         Livewire.on('refreshChart', () => {
@@ -293,14 +282,18 @@
     });
 
     function downloadChart() {
-        const canvas = document.getElementById('TraansjakartaTrafficChart-{{ $timeRange }}');
-        const image = canvas.toDataURL('image/png', 1.0);
+        const canvas = document.getElementById('TransjakartaTrafficChart-{{ $timeRange }}');
+        if (canvas) {
+            const image = canvas.toDataURL('image/png', 1.0);
 
-        // Create download link
-        const link = document.createElement('a');
-        link.download = 'transjakarta-impressions-{{ $timeRange }}.png';
-        link.href = image;
-        link.click();
+            // Create download link
+            const link = document.createElement('a');
+            link.download = 'transjakarta-impressions-{{ $timeRange }}.png';
+            link.href = image;
+            link.click();
+        } else {
+            console.error("Chart canvas element not found");
+        }
     }
 </script>
 @endpush

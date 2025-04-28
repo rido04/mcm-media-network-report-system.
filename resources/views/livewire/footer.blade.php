@@ -158,7 +158,7 @@
 @push('scripts')
 <script>
     // Back to top button functionality
-    const backToTopButton = document.getElementById('back-to-top');
+    var backToTopButton = document.getElementById('back-to-top');
 
     window.addEventListener('scroll', () => {
         if (window.pageYOffset > 300) {

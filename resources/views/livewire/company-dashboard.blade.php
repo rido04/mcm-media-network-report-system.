@@ -1,6 +1,19 @@
-@extends('layouts.app')
-
-@section('content')
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MCM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{-- <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.0.0/dist/tailwind.min.css" rel="stylesheet"> --}}
+    @livewireStyles
+    @stack('styles')
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-gray-800">
 @php
     $user = auth()->user();
 @endphp
@@ -103,4 +116,9 @@
             @livewire('footer')
         </div>
 </div>
-@endsection
+@livewireScripts
+{{-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
+{{-- <script src="https://cdn.jsdelivr.net/npm/countup.js@2.6.0/dist/countUp.umd.js"></script> --}}
+@stack('scripts')
+</body>
+</html>

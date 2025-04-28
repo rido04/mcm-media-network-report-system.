@@ -27,7 +27,6 @@ x-data="{
                 el.textContent = formatValue(end);
             }
         }
-
         requestAnimationFrame(updateNumber);
     },
     init() {
@@ -284,7 +283,6 @@ x-bind:class="{
     </div>
 </div>
 
-<!-- Add this script to the page -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const toggleButton = document.getElementById('toggleMobileStatsSummary');
