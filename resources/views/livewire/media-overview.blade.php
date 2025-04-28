@@ -4,62 +4,85 @@
         shown: false,
         counters: {},
         init() {
+            this.setupObserver();
+    
+            // Reset observer ketika data berubah
+            Livewire.hook('commit', ({ component, succeed }) => {
+                succeed(() => {
+                    if (component.id === this.$wire.__instance.id) {
+                        this.shown = false;
+                        this.setupObserver();
+                        this.animateElements(); // Panggil animateElements setelah data update
+                    }
+                });
+            });
+    
+            // Tangkap event statsUpdated
+            window.addEventListener('statsUpdated', () => {
+                this.shown = false;
+                this.setupObserver();
+            });
+        },
+        setupObserver() {
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     this.shown = entry.isIntersecting;
                     if (entry.isIntersecting) {
                         observer.unobserve(this.$el);
-
-                        // Add staggered fade-in animation for cards
-                        const cards = this.$el.querySelectorAll('.card-animate');
-                        cards.forEach((card, index) => {
-                            setTimeout(() => {
-                                card.classList.add('card-visible');
-                            }, 150 * index);
-                        });
-
-                        // Enhanced countup animation with easing
-                        this.$el.querySelectorAll('[data-countup]').forEach(el => {
-                            const target = parseInt(el.getAttribute('data-countup'));
-                            const duration = parseInt(el.getAttribute('data-duration') || 1500);
-                            const start = 0;
-                            const frameDuration = 1000/60; // 60fps
-                            const totalFrames = Math.round(duration / frameDuration);
-                            let frame = 0;
-
-                            // Save initial value
-                            this.counters[el.id] = start;
-                            el.textContent = start;
-
-                            const easeOutQuad = t => t * (2 - t); // Smoother easing function
-
-                            const timer = setInterval(() => {
-                                frame++;
-
-                                // Calculate progress with easing
-                                const progress = easeOutQuad(frame / totalFrames);
-                                const current = Math.round(start + (target - start) * progress);
-
-                                if (frame === totalFrames) {
-                                    el.textContent = target;
-                                    clearInterval(timer);
-                                } else {
-                                    el.textContent = current;
-                                }
-                            }, frameDuration);
-                        });
+                        this.animateElements();
                     }
                 });
-            }, {
-                threshold: 0.2 // Trigger earlier when 20% visible
-            });
+            }, { threshold: 0.2 });
+
             observer.observe(this.$el);
+        },
+        animateElements() {
+            // Add staggered fade-in animation for cards
+            const cards = this.$el.querySelectorAll('.card-animate');
+            cards.forEach((card, index) => {
+                card.classList.remove('card-visible');
+                setTimeout(() => {
+                    card.classList.add('card-visible');
+                }, 150 * index);
+            });
+
+            // Enhanced countup animation with easing
+            this.$el.querySelectorAll('[data-countup]').forEach(el => {
+                const target = parseInt(el.getAttribute('data-countup'));
+                const duration = parseInt(el.getAttribute('data-duration') || 1500);
+                const start = 0;
+                const frameDuration = 1000/60; // 60fps
+                const totalFrames = Math.round(duration / frameDuration);
+                let frame = 0;
+
+                // Save initial value
+                this.counters[el.id] = start;
+                el.textContent = start;
+
+                const easeOutQuad = t => t * (2 - t); // Smoother easing function
+
+                const timer = setInterval(() => {
+                    frame++;
+
+                    // Calculate progress with easing
+                    const progress = easeOutQuad(frame / totalFrames);
+                    const current = Math.round(start + (target - start) * progress);
+
+                    if (frame === totalFrames) {
+                        el.textContent = target;
+                        clearInterval(timer);
+                    } else {
+                        el.textContent = current;
+                    }
+                }, frameDuration);
+            });
         }
     }"
     x-bind:class="{
         'opacity-100 translate-y-0': shown,
         'opacity-0 translate-y-6': !shown
     }"
+    x-init="init"
 >
     <!-- Container for both mobile and desktop views -->
     <div class="w-full">

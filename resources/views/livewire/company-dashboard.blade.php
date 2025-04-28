@@ -56,9 +56,6 @@
                         <div class="font-semibold text-sm sm:text-lg text-white leading-tight whitespace-nowrap">
                             Welcome, {{ $user->name }}
                         </div>
-                        <div class="text-xs text-gray-300 hidden sm:block">
-                            {{ $user->email }}
-                        </div>
                     </div>
                 </div>
 
@@ -82,7 +79,7 @@
             </div>
 
             <!-- Company Info -->
-            <a href="https://www.mcmmedianetworks.com/" target="_blank" class="flex items-center bg-slate-800 px-4 py-2 rounded-lg shadow-sm w-full sm:w-auto hover:bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 transition">
+            <a href="https://www.mcmmedianetworks.com/" target="_blank" class="flex items-center bg-slate-800 px-4 py-2 rounded-lg shadow-sm w-full sm:w-auto hover:bg-slate-700 text-white transition-colors duration-300 ease-in-out">
                 <img src="{{ asset('storage/image/logo_mcm.png') }}"
                     alt="MCM Media Network"
                     class="h-10 w-10 rounded-full object-cover border-2 border-blue-100" />

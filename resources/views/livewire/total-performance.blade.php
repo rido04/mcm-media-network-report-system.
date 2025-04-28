@@ -25,21 +25,16 @@
     document.addEventListener('DOMContentLoaded', function () {
     const ctx = document.getElementById('performanceChart').getContext('2d');
 
-    // Ambil data dari backend
     const labels = @json($labels);
     const backendDatasets = @json($datasets);
 
-    // Buat salinan dataset dari backend
     const datasets = [...backendDatasets];
 
-    // Tambahkan dataset line baru
-    // Contoh: line dataset berdasarkan data dari dataset pertama
-    // Anda bisa menyesuaikan data yang digunakan
     if (datasets.length > 0 && datasets[0].data) {
         datasets.push({
             type: 'line',
             label: 'Trend Line',
-            data: datasets[0].data,  // Gunakan data yang sama dengan dataset pertama
+            data: datasets[0].data,
             borderColor: 'rgba(255, 99, 132, 1)',
             backgroundColor: 'rgba(255, 99, 132, 0.2)',
             borderWidth: 2,
@@ -48,16 +43,15 @@
             pointRadius: 3,
             pointHoverRadius: 5,
             pointBackgroundColor: 'rgba(255, 99, 132, 1)',
-            // Tambahkan opsi ini untuk memastikan line chart menggunakan sumbu y yang sama
             yAxisID: 'y'
         });
     }
 
     new Chart(ctx, {
-        type: 'bar',  // Tipe utama tetap bar
+        type: 'bar',
         data: {
             labels: labels,
-            datasets: datasets  // Gunakan datasets yang sudah dimodifikasi
+            datasets: datasets  // Use the modified dataset
         },
         options: {
             responsive: true,
