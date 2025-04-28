@@ -71,13 +71,13 @@
                             stroke="currentColor"
                             class="w-4 h-4 sm:w-5 sm:h-5">
                             <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6A2.25 2.25 0 005.25 5.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3-3H9m0 0l3-3m-3 3l3 3" />
+                            d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6A2.25 2.25 0 005.25 5.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3-3H9m0 0l3-3m-3 3l3 3" />
                         </svg>
                         Logout
                     </button>
                 </form>
             </div>
-
+            
             <!-- Company Info -->
             <a href="https://www.mcmmedianetworks.com/" target="_blank" class="flex items-center bg-slate-800 px-4 py-2 rounded-lg shadow-sm w-full sm:w-auto hover:bg-slate-700 text-white transition-colors duration-300 ease-in-out">
                 <img src="{{ asset('storage/image/logo_mcm.png') }}"
@@ -114,8 +114,7 @@
         </div>
 </div>
 @livewireScripts
-{{-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
-{{-- <script src="https://cdn.jsdelivr.net/npm/countup.js@2.6.0/dist/countUp.umd.js"></script> --}}
+<script type="module" src="{{ mix('../resources/js/app.js') }}"></script>
 @stack('scripts')
 </body>
 </html>

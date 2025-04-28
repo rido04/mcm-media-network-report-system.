@@ -6,18 +6,18 @@
         init() {
             this.setupObserver();
     
-            // Reset observer ketika data berubah
+            // Reset observer when data changed
             Livewire.hook('commit', ({ component, succeed }) => {
                 succeed(() => {
                     if (component.id === this.$wire.__instance.id) {
                         this.shown = false;
                         this.setupObserver();
-                        this.animateElements(); // Panggil animateElements setelah data update
+                        this.animateElements(); // get animateElement
                     }
                 });
             });
     
-            // Tangkap event statsUpdated
+            // get statsUpdated
             window.addEventListener('statsUpdated', () => {
                 this.shown = false;
                 this.setupObserver();
