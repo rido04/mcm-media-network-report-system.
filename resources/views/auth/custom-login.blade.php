@@ -53,7 +53,7 @@
         .radio-ring {
             position: absolute;
             border-radius: 50%;
-            border: 4px solid #3e17cc; 
+            border: 4px solid #3e17cc;
             opacity: 0;
             animation: radioPulse 2s infinite ease-out;
             z-index: 0;
@@ -204,12 +204,12 @@
         }
 
         .login-btn:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 5px 15px rgba(62, 23, 204, 0.4);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(62, 23, 204, 0.4);
         }
 
         .login-btn:active {
-          transform: translateY(0);
+        transform: translateY(0);
         }
     </style>
 </head>
@@ -239,9 +239,9 @@
 
     <!-- Right Section with Login Form -->
     <div class="flex-1 flex flex-col justify-center p-4 md:p-8 w-full md:w-1/2 mx-auto login-form-container">
-        <div class="max-w-md w-full mx-auto rounded-2xl shadow-lg p-6 md:p-8 backdrop-blur-md bg-white/90 border border-white/20">
-            <h2 class="text-2xl md:text-3xl font-semibold mb-2 text-gray-800">MCM Portal</h2>
-            <h4 class="text-lg md:text-xl font-medium mb-8 text-gray-600">login to your account</h4>
+        <div class="max-w-md w-full mx-auto rounded-2xl p-6 md:p-8 ">
+            <h2 class="text-2xl md:text-3xl font-semibold mb-2 text-white text-center md:text-left sm:text-left">MCM Portal</h2>
+            <h4 class="text-lg md:text-xl font-medium mb-8 text-white text-center md:text-left sm:text-left">login to your account</h4>
 
             @if ($errors->any())
                 <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded">
@@ -252,7 +252,33 @@
                             </svg>
                         </div>
                         <div class="ml-3">
-                            <p class="text-sm text-red-600">{{ $errors->first() }}</p>
+                            @if($errors->has('email'))
+                                <p class="text-sm text-red-600">
+                                    @if($errors->first('email') == 'The email field is required.')
+                                        Email is required
+                                    @elseif($errors->first('email') == 'The email must be a valid email address.')
+                                        Please enter a valid email address
+                                    @elseif($errors->first('email') == 'These credentials do not match our records.')
+                                        Invalid email or password
+                                    @else
+                                        {{ $errors->first('email') }}
+                                    @endif
+                                </p>
+                            @elseif($errors->has('password'))
+                                <p class="text-sm text-red-600">
+                                    @if($errors->first('password') == 'The password field is required.')
+                                        Password is required
+                                    @elseif($errors->first('password') == 'The password must be at least 8 characters.')
+                                        Password must be at least 8 characters
+                                    @elseif($errors->first('password') == 'These credentials do not match our records.')
+                                        Invalid email or password
+                                    @else
+                                        {{ $errors->first('password') }}
+                                    @endif
+                                </p>
+                            @else
+                                <p class="text-sm text-red-600">{{ $errors->first() }}</p>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -264,22 +290,22 @@
                     <input type="email" name="email" value="{{ old('email') }}" class="form-input" id="email" placeholder="Email" required>
                     <label for="email" class="form-label">Email</label>
                 </div>
-                
+
                 <div class="form-input-container">
                     <input type="password" name="password" class="form-input" id="password" placeholder="Password" required>
                     <label for="password" class="form-label">Password</label>
                 </div>
-                
+
                 <div class="flex items-center justify-between mb-6">
                     <div class="flex items-center">
                         <input type="checkbox" id="remember" name="remember" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                        <label for="remember" class="ml-2 block text-sm text-gray-700">Remember me</label>
+                        <label for="remember" class="ml-2 block text-sm text-white">Remember me</label>
                     </div>
                     <div class="text-sm">
-                        <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium">Forgot password?</a>
+                        <a href="#" class="text-indigo-400 hover:text-indigo-800 font-medium">Forgot password?</a>
                     </div>
                 </div>
-                
+
                 <button type="submit" class="login-btn w-full py-3 px-4 rounded-xl font-bold text-white mb-4 transition duration-300 ease-in-out">
                     Login
                 </button>

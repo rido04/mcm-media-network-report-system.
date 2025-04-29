@@ -17,7 +17,7 @@
          'opacity-100 translate-y-0': shown,
          'opacity-0 translate-y-4': !shown
      }">
-        <div class="border-b border-gray-500 dark:border-gray-700 overflow-x-auto scrollbar-hide">
+        <div class="border-b border-gray-600 dark:border-gray-700 overflow-x-auto scrollbar-hide">
             <div class="flex space-x-4 min-w-max">
                 <button @click="tab = 'media_placement'"
                         :class="tab === 'media_placement' ? 'text-blue-600 dark:text-blue-400 font-semibold' : 'text-white dark:text-gray-400 hover:text-blue-200 dark:hover:text-gray-200'"
@@ -58,7 +58,7 @@
          x-transition:leave="transition ease-in duration-200"
          x-transition:leave-start="opacity-100 translate-y-0"
          x-transition:leave-end="opacity-0 translate-y-2" x-cloak>
-        <div class="overflow-x-auto rounded-md border border-gray-500 dark:border-gray-700 shadow-sm">
+        <div class="overflow-x-auto rounded-md border border-gray-600 dark:border-gray-700 shadow-sm">
             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                 <thead class="bg-slate-800">
                     <tr>

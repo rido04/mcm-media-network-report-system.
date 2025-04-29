@@ -1,10 +1,11 @@
 <?php
 
 use Illuminate\Http\Request;
-use App\Livewire\CompanyDashboard;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Company\DashboardController;
+use Illuminate\Support\Facades\Validator;
+use App\Livewire\CompanyDashboard;
+use App\Livewire\Profile;
 
 Route::get('/', function () {
     return redirect('login');
@@ -16,37 +17,56 @@ Route::get('/login', function () {
 })->name('login');
 
 Route::post('/login', function (Request $request) {
-    // Ambil kredensial dari request
-    $credentials = $request->only(['email', 'password']); // Gunakan dependency injection
+    // Validate input first
+    $validator = Validator::make($request->all(), [
+        'email' => 'required|email',
+        'password' => 'required'
+    ], [
+        'email.required' => 'Email is required',
+        'email.email' => 'Please enter a valid email address',
+        'password.required' => 'Password is required',
+        'password.min' => 'Password must be at least 8 characters'
+    ]);
 
-    if (Auth::attempt($credentials)) {
+    if ($validator->fails()) {
+        return back()->withErrors($validator)->withInput();
+    }
+
+    $credentials = $request->only(['email', 'password']);
+    $remember = $request->filled('remember');
+
+    if (Auth::attempt($credentials, $remember)) {
+        $request->session()->regenerate();
         $user = Auth::user();
 
-        // Redirect sesuai role
-        if ($user->hasRole('admin')) { // Ignore the hasRole Erro if shown up, cause VScode dont know if this is a Model
+        // Redirect based on role
+        if ($user->hasRole('admin')) {
             return redirect()->intended('/admin');
         }
 
-        if ($user->hasRole('company')) { // Perbaiki pemanggilan hasRole
+        if ($user->hasRole('company')) {
             return redirect()->intended('/company-dashboard');
         }
 
-        // Jika role tidak dikenali
+        // If role not recognized
         Auth::logout();
-        return back()->withErrors(['email' => 'Role tidak dikenal.']);
+        return back()->withErrors([
+            'email' => 'Your account does not have access permissions.'
+        ]);
     }
 
-    // Jika login gagal
+    // If authentication fails
     return back()->withErrors([
-        'email' => 'Login gagal.',
-    ]);
+        'email' => 'Invalid email or password',
+    ])->withInput($request->only('email'));
 });
 
-Route::post('/filament/logout', function () {
+Route::post('/logout', function () {
     Auth::logout();
     return redirect('/login');
 })->name('logout');
 
 Route::middleware(['auth', 'role:company'])->group(function () {
     Route::get('/company-dashboard', CompanyDashboard::class)->name('company.dashboard');
+    Route::get('/profile', Profile::class)->name('profile');
 });

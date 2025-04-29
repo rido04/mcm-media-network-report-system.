@@ -53,7 +53,7 @@ x-data="{
     init() {
         this.setupObserver();
 
-        // Listen for Livewire updates using commit hook (more reliable)
+        // Listen for Livewire updates using commit hook
         if (typeof window.Livewire !== 'undefined') {
             window.Livewire.hook('commit', ({ component, succeed }) => {
                 succeed(() => {

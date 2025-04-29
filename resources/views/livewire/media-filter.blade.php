@@ -12,7 +12,7 @@
         <!-- Date Range Filter -->
         <div class="relative">
             <button @click="toggleFilter('date')"
-                    class="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm hover:bg-gray-50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 shadow-sm"
+                    class="flex items-center gap-2 border border-gray-200 rounded-lg px-3 py-2 text-sm hover:bg-gray-50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 shadow-sm"
                     :class="{ 'bg-blue-50 border-blue-300 text-blue-700': $wire.filters.start_date || $wire.filters.end_date, 'text-gray-700': !($wire.filters.start_date || $wire.filters.end_date) }">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" :class="{ 'text-blue-500': $wire.filters.start_date || $wire.filters.end_date, 'text-gray-400': !($wire.filters.start_date || $wire.filters.end_date) }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -57,9 +57,9 @@
         <!-- Media Plan Filter -->
         <div class="relative">
             <button @click="toggleFilter('media')"
-                    class="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm hover:bg-gray-50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 shadow-sm"
-                    :class="{ 'bg-blue-50 border-blue-300 text-blue-700': $wire.filters.media, 'text-gray-700': !$wire.filters.media }">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" :class="{ 'text-blue-500': $wire.filters.media, 'text-gray-400': !$wire.filters.media }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    class="flex items-center gap-2 border border-gray-200 rounded-lg px-3 py-2 text-sm hover:bg-gray-50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 shadow-sm"
+                    :class="{ 'bg-blue-50 border-blue-300 text-blue-700': $wire.filters.media, 'text-white hover:text-black': !$wire.filters.media }">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" :class="{ 'text-white hover:text-black': $wire.filters.media, 'text-gray-400': !$wire.filters.media }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
                 </svg>
                 <span x-text="$wire.filters.media ? 'Media Plan (' + $wire.mediaOptions[$wire.filters.media] + ')' : 'Media Plan'"></span>
@@ -108,9 +108,9 @@
         <!-- City & District Filter -->
         <div class="relative">
             <button @click="toggleFilter('city')"
-                    class="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm hover:bg-gray-50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 shadow-sm"
-                    :class="{ 'bg-blue-50 border-blue-300 text-blue-700': $wire.filters.city, 'text-gray-700': !$wire.filters.city }">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" :class="{ 'text-blue-500': $wire.filters.city, 'text-gray-400': !$wire.filters.city }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    class="flex items-center gap-2 border border-gray-200 rounded-lg px-3 py-2 text-sm hover:bg-gray-50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 shadow-sm"
+                    :class="{ 'bg-blue-50 border-blue-300 text-blue-700': $wire.filters.city, 'text-white hover:text-black': !$wire.filters.city }">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" :class="{ 'text-blue-500': $wire.filters.city, 'text-gray-500': !$wire.filters.city }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                 </svg>
                 <span x-text="$wire.filters.city ? 'City (' + $wire.cityOptions[$wire.filters.city] + ')' : 'City & District'"></span>
@@ -159,7 +159,7 @@
         <!-- Reset Button -->
         <button wire:click="resetFilters"
                 x-show="hasFilters()"
-                class="ml-auto bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-lg px-3 py-2 text-sm flex items-center gap-1 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50">
+                class="ml-auto border border-gray-400 hover:bg-gray-200 text-white hover:text-black rounded-lg px-3 py-2 text-sm flex items-center gap-1 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
             </svg>

@@ -10,9 +10,28 @@
         html {
             scroll-behavior: smooth;
         }
+
+        /* Style untuk menu aktif */
+        .nav-link.active {
+            border-bottom: 2px solid #3b82f6;
+        }
+
+        /* Mobile dropdown style */
+        .mobile-dropdown {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .mobile-dropdown.open {
+            max-height: 400px; /* Adjust based on your content */
+        }
     </style>
 </head>
-<body class="flex items-center justify-center h-screen bg-gray-100 scroll-smooth">
+<body class="bg-slate-950 text-gray-800">
+    @php
+        $user = auth()->user();
+    @endphp
     @yield('content')
     @livewireScripts()
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>

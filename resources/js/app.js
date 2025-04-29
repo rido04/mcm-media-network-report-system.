@@ -27,16 +27,14 @@ function initSwiperContainer(container) {
         return;
     }
 
-    // Initialize new Swiper instance
-    new Swiper(container, {
+    // Count the number of slides
+    const slideCount = container.querySelectorAll(".swiper-slide").length;
+
+    // Base configuration
+    const swiperConfig = {
         modules: [Navigation, Pagination, Autoplay],
         slidesPerView: 1,
         spaceBetween: 20,
-        loop: true,
-        autoplay: {
-            delay: 5000,
-            disableOnInteraction: false,
-        },
         pagination: {
             el: ".swiper-pagination",
             clickable: true,
@@ -47,22 +45,43 @@ function initSwiperContainer(container) {
         },
         breakpoints: {
             640: {
-                slidesPerView: 1.5, // 1.5 slide on smaller resolution
-                centeredSlides: true,
+                slidesPerView: slideCount > 1 ? 1.5 : 1, // Adjust for single slide
+                centeredSlides: slideCount > 1,
             },
             768: {
-                slidesPerView: 2,
-                centeredSlides: false,
+                slidesPerView: Math.min(slideCount, 2),
+                centeredSlides: slideCount === 1,
                 spaceBetween: 24,
             },
             1024: {
-                slidesPerView: 3, // 3 slide on 1024px resolution and up
+                slidesPerView: Math.min(slideCount, 3),
                 spaceBetween: 32,
             },
             1280: {
-                slidesPerView: 2, // 4 slide on 1280px resolution and up
+                slidesPerView: Math.min(slideCount, 2),
                 spaceBetween: 32,
             },
         },
-    });
+    };
+
+    // Only enable loop and autoplay if there's more than one slide
+    if (slideCount > 1) {
+        swiperConfig.loop = true;
+        swiperConfig.autoplay = {
+            delay: 5000,
+            disableOnInteraction: false,
+        };
+    } else {
+        // Hide navigation and pagination for single slide
+        const pagination = container.querySelector(".swiper-pagination");
+        const nextBtn = container.querySelector(".swiper-button-next");
+        const prevBtn = container.querySelector(".swiper-button-prev");
+
+        if (pagination) pagination.style.display = "none";
+        if (nextBtn) nextBtn.style.display = "none";
+        if (prevBtn) prevBtn.style.display = "none";
+    }
+
+    // Initialize new Swiper instance
+    new Swiper(container, swiperConfig);
 }

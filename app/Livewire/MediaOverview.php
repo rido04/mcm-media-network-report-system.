@@ -80,7 +80,6 @@ class MediaOverview extends Component
         $this->stats['totalDuration'] = $totalDays;
         $this->stats['remainingDays'] = $remainingDays;
 
-        // Instead of dispatching an event, set a flag for the frontend
         // The event will be dispatched after render via a deferred action
         $this->dispatch('stats-updated-init', ['stats' => $this->stats]);
     }
