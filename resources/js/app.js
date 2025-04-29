@@ -47,20 +47,20 @@ function initSwiperContainer(container) {
         },
         breakpoints: {
             640: {
-                slidesPerView: 1.5, // 1.5 slide pada resolusi lebih kecil
+                slidesPerView: 1.5, // 1.5 slide on smaller resolution
                 centeredSlides: true,
             },
             768: {
                 slidesPerView: 2,
                 centeredSlides: false,
-                spaceBetween: 24, // jarak antar kolom
+                spaceBetween: 24,
             },
             1024: {
-                slidesPerView: 3, // 3 slide pada resolusi 1024px ke atas
+                slidesPerView: 3, // 3 slide on 1024px resolution and up
                 spaceBetween: 32,
             },
             1280: {
-                slidesPerView: 2, // 4 slide pada resolusi 1280px ke atas
+                slidesPerView: 2, // 4 slide on 1280px resolution and up
                 spaceBetween: 32,
             },
         },

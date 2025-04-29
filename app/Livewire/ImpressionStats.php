@@ -4,27 +4,79 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\DailyImpression;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 class ImpressionStats extends Component
 {
-    public $start_date;
-    public $end_date;
-    public $media_statistic_id;
+    public $stats = [
+        'highest' => 0,
+        'lowest' => 0,
+        'average' => 0,
+        'total' => 0
+    ];
 
-    // Membuat event listener untuk refresh widget
-    protected $listeners = ['refreshStatsWidget' => '$refresh'];
+    public $start_date = null;
+    public $end_date = null;
+    public $media_statistic_id = null;
+    public $city = null;
+
+    protected $listeners = [
+        'refreshStatsWidget' => 'handleFiltersUpdated'
+    ];
 
     public function mount()
     {
-        // Ambil filter dari session (jika ada)
+        $this->loadFilters();
+        $this->stats = $this->getImpressionStats();
+    }
+
+    public function loadFilters()
+    {
         $filters = session('filters', []);
         $this->start_date = $filters['start_date'] ?? null;
         $this->end_date = $filters['end_date'] ?? null;
-        $this->media_statistic_id = $filters['media_statistic_id'] ?? 'all';
+        $this->media_statistic_id = $filters['media'] ?? null;
+        $this->city = $filters['city'] ?? null;
     }
 
-    // Mendapatkan data berdasarkan filter
+    public function handleFiltersUpdated($filters = null)
+    {
+        // If filters were passed directly, use them
+        if ($filters) {
+            // Validate the incoming filters
+            $validated = $this->validateFilters($filters);
+
+            $this->start_date = $validated['start_date'] ?? null;
+            $this->end_date = $validated['end_date'] ?? null;
+            $this->media_statistic_id = $validated['media'] ?? null;
+            $this->city = $validated['city'] ?? null;
+        } else {
+            // Otherwise load from session (fallback)
+            $this->loadFilters();
+        }
+
+        // Refresh stats and emit an event to trigger UI updates
+        $this->stats = $this->getImpressionStats();
+        $this->dispatch('statsUpdated');
+    }
+
+    protected function validateFilters(array $filters)
+    {
+        return validator($filters, [
+            'start_date' => ['nullable', 'date'],
+            'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
+            'media' => ['nullable', 'string'],
+            'city' => ['nullable', 'string'],
+        ])->validate();
+    }
+
+    public function refreshStats()
+    {
+        $this->stats = $this->getImpressionStats();
+        $this->dispatch('statsUpdated');
+    }
+
     public function getImpressionStats()
     {
         $userId = Auth::id();
@@ -32,31 +84,41 @@ class ImpressionStats extends Component
         $query = DailyImpression::whereHas('adminTraffic', function ($q) use ($userId) {
             $q->where('user_id', $userId);
         });
-        
-        if (!empty($this->start_date)) {
+
+        // Date filters
+        if ($this->start_date) {
             $query->whereDate('date', '>=', $this->start_date);
         }
 
-        if (!empty($this->end_date)) {
+        if ($this->end_date) {
             $query->whereDate('date', '<=', $this->end_date);
         }
 
-        if ($this->media_statistic_id !== 'all') {
-            $query->where('media_statistic_id', $this->media_statistic_id);
+        // Media filter
+        if ($this->media_statistic_id && $this->media_statistic_id !== 'all') {
+            $query->whereHas('mediaStatistic', function($q) {
+                $q->where('media', $this->media_statistic_id)
+                  ->orWhere('id', $this->media_statistic_id);
+            });
+        }
+
+        // City filter
+        if ($this->city) {
+            $query->whereHas('mediaStatistic', function($q) {
+                $q->where('city', $this->city);
+            });
         }
 
         return [
-            'highest' => $query->max('impression'),
-            'lowest' => $query->min('impression'),
-            'average' => $query->avg('impression'),
-            'total' => $query->sum('impression'),
+            'highest' => (clone $query)->max('impression') ?? 0,
+            'lowest' => (clone $query)->min('impression') ?? 0,
+            'average' => (clone $query)->avg('impression') ?? 0,
+            'total' => (clone $query)->sum('impression') ?? 0,
         ];
     }
 
     public function render()
     {
-        $stats = $this->getImpressionStats();
-
-        return view('livewire.impression-stats', compact('stats'));
+        return view('livewire.impression-stats');
     }
 }

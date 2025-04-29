@@ -29,37 +29,64 @@ x-data="{
         }
         requestAnimationFrame(updateNumber);
     },
-    init() {
+    initCounters() {
+        // Start countup animations for all elements with data-countup
+        this.$el.querySelectorAll('[data-countup]').forEach(el => {
+            const target = el.getAttribute('data-countup');
+            const duration = parseInt(el.getAttribute('data-duration') || 1500);
+            const decimals = parseInt(el.getAttribute('data-decimals') || 0);
+            this.countUp(el, target, duration, decimals);
+        });
+    },
+    setupObserver() {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 this.shown = entry.isIntersecting;
                 if (entry.isIntersecting) {
                     observer.unobserve(this.$el);
-
-                    // Start countup animations for all elements with data-countup
-                    this.$el.querySelectorAll('[data-countup]').forEach(el => {
-                        const target = el.getAttribute('data-countup');
-                        const duration = parseInt(el.getAttribute('data-duration') || 1500);
-                        const decimals = parseInt(el.getAttribute('data-decimals') || 0);
-                        this.countUp(el, target, duration, decimals);
-                    });
+                    this.initCounters();
                 }
             });
         });
         observer.observe(this.$el);
+    },
+    init() {
+        this.setupObserver();
+
+        // Listen for Livewire updates using commit hook (more reliable)
+        if (typeof window.Livewire !== 'undefined') {
+            window.Livewire.hook('commit', ({ component, succeed }) => {
+                succeed(() => {
+                    // Check if this update affects our component
+                    if (component.id === this.$wire.__instance.id) {
+                        // Reset visibility and re-initialize animations
+                        this.shown = false;
+                        this.setupObserver();
+                    }
+                });
+            });
+
+            // Listen for custom statsUpdated event
+            window.addEventListener('statsUpdated', () => {
+                this.shown = false;
+                this.setupObserver();
+            });
+        }
     }
 }"
+x-init="init()"
 x-bind:class="{
     'opacity-100 translate-y-0': shown,
     'opacity-0 translate-y-4': !shown
-}">
+}"
+>
     <!-- Desktop Stats Grid (Hidden on Mobile) -->
     <div class="hidden md:grid md:grid-cols-4 gap-4">
         <!-- Highest Impression Card -->
         <div class="bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 p-4 rounded-lg shadow-lg text-white relative overflow-hidden group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
             <!-- Shimmer Effect -->
             <div class="absolute inset-0 overflow-hidden">
-                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out"></div>
+                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"></div>
             </div>
 
             <!-- Background Decoration -->
@@ -89,7 +116,7 @@ x-bind:class="{
         <div class="bg-gradient-to-t from-gray-800 to-gray-700 p-4 rounded-lg shadow-lg text-white relative overflow-hidden group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
             <!-- Shimmer Effect -->
             <div class="absolute inset-0 overflow-hidden">
-                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out"></div>
+                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"></div>
             </div>
 
             <!-- Background Decoration -->
@@ -119,7 +146,7 @@ x-bind:class="{
         <div class="bg-gradient-to-t from-gray-800 to-gray-700 p-4 rounded-lg shadow-lg text-white relative overflow-hidden group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
             <!-- Shimmer Effect -->
             <div class="absolute inset-0 overflow-hidden">
-                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out"></div>
+                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"></div>
             </div>
 
             <!-- Background Decoration -->
@@ -149,7 +176,7 @@ x-bind:class="{
         <div class="bg-gradient-to-t from-gray-800 to-gray-700 p-4 rounded-lg shadow-lg text-white relative overflow-hidden group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
             <!-- Shimmer Effect -->
             <div class="absolute inset-0 overflow-hidden">
-                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out"></div>
+                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"></div>
             </div>
 
             <!-- Background Decoration -->
@@ -296,5 +323,13 @@ x-bind:class="{
                 toggleButton.querySelector('svg').classList.toggle('rotate-180', !isExpanded);
             });
         }
+
+        // Trigger a custom statsUpdated event when filters change
+        // This example listens for filter change events by class name
+        document.querySelectorAll('.filter-control').forEach(filter => {
+            filter.addEventListener('change', () => {
+                window.dispatchEvent(new CustomEvent('statsUpdated'));
+            });
+        });
     });
 </script>

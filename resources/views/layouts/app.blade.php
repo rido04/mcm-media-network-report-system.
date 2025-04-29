@@ -15,6 +15,7 @@
 <body class="flex items-center justify-center h-screen bg-gray-100 scroll-smooth">
     @yield('content')
     @livewireScripts()
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/countup.js@2.6.0/dist/countUp.umd.js"></script>
     @stack('scripts')

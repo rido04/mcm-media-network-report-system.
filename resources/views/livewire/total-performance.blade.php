@@ -31,10 +31,18 @@
     const datasets = [...backendDatasets];
 
     if (datasets.length > 0 && datasets[0].data) {
+        // Create a trend line dataset with higher values than the bar data
+        const barData = datasets[0].data;
+        const trendLineData = barData.map(value => {
+            // Make the trend line 15-25% higher than the bar values
+            const multiplier = Math.random() * 0.1 + 1.15; // Random between 1.15 and 1.25
+            return Math.round(value * multiplier);
+        });
+
         datasets.push({
             type: 'line',
             label: 'Trend Line',
-            data: datasets[0].data,
+            data: trendLineData, // Use the new higher data values
             borderColor: 'rgba(255, 99, 132, 1)',
             backgroundColor: 'rgba(255, 99, 132, 0.2)',
             borderWidth: 2,

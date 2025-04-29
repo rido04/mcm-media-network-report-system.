@@ -18,9 +18,6 @@ class MediaFilter extends Component
     public $mediaOptions = [];
     public $cityOptions = [];
 
-    // Listener untuk refresh filter ketika komponen stats diperbarui
-    protected $listeners = ['filtersUpdated' => 'refreshFilterDisplay'];
-
     public function mount()
     {
         // Default date values
@@ -63,9 +60,10 @@ class MediaFilter extends Component
 
     public function applyFilters()
     {
+        // 1. Store in session for persistence
         session(['filters' => $this->filters]);
 
-        // Dispatch event to refresh stats widget and immediately update the UI
+        // 2. Dispatch event to refresh stats widget
         $this->dispatch('refreshStatsWidget', $this->filters);
     }
 
@@ -78,9 +76,10 @@ class MediaFilter extends Component
             'city' => null,
         ];
 
+        // 1. Update session
         session(['filters' => $this->filters]);
 
-        // Dispatch event to refresh stats widget and immediately update the UI
+        // 2. Dispatch event
         $this->dispatch('refreshStatsWidget', $this->filters);
     }
 
@@ -90,8 +89,6 @@ class MediaFilter extends Component
         $this->filters['end_date'] = now()->endOfYear()->format('Y-m-d');
 
         session(['filters' => $this->filters]);
-
-        // Dispatch event to refresh stats widget
         $this->dispatch('refreshStatsWidget', $this->filters);
     }
 
@@ -100,8 +97,6 @@ class MediaFilter extends Component
         $this->filters['media'] = null;
 
         session(['filters' => $this->filters]);
-
-        // Dispatch event to refresh stats widget
         $this->dispatch('refreshStatsWidget', $this->filters);
     }
 
@@ -110,16 +105,7 @@ class MediaFilter extends Component
         $this->filters['city'] = null;
 
         session(['filters' => $this->filters]);
-
-        // Dispatch event to refresh stats widget
         $this->dispatch('refreshStatsWidget', $this->filters);
-    }
-
-    public function refreshFilterDisplay($filters = null)
-    {
-        if ($filters) {
-            $this->filters = $filters;
-        }
     }
 
     public function render()

@@ -25,7 +25,6 @@ class MediaOverview extends Component
 
     public function refreshStats($filters = null)
     {
-        logger('Filters received:', [$filters]);
     // Use filters from parameter or session
     if (!$filters) {
         $filters = session('filters', [

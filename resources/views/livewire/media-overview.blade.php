@@ -5,7 +5,7 @@
         counters: {},
         init() {
             this.setupObserver();
-    
+
             // Reset observer when data changed
             Livewire.hook('commit', ({ component, succeed }) => {
                 succeed(() => {
@@ -16,9 +16,9 @@
                     }
                 });
             });
-    
+
             // get statsUpdated
-            window.addEventListener('statsUpdated', () => {
+            window.addEventListener('refreshStatsWidget', () => {
                 this.shown = false;
                 this.setupObserver();
             });
@@ -87,11 +87,14 @@
     <!-- Container for both mobile and desktop views -->
     <div class="w-full">
         <!-- Enhanced Mobile Summary Card -->
-        <div class="block sm:hidden mb-6 bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 dark:from-gray-700 dark:via-gray-800 dark:to-gray-900 rounded-2xl shadow-lg overflow-hidden transform transition-all card-animate shimmer-container">
+        <div class="block sm:hidden mb-6 bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 dark:from-gray-700 dark:via-gray-800 dark:to-gray-900 rounded-2xl shadow-lg overflow-hidden transform transition-all card-animate group">
             <div class="px-5 py-4 relative overflow-hidden">
                 <!-- Background accent effects -->
                 <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full -mr-16 -mt-16 blur-2xl"></div>
                 <div class="absolute bottom-0 left-0 w-24 h-24 bg-green-500/10 rounded-full -ml-12 -mb-12 blur-xl"></div>
+
+                <!-- Tailwind Shimmer Effect -->
+                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"></div>
 
                 <h3 class="text-sm font-medium text-gray-200 dark:text-gray-300 mb-3 flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -101,8 +104,10 @@
                 </h3>
 
                 <div class="grid grid-cols-2 gap-3">
-                    <div class="bg-gray-600/30 dark:bg-gray-700/40 backdrop-blur-sm rounded-xl p-3 transform transition-all duration-300 hover:-translate-y-1 hover:shadow-md shimmer-card">
-                        <div class="shimmer-effect"></div>
+                    <div class="bg-gray-600/30 dark:bg-gray-700/40 backdrop-blur-sm rounded-xl p-3 transform transition-all duration-300 hover:-translate-y-1 hover:shadow-md relative group/card overflow-hidden">
+                        <!-- Tailwind Shimmer Effect -->
+                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover/card:translate-x-full transition-transform duration-1000 ease-in-out"></div>
+
                         <p class="text-xs text-gray-300 dark:text-gray-300 mb-1 flex items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
@@ -115,8 +120,10 @@
                         </p>
                     </div>
 
-                    <div class="bg-gray-600/30 dark:bg-gray-700/40 backdrop-blur-sm rounded-xl p-3 transform transition-all duration-300 hover:-translate-y-1 hover:shadow-md shimmer-card">
-                        <div class="shimmer-effect"></div>
+                    <div class="bg-gray-600/30 dark:bg-gray-700/40 backdrop-blur-sm rounded-xl p-3 transform transition-all duration-300 hover:-translate-y-1 hover:shadow-md relative group/card overflow-hidden">
+                        <!-- Tailwind Shimmer Effect -->
+                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover/card:translate-x-full transition-transform duration-1000 ease-in-out"></div>
+
                         <p class="text-xs text-gray-300 dark:text-gray-300 mb-1 flex items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -128,8 +135,10 @@
                         </p>
                     </div>
 
-                    <div class="bg-gray-600/30 dark:bg-gray-700/40 backdrop-blur-sm rounded-xl p-3 transform transition-all duration-300 hover:-translate-y-1 hover:shadow-md shimmer-card">
-                        <div class="shimmer-effect"></div>
+                    <div class="bg-gray-600/30 dark:bg-gray-700/40 backdrop-blur-sm rounded-xl p-3 transform transition-all duration-300 hover:-translate-y-1 hover:shadow-md relative group/card overflow-hidden">
+                        <!-- Tailwind Shimmer Effect -->
+                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover/card:translate-x-full transition-transform duration-1000 ease-in-out"></div>
+
                         <p class="text-xs text-gray-300 dark:text-gray-300 mb-1 flex items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -142,8 +151,10 @@
                         </p>
                     </div>
 
-                    <div class="bg-gray-600/30 dark:bg-gray-700/40 backdrop-blur-sm rounded-xl p-3 transform transition-all duration-300 hover:-translate-y-1 hover:shadow-md shimmer-card">
-                        <div class="shimmer-effect"></div>
+                    <div class="bg-gray-600/30 dark:bg-gray-700/40 backdrop-blur-sm rounded-xl p-3 transform transition-all duration-300 hover:-translate-y-1 hover:shadow-md relative group/card overflow-hidden">
+                        <!-- Tailwind Shimmer Effect -->
+                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover/card:translate-x-full transition-transform duration-1000 ease-in-out"></div>
+
                         <p class="text-xs text-gray-300 dark:text-gray-300 mb-1 flex items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -162,10 +173,12 @@
         <!-- Enhanced Desktop Cards Grid -->
         <div class="hidden sm:grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
             <!-- Media Plan Card -->
-            <div class="card-animate opacity-0 transform translate-y-4 transition-all duration-500 bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 dark:from-gray-700 dark:via-gray-800 dark:to-gray-900 rounded-xl shadow-md overflow-hidden hover:shadow-xl hover:-translate-y-2 group relative shimmer-container">
+            <div class="card-animate opacity-0 transform translate-y-4 transition-all duration-500 bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 dark:from-gray-700 dark:via-gray-800 dark:to-gray-900 rounded-xl shadow-md overflow-hidden hover:shadow-xl hover:-translate-y-2 group relative">
                 <!-- Background accent effect -->
                 <div class="absolute inset-0 bg-blue-500/5 rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-                <div class="shimmer-effect"></div>
+
+                <!-- Tailwind Shimmer Effect -->
+                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"></div>
 
                 <div class="px-5 py-4 relative">
                     <div class="flex justify-between items-start">
@@ -194,10 +207,12 @@
             </div>
 
             <!-- Media Placement Card -->
-            <div class="card-animate opacity-0 transform translate-y-4 transition-all duration-500 bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 dark:from-gray-700 dark:via-gray-800 dark:to-gray-900 rounded-xl shadow-md overflow-hidden hover:shadow-xl hover:-translate-y-2 group relative shimmer-container">
+            <div class="card-animate opacity-0 transform translate-y-4 transition-all duration-500 bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 dark:from-gray-700 dark:via-gray-800 dark:to-gray-900 rounded-xl shadow-md overflow-hidden hover:shadow-xl hover:-translate-y-2 group relative">
                 <!-- Background accent effect -->
                 <div class="absolute inset-0 bg-green-500/5 rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-                <div class="shimmer-effect"></div>
+
+                <!-- Tailwind Shimmer Effect -->
+                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"></div>
 
                 <div class="px-5 py-4 relative">
                     <div class="flex justify-between items-start">
@@ -225,10 +240,12 @@
             </div>
 
             <!-- Broadcast Duration Card -->
-            <div class="card-animate opacity-0 transform translate-y-4 transition-all duration-500 bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 dark:from-gray-700 dark:via-gray-800 dark:to-gray-900 rounded-xl shadow-md overflow-hidden hover:shadow-xl hover:-translate-y-2 group relative shimmer-container">
+            <div class="card-animate opacity-0 transform translate-y-4 transition-all duration-500 bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 dark:from-gray-700 dark:via-gray-800 dark:to-gray-900 rounded-xl shadow-md overflow-hidden hover:shadow-xl hover:-translate-y-2 group relative">
                 <!-- Background accent effect -->
                 <div class="absolute inset-0 bg-cyan-500/5 rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-                <div class="shimmer-effect"></div>
+
+                <!-- Tailwind Shimmer Effect -->
+                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"></div>
 
                 <div class="px-5 py-4 relative">
                     <div class="flex justify-between items-start">
@@ -257,10 +274,12 @@
             </div>
 
             <!-- Remaining Days Card -->
-            <div class="card-animate opacity-0 transform translate-y-4 transition-all duration-500 bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 dark:from-gray-700 dark:via-gray-800 dark:to-gray-900 rounded-xl shadow-md overflow-hidden hover:shadow-xl hover:-translate-y-2 group relative shimmer-container">
+            <div class="card-animate opacity-0 transform translate-y-4 transition-all duration-500 bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 dark:from-gray-700 dark:via-gray-800 dark:to-gray-900 rounded-xl shadow-md overflow-hidden hover:shadow-xl hover:-translate-y-2 group relative">
                 <!-- Background accent effect -->
                 <div class="absolute inset-0 bg-amber-500/5 rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-                <div class="shimmer-effect"></div>
+
+                <!-- Tailwind Shimmer Effect -->
+                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"></div>
 
                 <div class="px-5 py-4 relative">
                     <div class="flex justify-between items-start">
@@ -311,44 +330,6 @@
     /* Hover effects */
     .hover\:scale-102:hover {
         transform: scale(1.02);
-    }
-
-    /* Shimmer effect styles */
-    .shimmer-container {
-        position: relative;
-        overflow: hidden;
-    }
-
-    .shimmer-card {
-        position: relative;
-        overflow: hidden;
-    }
-
-    .shimmer-effect {
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 50%;
-        height: 100%;
-        background: linear-gradient(
-            90deg,
-            transparent,
-            rgba(255, 255, 255, 0.1),
-            rgba(255, 255, 255, 0.2),
-            rgba(255, 255, 255, 0.1),
-            transparent
-        );
-        opacity: 0;
-        transition: opacity 0.2s ease;
-        z-index: 1;
-        pointer-events: none;
-    }
-
-    .shimmer-container:hover .shimmer-effect,
-    .shimmer-card:hover .shimmer-effect {
-        opacity: 1;
-        left: 150%;
-        transition: left 1s ease, opacity 0.2s ease;
     }
     </style>
 </div>
