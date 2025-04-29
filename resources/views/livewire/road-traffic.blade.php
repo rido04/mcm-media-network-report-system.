@@ -27,17 +27,17 @@
 
     <!-- Stats Summary - Desktop version (hidden on mobile) -->
     <div class="hidden md:grid md:grid-cols-3 gap-4 mb-6">
-        <div class="bg-gradient-to-t from-gray-800 to-gray-700 p-4 rounded-lg">
+        <div class="bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 p-4 rounded-lg">
             <div class="text-gray-400 text-xs uppercase font-semibold mb-1">Total Impressions</div>
             <div class="text-2xl font-bold text-white" x-text="new Intl.NumberFormat().format(@js(array_sum($impressions)))"></div>
             <div class="text-indigo-400 text-sm mt-1" x-text="'For ' + @js(ucfirst($timeRange)) + ' period'"></div>
         </div>
-        <div class="bg-gradient-to-t from-gray-800 to-gray-700 p-4 rounded-lg">
+        <div class="bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 p-4 rounded-lg">
             <div class="text-gray-400 text-xs uppercase font-semibold mb-1">Average</div>
             <div class="text-2xl font-bold text-white" x-text="new Intl.NumberFormat().format(Math.round(@js(array_sum($impressions)) / @js(count($impressions))))"></div>
             <div class="text-indigo-400 text-sm mt-1">Per data point</div>
         </div>
-        <div class="bg-gradient-to-t from-gray-800 to-gray-700 p-4 rounded-lg">
+        <div class="bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 p-4 rounded-lg">
             <div class="text-gray-400 text-xs uppercase font-semibold mb-1">Highest Value</div>
             <div class="text-2xl font-bold text-white" x-text="new Intl.NumberFormat().format(Math.max(...@js($impressions)))"></div>
             <div class="text-indigo-400 text-sm mt-1" id="highestDateDesktop">Peak impression</div>
@@ -46,7 +46,7 @@
 
     <!-- Mobile Stats Summary (single card, visible only on mobile) -->
     <div class="md:hidden mb-6" x-data="{ isExpanded: true }">
-        <div class="bg-gradient-to-t from-gray-800 to-gray-700 p-4 rounded-lg">
+        <div class="bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 p-4 rounded-lg">
             <div class="flex justify-between items-center border-b border-gray-600 pb-3 mb-3">
                 <div class="text-gray-400 text-xs uppercase font-semibold">Road Traffic Summary ({{ ucfirst($timeRange) }})</div>
                 <button @click="isExpanded = !isExpanded" class="text-gray-400 hover:text-white">

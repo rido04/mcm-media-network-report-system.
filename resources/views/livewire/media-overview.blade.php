@@ -1,40 +1,45 @@
 <div
-    class="w-full transition-all duration-1200 ease-out transform opacity-0 translate-y-6"
+    class="w-full transition-all duration-1200 ease-out transform"
     x-data="{
-        shown: false,
+        shown: true,
         counters: {},
         init() {
-            this.setupObserver();
+            this.animateElements();
 
-            // Reset observer when data changed
-            Livewire.hook('commit', ({ component, succeed }) => {
-                succeed(() => {
-                    if (component.id === this.$wire.__instance.id) {
-                        this.shown = false;
-                        this.setupObserver();
-                        this.animateElements(); // get animateElement
-                    }
-                });
+            // Listen for browser events from Livewire
+            window.addEventListener('stats-updated-init', (event) => {
+                // Ensure the container is visible
+                this.shown = true;
+
+                // Force animation with a slight delay to ensure the DOM is updated
+                setTimeout(() => {
+                    this.resetAnimations();
+                    this.animateElements();
+                }, 50);
             });
 
-            // get statsUpdated
+            // Keep for backward compatibility
             window.addEventListener('refreshStatsWidget', () => {
-                this.shown = false;
-                this.setupObserver();
+                // Ensure the container is visible
+                this.shown = true;
+
+                // Reset and animate
+                setTimeout(() => {
+                    this.resetAnimations();
+                    this.animateElements();
+                }, 50);
             });
         },
-        setupObserver() {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    this.shown = entry.isIntersecting;
-                    if (entry.isIntersecting) {
-                        observer.unobserve(this.$el);
-                        this.animateElements();
-                    }
-                });
-            }, { threshold: 0.2 });
+        resetAnimations() {
+            // Clear any ongoing animations
+            Object.keys(this.counters).forEach(id => {
+                if (this.counters[id] && this.counters[id].timer) {
+                    clearInterval(this.counters[id].timer);
+                }
+            });
 
-            observer.observe(this.$el);
+            // Reset counter storage
+            this.counters = {};
         },
         animateElements() {
             // Add staggered fade-in animation for cards
@@ -55,8 +60,13 @@
                 const totalFrames = Math.round(duration / frameDuration);
                 let frame = 0;
 
+                // Clear any existing animation
+                if (this.counters[el.id] && this.counters[el.id].timer) {
+                    clearInterval(this.counters[el.id].timer);
+                }
+
                 // Save initial value
-                this.counters[el.id] = start;
+                this.counters[el.id] = { value: start };
                 el.textContent = start;
 
                 const easeOutQuad = t => t * (2 - t); // Smoother easing function
@@ -75,14 +85,12 @@
                         el.textContent = current;
                     }
                 }, frameDuration);
+
+                // Store the timer reference for possible cleanup
+                this.counters[el.id].timer = timer;
             });
         }
     }"
-    x-bind:class="{
-        'opacity-100 translate-y-0': shown,
-        'opacity-0 translate-y-6': !shown
-    }"
-    x-init="init"
 >
     <!-- Container for both mobile and desktop views -->
     <div class="w-full">
@@ -310,7 +318,7 @@
     </div>
 
     <style>
-    /* Custom animations */
+    /* animations */
     @keyframes fadeUp {
         from {
             opacity: 0;
