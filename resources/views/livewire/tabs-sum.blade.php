@@ -51,132 +51,35 @@
         </div>
     </div>
 
-    <!-- Media Placement Tab -->
-    <div x-show="tab === 'media_placement'" x-transition:enter="transition ease-out duration-1000"
-         x-transition:enter-start="opacity-0 translate-y-2"
-         x-transition:enter-end="opacity-100 translate-y-0"
-         x-transition:leave="transition ease-in duration-200"
-         x-transition:leave-start="opacity-100 translate-y-0"
-         x-transition:leave-end="opacity-0 translate-y-2" x-cloak>
-        <div class="overflow-x-auto rounded-md border border-gray-600 dark:border-gray-700 shadow-sm">
-            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                <thead class="bg-slate-800">
-                    <tr>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white dark:text-white uppercase tracking-wider">Media</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white dark:text-white uppercase tracking-wider">Category</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white dark:text-white uppercase tracking-wider">Space Ads</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white dark:text-white uppercase tracking-wider">Size</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white dark:text-white uppercase tracking-wider">Avg daily Impression</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-slate-700 dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                    @forelse ($mediaPlacement as $item)
-                    <tr class="hover:bg-indigo-400 dark:hover:bg-gray-700/50 transition-colors">
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white dark:text-white">{{ $item->media ?? '-' }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-white">{{ $item->adminTraffic->category ?? '-' }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-white">{{ $item->space_ads ?? '-' }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-white">{{ $item->size ?? '-' }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-white">
-                            {{ number_format($item->avg_daily_impression, 0, ',', '.') }}
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400">No Media Placement found.</td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-    </div>
+     <!-- Media Placement Tab -->
+     <div x-show="tab === 'media_placement'" x-transition:enter="transition ease-out duration-1000"
+     x-transition:enter-start="opacity-0 translate-y-2"
+     x-transition:enter-end="opacity-100 translate-y-0"
+     x-transition:leave="transition ease-in duration-200"
+     x-transition:leave-start="opacity-100 translate-y-0"
+     x-transition:leave-end="opacity-0 translate-y-2" x-cloak>
+    <div id="media-placement-grid" class="my-4"></div>
+</div>
 
-    <!-- Media Plan Tab -->
-    <div x-show="tab === 'media_statistics'" x-transition:enter="transition ease-out duration-1000"
-         x-transition:enter-start="opacity-0 translate-y-2"
-         x-transition:enter-end="opacity-100 translate-y-0"
-         x-transition:leave="transition ease-in duration-200"
-         x-transition:leave-start="opacity-100 translate-y-0"
-         x-transition:leave-end="opacity-0 translate-y-2" x-cloak>
-        <div class="overflow-x-auto border rounded-md border-gray-600 dark:border-gray-700 shadow-sm">
-            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                <thead class="bg-slate-800">
-                    <tr>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white dark:text-white uppercase tracking-wider">Media Plan</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white dark:text-white uppercase tracking-wider">Start Date</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white dark:text-white uppercase tracking-wider">End Date</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white dark:text-white uppercase tracking-wider">Duration</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white dark:text-white uppercase tracking-wider">Total Impression</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-slate-700 dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                    @forelse ($mediaStatistics as $item)
-                    <tr class="hover:bg-indigo-300 dark:hover:bg-gray-700/50 transition-colors">
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white dark:text-white">{{ $item->media }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-white">{{ \Carbon\Carbon::parse($item->start_date)->format('d M Y') }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-white">{{ \Carbon\Carbon::parse($item->end_date)->format('d M Y') }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-white">
-                            {{ \Carbon\Carbon::parse($item->start_date)->diffInDays($item->end_date) }} days
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-white">
-                            {{ number_format($item->dailyImpressions->sum('impression') ?? 0, 0, ',', '.') }}
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400">No Media Plans found.</td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-    </div>
+<!-- Media Plan Tab -->
+<div x-show="tab === 'media_statistics'" x-transition:enter="transition ease-out duration-1000"
+     x-transition:enter-start="opacity-0 translate-y-2"
+     x-transition:enter-end="opacity-100 translate-y-0"
+     x-transition:leave="transition ease-in duration-200"
+     x-transition:leave-start="opacity-100 translate-y-0"
+     x-transition:leave-end="opacity-0 translate-y-2" x-cloak>
+    <div id="media-statistics-grid" class="my-4"></div>
+</div>
 
-    <!-- Play Log Tab -->
-    <div x-show="tab === 'play_log'" x-transition:enter="transition ease-out duration-1000"
-         x-transition:enter-start="opacity-0 translate-y-2"
-         x-transition:enter-end="opacity-100 translate-y-0"
-         x-transition:leave="transition ease-in duration-200"
-         x-transition:leave-start="opacity-100 translate-y-0"
-         x-transition:leave-end="opacity-0 translate-y-2" x-cloak>
-        <div class="overflow-x-auto border rounded-md border-gray-600 dark:border-gray-700 shadow-sm">
-            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                <thead class="bg-slate-800">
-                    <tr>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white dark:text-white uppercase tracking-wider">Device ID</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white dark:text-white uppercase tracking-wider">Media Name</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white dark:text-white uppercase tracking-wider">Play Date</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white dark:text-white uppercase tracking-wider">Longitude</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white dark:text-white uppercase tracking-wider">Latitude</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white dark:text-white uppercase tracking-wider">Location</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-slate-700 dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                    @forelse ($playLogs as $log)
-                    <tr class="hover:bg-indigo-300 dark:hover:bg-gray-700/50 transition-colors">
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white dark:text-white">{{ $log->device_id }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-white">{{ $log->media_name }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-white">
-                            {{ \Carbon\Carbon::parse($log->play_date)->format('d M Y H:i') }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-white">
-                            {{ $log->longitude }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-white">
-                            {{ $log->latitude }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-white">
-                            {{ $log->location ?? $log->latitude.', '.$log->longitude }}
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400">No Play Logs found.</td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-    </div>
+<!-- Play Log Tab -->
+<div x-show="tab === 'play_log'" x-transition:enter="transition ease-out duration-1000"
+     x-transition:enter-start="opacity-0 translate-y-2"
+     x-transition:enter-end="opacity-100 translate-y-0"
+     x-transition:leave="transition ease-in duration-200"
+     x-transition:leave-start="opacity-100 translate-y-0"
+     x-transition:leave-end="opacity-0 translate-y-2" x-cloak>
+    <div id="play-log-grid" class="my-4"></div>
+</div>
 
     <!-- Documentation Tab -->
     <div x-show="tab === 'documentation'" x-transition:enter="transition ease-out duration-1000"
@@ -187,7 +90,7 @@
          x-transition:leave-end="opacity-0 translate-y-2" x-cloak>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @forelse ($documentations as $doc)
-            <div class="group bg-slate-800 rounded-md shadow-md overflow-hidden border border-gray-600 dark:border-gray-600 hover:shadow-lg transition-all duration-1000 hover:-translate-y-1">
+            <div class="group bg-slate-800 shadow-md overflow-hidden border border-gray-600 dark:border-gray-600 hover:shadow-lg transition-all duration-1000 hover:-translate-y-1">
                 <div class="relative h-48 overflow-hidden">
                     <img src="{{ asset('storage/' . $doc->image_path) }}"
                          alt="{{ $doc->description }}"
@@ -216,3 +119,168 @@
         </div>
     </div>
 </div>
+<script>
+    // Convert PHP collections to JSON and escape properly
+    const mediaPlacementData = {!! json_encode($mediaPlacement->map(function($item) {
+        return [
+            'media' => $item->media ?? '-',
+            'category' => $item->adminTraffic->category ?? '-',
+            'space_ads' => $item->space_ads ?? '-',
+            'size' => $item->size ?? '-',
+            'avg_daily_impression' => $item->avg_daily_impression ?? 0
+        ];
+    })) !!};
+
+    const mediaStatisticsData = {!! json_encode($mediaStatistics->map(function($item) {
+        return [
+            'media' => $item->media,
+            'start_date' => \Carbon\Carbon::parse($item->start_date)->format('d M Y'),
+            'end_date' => \Carbon\Carbon::parse($item->end_date)->format('d M Y'),
+            'duration' => \Carbon\Carbon::parse($item->start_date)->diffInDays($item->end_date) . ' days',
+            'total_impression' => $item->dailyImpressions->sum('impression') ?? 0
+        ];
+    })) !!};
+
+    const playLogsData = {!! json_encode($playLogs->map(function($log) {
+        return [
+            'device_id' => $log->device_id,
+            'media_name' => $log->media_name,
+            'play_date' => \Carbon\Carbon::parse($log->play_date)->format('d M Y H:i'),
+            'longitude' => $log->longitude,
+            'latitude' => $log->latitude,
+            'location' => $log->location ?? $log->latitude + ', ' + $log->longitude
+        ];
+    })) !!};
+
+    // Initialize grids when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        // Media Placement Grid
+        new window.gridjs.Grid({
+            columns: [
+                'Media',
+                'Category',
+                'Space Ads',
+                'Size',
+                {
+                    name: 'Avg Daily Impression',
+                    formatter: (cell) => gridjs.html(`<span>${new Intl.NumberFormat().format(cell)}</span>`)
+                }
+            ],
+            data: mediaPlacementData.map(item => [
+                item.media,
+                item.category,
+                item.space_ads,
+                item.size,
+                item.avg_daily_impression
+            ]),
+            search: true,
+            pagination: true,
+            resizable:true,
+            style: {
+                table: { 'white-space': 'nowrap' },
+                th: {
+                    'background-color': '#1e293b',
+                    color: '#fff',
+                    padding: '0.75rem 1.5rem'
+                },
+                td: { padding: '0.75rem 1.5rem',
+                    'background-color' : '#f1f1f1'
+                 }
+            },
+            className: {
+                table: 'w-full bg-slate-700',
+                thead: 'bg-slate-800',
+                tbody: 'divide-y divide-gray-600',
+                tr: 'hover:bg-indigo-400 dark:hover:bg-gray-700/50',
+                th: 'text-left text-xs font-medium uppercase tracking-wider',
+                td: 'text-sm text-black whitespace-nowrap',
+                footer : 'bg-[#f1f1f1]'
+            }
+        }).render(document.getElementById('media-placement-grid'));
+
+        // Media Statistics Grid (similar structure)
+        new window.gridjs.Grid({
+            columns: [
+                'Media Plan',
+                'Start Date',
+                'End Date',
+                'Duration',
+                {
+                    name: 'Total Impression',
+                    formatter: (cell) => gridjs.html(`<span>${new Intl.NumberFormat().format(cell)}</span>`)
+                }
+            ],
+            data: mediaStatisticsData.map(item => [
+                item.media,
+                item.start_date,
+                item.end_date,
+                item.duration,
+                item.total_impression
+            ]),
+            search: true,
+            pagination: true,
+            resizable:true,
+            style: {
+                table: { 'white-space': 'nowrap' },
+                th: {
+                    'background-color': '#1e293b',
+                    color: '#fff',
+                    padding: '0.75rem 1.5rem'
+                },
+                td: { padding: '0.75rem 1.5rem',
+                    'background-color' : '#f1f1f1'
+                 }
+            },
+            className: {
+                table: 'w-full bg-slate-700',
+                thead: 'bg-slate-800',
+                tbody: 'divide-y divide-gray-600',
+                tr: 'hover:bg-indigo-400 dark:hover:bg-gray-700/50',
+                th: 'text-left text-xs font-medium uppercase tracking-wider',
+                td: 'text-sm text-black whitespace-nowrap'
+            }
+        }).render(document.getElementById('media-statistics-grid'));
+
+        // Play Log Grid (similar structure)
+        new window.gridjs.Grid({
+            columns: [
+                'Device ID',
+                'Media Name',
+                'Play Date',
+                'Longitude',
+                'Latitude',
+                'Location'
+            ],
+            data: playLogsData.map(item => [
+                item.device_id,
+                item.media_name,
+                item.play_date,
+                item.longitude,
+                item.latitude,
+                item.location
+            ]),
+            search: true,
+            pagination: true,
+            resizable:true,
+            style: {
+                table: { 'white-space': 'nowrap' },
+                th: {
+                    'background-color': '#1e293b',
+                    color: '#fff',
+                    padding: '0.75rem 1.5rem'
+                },
+                td: { padding: '0.75rem 1.5rem',
+                    'background-color' : '#f1f1f1'
+                 }
+            },
+            className: {
+                table: 'w-full bg-slate-700',
+                thead: 'bg-slate-800',
+                tbody: 'divide-y divide-gray-600',
+                tr: 'hover:bg-indigo-400 dark:hover:bg-gray-700/50',
+                th: 'text-left text-xs font-medium uppercase tracking-wider',
+                td: 'text-sm text-black whitespace-nowrap'
+            }
+        }).render(document.getElementById('play-log-grid'));
+    });
+    </script>

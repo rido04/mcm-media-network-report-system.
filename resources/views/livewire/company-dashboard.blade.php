@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <title>MCM</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Add these in your head or before the closing body tag -->
+    <link href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
+    <script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
     @livewireStyles
     @stack('styles')
     <style>
