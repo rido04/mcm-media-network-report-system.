@@ -44,7 +44,7 @@
         </div>
     </div>
 
-    <!-- Mobile Stats Summary (single card, visible only on mobile) -->
+    <!-- Mobile Stats Summary -->
     <div class="md:hidden mb-6" x-data="{ isExpanded: true }">
         <div class="bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 p-4 rounded-lg">
             <div class="flex justify-between items-center border-b border-gray-600 pb-3 mb-3">
@@ -147,6 +147,7 @@
                                     borderWidth: 1,
                                     borderRadius: 4,
                                     hoverBackgroundColor: 'rgba(129, 140, 248, 0.8)',
+                                    tension: 0.4
                                 }, {
                                     label: 'Trend',
                                     type: 'line',
