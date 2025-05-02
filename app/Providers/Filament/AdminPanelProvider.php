@@ -52,6 +52,7 @@ class AdminPanelProvider extends PanelProvider
             ->unsavedChangesAlerts()
             ->brandLogo(asset('/storage/image/logo_mcm.png'))
             ->brandLogoHeight('2.5rem')
+            ->brandName('Medialoger')
             ->login(fn () => redirect('/login'))
             ->authMiddleware([
                 'role:admin', // tambahan role check

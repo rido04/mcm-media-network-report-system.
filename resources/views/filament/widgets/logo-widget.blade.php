@@ -11,15 +11,6 @@
                 >
                 <span class="text-base sm:text-lg font-medium text-white">MCM Media Network</span>
             </div>
-
-            <!-- Contact Us Link -->
-            <div>
-                <a
-                    href="mailto:contact@mcmmedianetwork.com"
-                    class="px-3 py-2 text-sm sm:text-base text-white bg-amber-600 hover:bg-amber-700 transition-colors duration-200 rounded-md inline-block">
-                    Contact Us
-                </a>
-            </div>
         </div>
         <x-slot name="footer"></x-slot>
     </x-filament::section>

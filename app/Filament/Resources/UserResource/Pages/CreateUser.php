@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\UserResource\Pages;
 
 use App\Filament\Resources\UserResource;
-use App\Models\User; // Tambahkan ini untuk memastikan model User dikenali
+use App\Models\User;
 use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
@@ -18,7 +18,7 @@ class CreateUser extends CreateRecord
 
     protected function afterCreate(): void
     {
-        $this->record->assignRole('company');// registrasi role otomatis
+        $this->record->assignRole('company');// automatic role registration
     }
 
     protected function getRedirectUrl(): string

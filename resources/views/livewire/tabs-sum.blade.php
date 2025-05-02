@@ -1,4 +1,4 @@
-<div x-data="{ tab: 'media_placement' }" class="transition-all duration-1000 ">
+<div x-data="{ tab: 'media_placement' }" class="transition-all duration-1000 mt-20">
     <!-- Enhanced Tab Navigation with Indicator Animation -->
     <div class="relative mb-6 transition-all duration-1000 ease-out transform opacity-0 translate-y-4"
      x-data="{
@@ -79,6 +79,7 @@
      x-transition:leave-start="opacity-100 translate-y-0"
      x-transition:leave-end="opacity-0 translate-y-2" x-cloak>
     <div id="play-log-grid" class="my-4"></div>
+    <button onclick="exportExcel(playLogsData, ['Device ID','Media Name','Play Date','Longitude','Latitude','Location'], 'play_logs.xlsx')" class="bg-green-800 hover:bg-slate-800 transition duration-500 ease-in-out text-white px-4 py-2 rounded">Export to Excel</button>
 </div>
 
     <!-- Documentation Tab -->
@@ -154,133 +155,120 @@
 
     // Initialize grids when DOM is loaded
     document.addEventListener('DOMContentLoaded', function() {
-        // Media Placement Grid
-        new window.gridjs.Grid({
-            columns: [
-                'Media',
-                'Category',
-                'Space Ads',
-                'Size',
-                {
-                    name: 'Avg Daily Impression',
-                    formatter: (cell) => gridjs.html(`<span>${new Intl.NumberFormat().format(cell)}</span>`)
-                }
-            ],
-            data: mediaPlacementData.map(item => [
-                item.media,
-                item.category,
-                item.space_ads,
-                item.size,
-                item.avg_daily_impression
-            ]),
-            search: true,
-            pagination: true,
-            resizable:true,
-            style: {
-                table: { 'white-space': 'nowrap' },
-                th: {
-                    'background-color': '#1e293b',
-                    color: '#fff',
-                    padding: '0.75rem 1.5rem'
-                },
-                td: { padding: '0.75rem 1.5rem',
-                    'background-color' : '#f1f1f1'
-                 }
+    // Common GridJS configuration for ALL tables
+    const gridOptions = {
+        search: true,
+        pagination: true,
+        resizable: true,
+        width: '100%',
+        style: {
+            table: {
+                'white-space': 'nowrap',
+                'min-width': '600px',
             },
-            className: {
-                table: 'w-full bg-slate-700',
-                thead: 'bg-slate-800',
-                tbody: 'divide-y divide-gray-600',
-                tr: 'hover:bg-indigo-400 dark:hover:bg-gray-700/50',
-                th: 'text-left text-xs font-medium uppercase tracking-wider',
-                td: 'text-sm text-black whitespace-nowrap',
-                footer : 'bg-[#f1f1f1]'
-            }
-        }).render(document.getElementById('media-placement-grid'));
+            th: {
+                'background-color': '#1e293b',
+                color: '#fff',
+                padding: '0.75rem 1rem',
+            },
+            td: {
+                padding: '0.75rem 1rem',
+                'background-color': '#f1f1f1',
+            },
+        },
+        className: {
+            table: 'w-full bg-slate-700',
+            thead: 'bg-slate-800',
+            tbody: 'divide-y divide-gray-600',
+            tr: 'hover:bg-indigo-400 dark:hover:bg-gray-700/50',
+            th: 'text-left font-medium uppercase tracking-wider',
+            td: 'text-black whitespace-nowrap',
+            footer: 'bg-[#f1f1f1]',
+        },
+    };
 
-        // Media Statistics Grid (similar structure)
-        new window.gridjs.Grid({
-            columns: [
-                'Media Plan',
-                'Start Date',
-                'End Date',
-                'Duration',
-                {
-                    name: 'Total Impression',
-                    formatter: (cell) => gridjs.html(`<span>${new Intl.NumberFormat().format(cell)}</span>`)
-                }
-            ],
-            data: mediaStatisticsData.map(item => [
-                item.media,
-                item.start_date,
-                item.end_date,
-                item.duration,
-                item.total_impression
-            ]),
-            search: true,
-            pagination: true,
-            resizable:true,
-            style: {
-                table: { 'white-space': 'nowrap' },
-                th: {
-                    'background-color': '#1e293b',
-                    color: '#fff',
-                    padding: '0.75rem 1.5rem'
-                },
-                td: { padding: '0.75rem 1.5rem',
-                    'background-color' : '#f1f1f1'
-                 }
-            },
-            className: {
-                table: 'w-full bg-slate-700',
-                thead: 'bg-slate-800',
-                tbody: 'divide-y divide-gray-600',
-                tr: 'hover:bg-indigo-400 dark:hover:bg-gray-700/50',
-                th: 'text-left text-xs font-medium uppercase tracking-wider',
-                td: 'text-sm text-black whitespace-nowrap'
+    // ===== Media Placement Grid =====
+    new window.gridjs.Grid({
+        ...gridOptions,
+        columns: [
+            'Media',
+            'Category',
+            'Space Ads',
+            'Size',
+            {
+                name: 'Avg Daily Impression',
+                formatter: (cell) => gridjs.html(`<span>${new Intl.NumberFormat().format(cell)}</span>`)
             }
-        }).render(document.getElementById('media-statistics-grid'));
+        ],
+        data: mediaPlacementData.map(item => [
+            item.media,
+            item.category,
+            item.space_ads,
+            item.size,
+            item.avg_daily_impression
+        ])
+    }).render(document.getElementById('media-placement-grid'));
 
-        // Play Log Grid (similar structure)
-        new window.gridjs.Grid({
-            columns: [
-                'Device ID',
-                'Media Name',
-                'Play Date',
-                'Longitude',
-                'Latitude',
-                'Location'
-            ],
-            data: playLogsData.map(item => [
-                item.device_id,
-                item.media_name,
-                item.play_date,
-                item.longitude,
-                item.latitude,
-                item.location
-            ]),
-            search: true,
-            pagination: true,
-            resizable:true,
-            style: {
-                table: { 'white-space': 'nowrap' },
-                th: {
-                    'background-color': '#1e293b',
-                    color: '#fff',
-                    padding: '0.75rem 1.5rem'
-                },
-                td: { padding: '0.75rem 1.5rem',
-                    'background-color' : '#f1f1f1'
-                 }
-            },
-            className: {
-                table: 'w-full bg-slate-700',
-                thead: 'bg-slate-800',
-                tbody: 'divide-y divide-gray-600',
-                tr: 'hover:bg-indigo-400 dark:hover:bg-gray-700/50',
-                th: 'text-left text-xs font-medium uppercase tracking-wider',
-                td: 'text-sm text-black whitespace-nowrap'
+    // ===== Media Statistics Grid =====
+    const statsGrid = new window.gridjs.Grid({
+        ...gridOptions,
+        columns: [
+            'Media Plan',
+            'Start Date',
+            'End Date',
+            'Duration',
+            {
+                name: 'Total Impression',
+                formatter: (cell) => gridjs.html(`<span>${new Intl.NumberFormat().format(cell)}</span>`)
             }
-        }).render(document.getElementById('play-log-grid'));
+        ],
+        data: mediaStatisticsData.map(item => [
+            item.media,
+            item.start_date,
+            item.end_date,
+            item.duration,
+            item.total_impression
+        ])
+    }).render(document.getElementById('media-statistics-grid'));
+
+    // ===== Play Log Grid =====
+    const playLogGrid = new window.gridjs.Grid({
+        ...gridOptions,
+        columns: [
+            'Device ID',
+            'Media Name',
+            'Play Date',
+            'Longitude',
+            'Latitude',
+            'Location'
+        ],
+        data: playLogsData.map(item => [
+            item.device_id,
+            item.media_name,
+            item.play_date,
+            item.longitude,
+            item.latitude,
+            item.location
+        ])
+    }).render(document.getElementById('play-log-grid'));
+    setTimeout(() => {
+        statsGrid.forceRender();
+        playLogGrid.forceRender();
+    }, 500);
     });
+    function exportExcel(data, headers, baseFilename) {
+    const date = new Date().toISOString().split('T')[0];
+    const filename = `${baseFilename.replace('.xlsx', '')}_${date}.xlsx`;
+
+    const worksheetData = [
+        headers,
+        ...data.map(item => headers.map((_, index) => Object.values(item)[index]))
+    ];
+
+    const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+    worksheet['!cols'] = headers.map(() => ({ wch: 20 }));
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+    XLSX.writeFile(workbook, filename);
+}
     </script>

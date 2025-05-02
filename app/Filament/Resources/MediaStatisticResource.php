@@ -117,7 +117,7 @@ class MediaStatisticResource extends Resource
                     if (!$data['value']) {
                         return $query;
                     }
-                    
+
                     return $query->where('user_id', $data['value']);
                 }),
                 SelectFilter::make('city')
@@ -129,7 +129,7 @@ class MediaStatisticResource extends Resource
                     if (!$data['value']) {
                         return $query;
                     }
-                    
+
                     return $query->where('city', $data['value']);
                 })
         ])

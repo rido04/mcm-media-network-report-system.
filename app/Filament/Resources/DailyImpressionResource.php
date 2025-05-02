@@ -69,11 +69,9 @@ class DailyImpressionResource extends Resource
                 ->reactive()
                 ->options(function (callable $get) {
                     $cityId = $get('media_statistic_id');
-
                     if (!$cityId) {
                         return [];
                     }
-
                     // adjust query
                     return AdminTraffic::whereHas('mediaStatistic', function ($query) use ($cityId) {
                         $query->where('id', $cityId);
@@ -84,22 +82,18 @@ class DailyImpressionResource extends Resource
                 ->label('Media Plan')
                 ->options(function (callable $get) {
                     $userId = $get('user_id');
-
                     if (!$userId) {
                         return [];
                     }
-
                     return MediaStatistic::where('user_id', $userId)
                         ->select('id', 'media')
                         ->distinct()
                         ->pluck('media', 'id');
                     })
                 ->required(),
-
             DatePicker::make('date')
                 ->label('Date')
                 ->required(),
-
             TextInput::make('impression')
                 ->label('Total Impression')
                 ->numeric()
@@ -135,7 +129,7 @@ class DailyImpressionResource extends Resource
                 ->label('Daily Impression'),
                 ])->defaultSort('date', 'desc')
             ->filters([
-                SelectFilter::make('client')
+            SelectFilter::make('client')
                 ->label('Client')
                 ->multiple()
                 ->options(fn () => User::whereHas('roles', fn($query) => $query->where('name', 'company'))
@@ -145,7 +139,6 @@ class DailyImpressionResource extends Resource
                     if (empty($data['values'])) {
                         return $query;
                     }
-
                     return $query->whereHas('adminTraffic.user', function ($query) use ($data) {
                         $query->whereIn('users.id', $data['values']);
                     });

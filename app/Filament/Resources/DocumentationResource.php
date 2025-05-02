@@ -44,6 +44,9 @@ class DocumentationResource extends Resource
                         ->pluck('name', 'id'))
                     ->searchable()
                     ->required(),
+                Textarea::make('description')
+                    ->label('Description')
+                    ->required(),
                 FileUpload::make('image_path')
                     ->label('Masukan Gambar Dokumentasi')
                     ->image()
@@ -51,9 +54,6 @@ class DocumentationResource extends Resource
                     ->directory('image')
                     ->visibility('public')
                     ->required(),
-                Textarea::make('description')
-                    ->label('Description')
-                    ->required()
             ]);
     }
 

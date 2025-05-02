@@ -1,4 +1,4 @@
-<footer class="bg-gradient-to-t from-gray-600 to-slate-900 text-white pt-16 pb-8 relative overflow-hidden transition-all duration-1000 ease-out transform opacity-0 translate-y-4"
+<footer class="bottom-0 bg-gradient-to-t from-gray-600 to-slate-900 text-white pt-16 pb-8 relative overflow-hidden transition-all duration-1000 ease-out transform opacity-0 translate-y-4"
      x-data="{
          shown: false,
          init() {
@@ -22,9 +22,10 @@
     </div>
 
     <div class="container mx-auto px-4 relative z-10">
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-12">
+        <!-- Mengubah grid layout menjadi flex layout -->
+        <div class="flex flex-col lg:flex-row justify-between">
             <!-- Company Info -->
-            <div class="space-y-6">
+            <div class="lg:w-1/3 space-y-6">
                 <div class="flex items-center space-x-3">
                     <img src="{{ asset('storage/image/logo_mcm.png') }}" alt="MCM Media Network" class="h-12 w-auto">
                     <span class="text-xl font-bold tracking-tight">MCM Media Networks</span>
@@ -60,74 +61,79 @@
                 </div>
             </div>
 
-            <!-- Office Locations -->
-            <div class="space-y-6">
-                <h3 class="text-lg font-bold tracking-wider text-white uppercase">Our Offices</h3>
-                <div class="space-y-4">
-                    <div class="flex items-start space-x-3">
-                        <svg class="h-5 w-5 text-blue-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        </svg>
-                        <div>
-                            <p class="font-medium text-white">BSD City Office</p>
-                            <p class="text-gray-300">Jl. Lavionda BSD City</p>
-                            <p class="text-gray-300">Serpong, 15322</p>
+            <!-- Office & Contact - sebelah kanan -->
+            <div class="mt-8 lg:mt-0 lg:w-3/5">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Office Locations -->
+                    <div class="space-y-6">
+                        <h3 class="text-lg font-bold tracking-wider text-white uppercase">Our Offices</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-start space-x-3">
+                                <svg class="h-5 w-5 text-blue-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                                <div>
+                                    <p class="font-medium text-white">BSD City Office</p>
+                                    <p class="text-gray-300">Jl. Lavionda BSD City</p>
+                                    <p class="text-gray-300">Serpong, 15322</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <svg class="h-5 w-5 text-blue-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                                <div>
+                                    <p class="font-medium text-white">Jakarta Office</p>
+                                    <p class="text-gray-300">Menara 165</p>
+                                    <p class="text-gray-300">Jl. TB Simatupang</p>
+                                    <p class="text-gray-300">Jakarta Selatan, Indonesia</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="flex items-start space-x-3">
-                        <svg class="h-5 w-5 text-blue-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        </svg>
-                        <div>
-                            <p class="font-medium text-white">Jakarta Office</p>
-                            <p class="text-gray-300">Menara 165</p>
-                            <p class="text-gray-300">Jl. TB Simatupang</p>
-                            <p class="text-gray-300">Jakarta Selatan, Indonesia</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Contact Info -->
-            <div class="space-y-6">
-                <h3 class="text-lg font-bold tracking-wider text-white uppercase">Get In Touch</h3>
-                <div class="space-y-4">
-                    <div class="flex items-start space-x-3">
-                        <svg class="h-5 w-5 text-blue-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                        </svg>
-                        <div>
-                            <p class="text-gray-300">General inquiries</p>
-                            <a href="mailto:info@mcmmedianetworks.com" class="font-medium text-white hover:text-blue-400 transition-colors duration-300">info@mcmmedianetworks.com</a>
-                        </div>
-                    </div>
-                    <div class="flex items-start space-x-3">
-                        <svg class="h-5 w-5 text-blue-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                        </svg>
-                        <div>
-                            <p class="text-gray-300">Sales inquiries</p>
-                            <a href="mailto:sales@mcmmedianetworks.com" class="font-medium text-white hover:text-blue-400 transition-colors duration-300">sales@mcmmedianetworks.com</a>
-                        </div>
-                    </div>
-                    <div class="flex items-start space-x-3">
-                        <svg class="h-5 w-5 text-blue-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-                        </svg>
-                        <div>
-                            <p class="text-gray-300">Phone</p>
-                            <a href="tel:+622153853599" class="font-medium text-white hover:text-blue-400 transition-colors duration-300">+62.21. 538-5359</a>
-                        </div>
-                    </div>
-                    <div class="flex items-start space-x-3">
-                        <svg class="h-5 w-5 text-blue-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                        </svg>
-                        <div>
-                            <p class="text-gray-300">WhatsApp</p>
-                            <a href="https://wa.me/6282123330234" class="font-medium text-white hover:text-blue-400 transition-colors duration-300">08-212-333-0234</a>
+                    <!-- Contact Info -->
+                    <div class="space-y-6">
+                        <h3 class="text-lg font-bold tracking-wider text-white uppercase">Get In Touch</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-start space-x-3">
+                                <svg class="h-5 w-5 text-blue-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                </svg>
+                                <div>
+                                    <p class="text-gray-300">General inquiries</p>
+                                    <a href="mailto:info@mcmmedianetworks.com" class="font-medium text-white hover:text-blue-400 transition-colors duration-300">info@mcmmedianetworks.com</a>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <svg class="h-5 w-5 text-blue-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                </svg>
+                                <div>
+                                    <p class="text-gray-300">Sales inquiries</p>
+                                    <a href="mailto:sales@mcmmedianetworks.com" class="font-medium text-white hover:text-blue-400 transition-colors duration-300">sales@mcmmedianetworks.com</a>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <svg class="h-5 w-5 text-blue-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                                </svg>
+                                <div>
+                                    <p class="text-gray-300">Phone</p>
+                                    <a href="tel:+622153853599" class="font-medium text-white hover:text-blue-400 transition-colors duration-300">+62.21. 538-5359</a>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <svg class="h-5 w-5 text-blue-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                </svg>
+                                <div>
+                                    <p class="text-gray-300">WhatsApp</p>
+                                    <a href="https://wa.me/6282123330234" class="font-medium text-white hover:text-blue-400 transition-colors duration-300">08-212-333-0234</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -154,25 +160,3 @@
         </svg>
     </button>
 </footer>
-
-@push('scripts')
-<script>
-    // Back to top button functionality
-    var backToTopButton = document.getElementById('back-to-top');
-
-    window.addEventListener('scroll', () => {
-        if (window.pageYOffset > 300) {
-            backToTopButton.classList.remove('opacity-0', 'invisible', 'translate-y-4');
-            backToTopButton.classList.add('opacity-100', 'visible', 'translate-y-0');
-        } else {
-            backToTopButton.classList.remove('opacity-100', 'visible', 'translate-y-0');
-            backToTopButton.classList.add('opacity-0', 'invisible', 'translate-y-4');
-        }
-    });
-
-    backToTopButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-</script>
-@endpush

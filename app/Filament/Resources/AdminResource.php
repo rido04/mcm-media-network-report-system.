@@ -25,7 +25,11 @@ class AdminResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->role('admin'); //query client menjadi role admin
+        return parent::getEloquentQuery()->role('admin'); //query client to admin role
+    }
+    public static function getLabel(): ?string
+    {
+        return 'Admin';
     }
     public static function getPluralLabel(): ?string
     {

@@ -240,7 +240,7 @@
     <!-- Right Section with Login Form -->
     <div class="flex-1 flex flex-col justify-center p-4 md:p-8 w-full md:w-1/2 mx-auto login-form-container">
         <div class="max-w-md w-full mx-auto rounded-2xl p-6 md:p-8 ">
-            <h2 class="text-2xl md:text-3xl font-semibold mb-2 text-white text-center md:text-left sm:text-left">MCM Portal</h2>
+            <h2 class="text-2xl md:text-3xl font-semibold mb-2 text-white text-center md:text-left sm:text-left">Medialogger</h2>
             <h4 class="text-lg md:text-xl font-medium mb-8 text-white text-center md:text-left sm:text-left">login to your account</h4>
 
             @if ($errors->any())

@@ -9,19 +9,22 @@ use App\Models\PlayLog;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Filament\Tables\Filters\Filter;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Actions\Exports\Models\Export;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteBulkAction;
 use App\Filament\Resources\PlayLogResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
 use App\Filament\Resources\PlayLogResource\RelationManagers;
-use Filament\Tables\Filters\Filter;
-use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Actions\ExportBulkAction;
 
 class PlayLogResource extends Resource
 {
@@ -90,9 +93,13 @@ class PlayLogResource extends Resource
                     ->label('Location')
                     ->searchable(),
             ])
+            ->headerActions([
+                ExportAction::make('export')
+                ->label('Export to Excel')
+                ->icon('heroicon-o-arrow-down-tray')
+                ->color('success')
+            ])
             ->filters([
-                // make form for filters  here
-                // all filters below user_id are null before you choose user_id
                 Filter::make('client_and_location')
                     ->form([
                         Select::make('user_id')
@@ -117,7 +124,7 @@ class PlayLogResource extends Resource
                             ->options(function (callable $get) {
                                 $userId = $get('user_id');
                                 if (!$userId) return [];
-                
+
                                 return PlayLog::where('user_id', $userId)
                                     ->select('device_id')
                                     ->distinct()
@@ -129,7 +136,7 @@ class PlayLogResource extends Resource
                             ->options(function (callable $get) {
                                 $userId = $get('user_id');
                                 if (!$userId) return [];
-                
+
                                 return PlayLog::where('user_id', $userId)
                                     ->select('media_name')
                                     ->distinct()
@@ -141,19 +148,19 @@ class PlayLogResource extends Resource
                                 if ($data['user_id']) {
                                     $query->where('user_id', $data['user_id']);
                                 }
-                        
+
                                 if ($data['location']) {
                                     $query->where('location', $data['location']);
                                 }
-                        
+
                                 if ($data['device_id']) {
                                     $query->where('device_id', $data['device_id']);
                                 }
-                        
+
                                 if ($data['media_name']) {
                                     $query->where('media_name', $data['media_name']);
                                 }
-                        
+
                                 return $query;
                             }),
 
@@ -164,6 +171,10 @@ class PlayLogResource extends Resource
             ->bulkActions([
                 BulkActionGroup::make([
                 DeleteBulkAction::make(),
+                ExportBulkAction::make('export')
+                ->label('Export to Excel')
+                ->icon('heroicon-o-arrow-down-tray')
+                ->color('green-800')
                 ]),
             ]);
     }

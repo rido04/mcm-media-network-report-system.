@@ -72,24 +72,24 @@ class AdMediaResource extends Resource
                 ->searchable()
                 ->required()
                 ->reactive(),
-            FileUpload::make('image_path')
-                ->image()
-                ->disk('public')
-                ->directory('image')
-                ->visibility('public')
-                ->required(),
-            TextInput::make('title')
+                TextInput::make('title')
                 ->label('Judul')
                 ->required(),
-            Textarea::make('description')
+                Textarea::make('description')
                 ->rows(4)
                 ->maxLength(1000),
-            DatePicker::make('start_date')
+                DatePicker::make('start_date')
                 ->label('Tanggal Mulai')
                 ->required(),
-            DatePicker::make('end_date')
+                DatePicker::make('end_date')
                 ->label('Tanggal Selesai')
                 ->required(),
+                FileUpload::make('image_path')
+                    ->image()
+                    ->disk('public')
+                    ->directory('image')
+                    ->visibility('public')
+                    ->required(),
         ]);
     }
 

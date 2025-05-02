@@ -32,7 +32,11 @@ class UserResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-briefcase';
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->role('company'); //query client menjadi role company
+        return parent::getEloquentQuery()->role('company'); //query client to company role
+    }
+    public static function getLabel(): ?string
+    {
+        return'Client';
     }
     public static function getPluralLabel(): ?string
     {
@@ -70,9 +74,9 @@ class UserResource extends Resource
                     ->imageEditor()
                     ->required()
                     ->saveUploadedFileUsing(function (TemporaryUploadedFile $file) {
-                        $filename = $file->hashName(); 
-                        $path = $file->storeAs('logos', $filename, 'public'); 
-                        return 'logos/'.$filename; 
+                        $filename = $file->hashName();
+                        $path = $file->storeAs('logos', $filename, 'public');
+                        return 'logos/'.$filename;
                     })
             ]);
     }

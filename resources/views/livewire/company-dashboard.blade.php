@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <title>MCM</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Add these in your head or before the closing body tag -->
     <link href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
     <script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
     @livewireStyles
     @stack('styles')
     <style>
@@ -14,12 +14,10 @@
             scroll-behavior: smooth;
         }
 
-        /* Style untuk menu aktif */
         .nav-link.active {
             border-bottom: 2px solid #3b82f6;
         }
 
-        /* Mobile dropdown style */
         .mobile-dropdown {
             max-height: 0;
             overflow: hidden;
@@ -27,7 +25,7 @@
         }
 
         .mobile-dropdown.open {
-            max-height: 400px; /* Adjust based on your content */
+            max-height: 400px;
         }
     </style>
 </head>
