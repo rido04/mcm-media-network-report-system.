@@ -1,104 +1,163 @@
 <?php
+
 namespace App\Livewire;
 
 use Carbon\Carbon;
 use Livewire\Component;
 use App\Models\DailyImpression;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class CommuterlineUserChart extends Component
 {
-    public $timeRange = 'daily'; // default filter
+        public $timeRange = 'daily'; // daily, weekly, monthly, yearly
+        protected $listeners = ['timeRangeChanged' => '$refresh'];
+        protected $queryString = ['timeRange'];
 
-    public function mount()
-    {
-        //
-    }
-
-    public function changeTimeRange($range)
-    {
-        $this->timeRange = $range;
-    }
-
-    public function render()
-    {
-        // Count date range choosen
-        switch ($this->timeRange) {
-            case 'daily':
-                $startDate = now()->subDays(7)->format('Y-m-d');
-                $endDate = now()->format('Y-m-d');
-                break;
-            case 'weekly':
-                $startDate = now()->subWeeks(8)->startOfWeek()->format('Y-m-d');
-                $endDate = now()->endOfWeek()->format('Y-m-d');
-                break;
-            case 'monthly':
-                $startDate = now()->subMonths(11)->startOfMonth()->format('Y-m-d'); // 12 months data
-                $endDate = now()->endOfMonth()->format('Y-m-d');
-                break;
-            case 'yearly':
-                $startDate = now()->subYears(4)->startOfYear()->format('Y-m-d'); // 5 years data
-                $endDate = now()->endOfYear()->format('Y-m-d');
-                break;
-            default:
-                $startDate = now()->subWeeks(8)->startOfWeek()->format('Y-m-d');
-                $endDate = now()->endOfWeek()->format('Y-m-d');
+        public function mount()
+        {
+            //
         }
 
-        $query = DailyImpression::with(['adminTraffic'])
-            ->whereHas('adminTraffic', function($q) {
-                $q->where('category', 'Commuterline')
-                ->where('user_id', Auth::id());
-            })
-            ->whereBetween('date', [$startDate, $endDate]);
+        public function changeTimeRange($range)
+        {
+            $this->timeRange = $range;
+            $this->dispatch('timeRangeChanged');
+        }
 
-        // Group data
-        $data = $query->get()
-            ->groupBy(function($item) {
-                $date = Carbon::parse($item->date);
+        public function updatedTimeRange()
+        {
+            $this->dispatch('timeRangeChanged');
+        }
 
-                switch ($this->timeRange) {
-                    case 'daily':
-                        return $date->format('Y-m-d');
-                    case 'weekly':
-                        return $date->startOfWeek()->format('Y-m-d') . ' to ' . $date->endOfWeek()->format('Y-m-d');
-                    case 'monthly':
-                        return $date->format('Y-m'); // Format as Year-Month for grouping
-                    case 'yearly':
-                        return $date->format('Y'); // Format as Year only for grouping
+        public function getChartData()
+        {
+            $cacheKey = 'commuterline_stats'.Auth::id().'_'.$this->timeRange;
+
+            return cache()->remember($cacheKey, now()->addMinutes(30), function() {
+                $rangeData = $this->getDateRange();
+
+                $query = DailyImpression::with(['adminTraffic'])
+                        ->whereHas('adminTraffic', function($q) {
+                            $q->where('category', 'Commuterline')
+                            ->where('user_id', Auth::id());
+                        })
+                    ->whereBetween('date', [$rangeData['startDate'], $rangeData['endDate']]);
+
+                // Use database groupping for monthly adn yearly
+                if (in_array($this->timeRange, ['monthly', 'yearly'])) {
+                    return $this->getDatabaseGroupedData($query, $rangeData['groupFormat']);
                 }
-            })
-            ->map(function($items) {
-                return $items->sum('impression');
+
+                return $this->getPhpGroupedData($query);
             });
+        }
 
-        // Format labels for display
-        $labels = $data->keys()->map(function($key) {
-            switch ($this->timeRange) {
-                case 'weekly':
-                    $parts = explode(' to ', $key);
-                    $start = Carbon::parse($parts[0])->format('M d');
-                    $end = Carbon::parse($parts[1])->format('M d');
-                    return $start . ' - ' . $end;
+        protected function getDatabaseGroupedData($query, $groupFormat)
+        {
+            $groupByExpression = match($this->timeRange) {
+                'monthly' => "DATE_FORMAT(date, '%Y-%m')",
+                'yearly' => "DATE_FORMAT(date, '%Y')",
+                default => 'date'
+            };
 
-                case 'monthly':
-                    return Carbon::createFromFormat('Y-m', $key)->format('M Y'); // Format as "Month Year"
+            $data = $query->selectRaw("
+                    {$groupByExpression} as group_date,
+                    SUM(impression) as total_impression
+                ")
+                ->groupBy('group_date')
+                ->orderBy('group_date')
+                ->get()
+                ->mapWithKeys(function($item) {
+                    return [$item->group_date => $item->total_impression];
+                });
 
-                case 'yearly':
-                    return $key; // Just the year
+            return [
+                'labels' => $this->formatLabels($data->keys()),
+                'impressions' => $data->values()->toArray()
+            ];
+        }
 
-                default: // daily
-                    return Carbon::parse($key)->format('M d, Y');
-            }
-        })->toArray();
+        protected function getPhpGroupedData($query)
+        {
+            $data = $query->get()
+                ->groupBy(function($item) {
+                    $date = Carbon::parse($item->date);
 
-        $impressions = $data->values()->toArray();
+                    return match ($this->timeRange) {
+                        'daily' => $date->format('Y-m-d'),
+                        'weekly' => $date->startOfWeek()->format('Y-m-d').' to '.$date->endOfWeek()->format('Y-m-d'),
+                        'monthly' => $date->format('Y-m'),
+                        'yearly' => $date->format('Y'),
+                        default => $date->format('Y-m-d')
+                    };
+                })
+                ->map(fn($items) => $items->sum('impression'));
 
-        return view('livewire.commuterline-user-chart', [
-            'labels' => $labels,
-            'impressions' => $impressions,
-            'timeRange' => $this->timeRange,
-        ]);
-    }
+            return [
+                'labels' => $this->formatLabels($data->keys()),
+                'impressions' => $data->values()->toArray()
+            ];
+        }
+
+        protected function getDateRange()
+        {
+            return match ($this->timeRange) {
+                'daily' => [
+                    'startDate' => now()->subDays(7)->format('Y-m-d'),
+                    'endDate' => now()->format('Y-m-d'),
+                    'groupFormat' => 'Y-m-d'
+                ],
+                'weekly' => [
+                    'startDate' => now()->subWeeks(8)->startOfWeek()->format('Y-m-d'),
+                    'endDate' => now()->endOfWeek()->format('Y-m-d'),
+                    'groupFormat' => 'week'
+                ],
+                'monthly' => [
+                    'startDate' => now()->subMonths(11)->startOfMonth()->format('Y-m-d'),
+                    'endDate' => now()->endOfMonth()->format('Y-m-d'),
+                    'groupFormat' => 'Y-m'
+                ],
+                'yearly' => [
+                    'startDate' => now()->subYears(4)->startOfYear()->format('Y-m-d'),
+                    'endDate' => now()->endOfYear()->format('Y-m-d'),
+                    'groupFormat' => 'Y'
+                ],
+                default => [
+                    'startDate' => now()->subWeeks(8)->startOfWeek()->format('Y-m-d'),
+                    'endDate' => now()->endOfWeek()->format('Y-m-d'),
+                    'groupFormat' => 'week'
+                ]
+            };
+        }
+
+        protected function formatLabels($labels)
+        {
+            return $labels->map(function($key) {
+                return match ($this->timeRange) {
+                    'weekly' => $this->formatWeeklyLabel($key),
+                    'monthly' => Carbon::createFromFormat('Y-m', $key)->format('M Y'),
+                    'yearly' => $key,
+                    default => Carbon::parse($key)->format('M d, Y')
+                };
+            })->toArray();
+        }
+
+        protected function formatWeeklyLabel($key)
+        {
+            $parts = explode(' to ', $key);
+            $start = Carbon::parse($parts[0])->format('M d');
+            $end = Carbon::parse($parts[1])->format('M d');
+            return $start.' - '.$end;
+        }
+
+        public function render()
+        {
+            $chartData = $this->getChartData();
+
+            return view('livewire.commuterline-user-chart', [
+                'labels' => $chartData['labels'],
+                'impressions' => $chartData['impressions'],
+                'timeRange' => $this->timeRange,
+            ]);
+        }
 }

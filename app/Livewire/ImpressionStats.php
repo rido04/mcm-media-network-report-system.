@@ -81,9 +81,10 @@ class ImpressionStats extends Component
     {
         $userId = Auth::id();
 
-        $query = DailyImpression::whereHas('adminTraffic', function ($q) use ($userId) {
-            $q->where('user_id', $userId);
-        });
+        $query = DailyImpression::with(['adminTraffic', 'mediaStatistic']) // Eager loading
+            ->whereHas('adminTraffic', function ($q) use ($userId) {
+                $q->where('user_id', $userId);
+            });
 
         // Date filters
         if ($this->start_date) {
@@ -98,7 +99,7 @@ class ImpressionStats extends Component
         if ($this->media_statistic_id && $this->media_statistic_id !== 'all') {
             $query->whereHas('mediaStatistic', function($q) {
                 $q->where('media', $this->media_statistic_id)
-                  ->orWhere('id', $this->media_statistic_id);
+                ->orWhere('id', $this->media_statistic_id);
             });
         }
 
@@ -109,11 +110,19 @@ class ImpressionStats extends Component
             });
         }
 
+        // Use single query for all aggregation
+        $result = $query->selectRaw('
+            MAX(impression) as highest,
+            MIN(impression) as lowest,
+            AVG(impression) as average,
+            SUM(impression) as total
+        ')->first();
+
         return [
-            'highest' => (clone $query)->max('impression') ?? 0,
-            'lowest' => (clone $query)->min('impression') ?? 0,
-            'average' => (clone $query)->avg('impression') ?? 0,
-            'total' => (clone $query)->sum('impression') ?? 0,
+            'highest' => $result->highest ?? 0,
+            'lowest' => $result->lowest ?? 0,
+            'average' => $result->average ?? 0,
+            'total' => $result->total ?? 0,
         ];
     }
 
