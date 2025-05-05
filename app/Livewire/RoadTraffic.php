@@ -34,10 +34,7 @@ class RoadTraffic extends Component
     {
         switch ($this->timeRange) {
             case 'daily':
-                return [
-                    now()->subDays(7)->format('Y-m-d'),
-                    now()->format('Y-m-d')
-                ];
+                return [null, null];
             case 'weekly':
                 return [
                     now()->subWeeks(8)->startOfWeek()->format('Y-m-d'),
@@ -89,10 +86,13 @@ class RoadTraffic extends Component
 
         $query = DailyImpression::with(['adminTraffic'])
             ->whereHas('adminTraffic', function($q) {
-                $q->whereIn('category', ['DOOH', 'OOH'])
+                $q->where('category', ['DOOH', 'OOH'])
                   ->where('user_id', $this->userId); // Filter user_id melalui relasi adminTraffic
-            })
-            ->whereBetween('date', [$startDate, $endDate]);
+            });
+
+            if ($startDate && $endDate) {
+                $query->whereBetween('date', [$startDate, $endDate]);
+            }
 
         // Group data
         $data = $query->get()

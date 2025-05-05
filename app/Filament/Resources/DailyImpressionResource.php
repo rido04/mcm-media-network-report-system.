@@ -80,6 +80,8 @@ class DailyImpressionResource extends Resource
                 ->required(),
             Select::make('media_statistic_id')
                 ->label('Media Plan')
+                ->disabled()
+                ->dehydrated(true)
                 ->options(function (callable $get) {
                     $userId = $get('user_id');
                     if (!$userId) {
@@ -93,9 +95,11 @@ class DailyImpressionResource extends Resource
                 ->required(),
             DatePicker::make('date')
                 ->label('Date')
-                ->required(),
+                ->default(now())
+                ->disabled()
+                ->dehydrated(true),
             TextInput::make('impression')
-                ->label('Total Impression')
+                ->label('Today Impression')
                 ->numeric()
                 ->required(),
             ]);

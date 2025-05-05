@@ -2,8 +2,9 @@
 
 namespace App\Livewire;
 
-use App\Models\MediaStatistic;
 use Livewire\Component;
+use App\Models\MediaStatistic;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class MediaOverview extends Component
@@ -25,20 +26,57 @@ class MediaOverview extends Component
 
     public function refreshStats($filters = null)
     {
-        // Use filters from parameter or session
-        if (!$filters) {
-            $filters = session('filters', [
-                'start_date' => now()->startOfYear()->format('Y-m-d'),
-                'end_date' => now()->endOfYear()->format('Y-m-d'),
-                'media' => null,
-                'city' => null,
-            ]);
-        }
+        $filters = $this->resolveFilters($filters);
 
-        // Start with base query
+        $cacheKey = 'media_overview_'.Auth::id().'_'.md5(json_encode($filters));
+
+        $this->stats = cache()->remember($cacheKey, now()->addMinutes(30), function() use ($filters) {
+            $query = $this->buildBaseQuery($filters);
+
+            $stats = $query->get([
+                'start_date',
+                'end_date',
+                DB::raw('DATEDIFF(end_date, start_date) + 1 as duration_days')
+            ]);
+
+            $today = now()->startOfDay();
+            $totalDays = 0;
+            $remainingDays = 0;
+
+            foreach ($stats as $stat) {
+                $totalDays += $stat->duration_days;
+                $endDate = \Carbon\Carbon::parse($stat->end_date);
+
+                if ($endDate->gt($today)) {
+                    $remainingDays += $today->diffInDays($endDate);
+                }
+            }
+
+            return [
+                'totalMediaPlan' => $query->distinct('media')->count('media'),
+                'totalInventory' => $query->count(),
+                'totalDuration' => $totalDays,
+                'remainingDays' => $remainingDays
+            ];
+        });
+
+        $this->dispatch('stats-updated-init', ['stats' => $this->stats]);
+    }
+
+    protected function resolveFilters($filters)
+    {
+        return $filters ?: session('filters', [
+            'start_date' => now()->startOfYear()->format('Y-m-d'),
+            'end_date' => now()->endOfYear()->format('Y-m-d'),
+            'media' => null,
+            'city' => null,
+        ]);
+    }
+
+    protected function buildBaseQuery($filters)
+    {
         $query = MediaStatistic::where('user_id', Auth::id());
 
-        // Apply filters
         if (!empty($filters['start_date'])) {
             $query->where('start_date', '>=', $filters['start_date']);
         }
@@ -55,35 +93,8 @@ class MediaOverview extends Component
             $query->where('city', $filters['city']);
         }
 
-        // Calculate statistics
-        $this->stats['totalMediaPlan'] = $query->distinct('media')->count('media');
-        $this->stats['totalInventory'] = $query->count();
-
-        // Calculate total duration (in days)
-        $totalDays = 0;
-        $remainingDays = 0;
-        $today = now()->startOfDay();
-
-        $stats = $query->get();
-        foreach ($stats as $stat) {
-            $startDate = \Carbon\Carbon::parse($stat->start_date);
-            $endDate = \Carbon\Carbon::parse($stat->end_date);
-
-            $duration = $startDate->diffInDays($endDate) + 1;
-            $totalDays += $duration;
-
-            if ($endDate->gt($today)) {
-                $remainingDays += $today->diffInDays($endDate);
-            }
-        }
-
-        $this->stats['totalDuration'] = $totalDays;
-        $this->stats['remainingDays'] = $remainingDays;
-
-        // The event will be dispatched after render via a deferred action
-        $this->dispatch('stats-updated-init', ['stats' => $this->stats]);
+        return $query;
     }
-
     public function render()
     {
         return view('livewire.media-overview');

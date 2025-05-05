@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class AdminTraffic extends Model
 {
     protected $table = 'admin_traffic';
-    protected $fillable = ['category', 'user_id', 'media_statistic_id'];
+    protected $fillable = ['category','sub_category', 'user_id', 'media_statistic_id'];
 
     public function dailyImpressions(): HasMany
     {

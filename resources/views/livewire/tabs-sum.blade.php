@@ -78,7 +78,7 @@
      x-transition:leave="transition ease-in duration-200"
      x-transition:leave-start="opacity-100 translate-y-0"
      x-transition:leave-end="opacity-0 translate-y-2" x-cloak>
-    <div id="play-log-grid" class="my-4"></div>
+    <div id="play-log-grid" class="my-4 overflow-x-auto"></div>
     <button onclick="exportExcel(playLogsData, ['Device ID','Media Name','Play Date','Longitude','Latitude','Location'], 'play_logs.xlsx')" class="bg-green-800 hover:bg-slate-800 transition duration-500 ease-in-out text-white px-4 py-2 rounded">Export to Excel</button>
 </div>
 
@@ -95,6 +95,7 @@
                 <div class="relative h-48 overflow-hidden">
                     <img src="{{ asset('storage/' . $doc->image_path) }}"
                          alt="{{ $doc->description }}"
+                         oncontextmenu="return false"
                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
                 </div>
@@ -163,7 +164,6 @@
         width: '100%',
         style: {
             table: {
-                'white-space': 'nowrap',
                 'min-width': '600px',
             },
             th: {
@@ -182,7 +182,7 @@
             tbody: 'divide-y divide-gray-600',
             tr: 'hover:bg-indigo-400 dark:hover:bg-gray-700/50',
             th: 'text-left font-medium uppercase tracking-wider',
-            td: 'text-black whitespace-nowrap',
+            td: 'text-black break-words whitespace-normal',
             footer: 'bg-[#f1f1f1]',
         },
     };
@@ -271,4 +271,4 @@
     XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
     XLSX.writeFile(workbook, filename);
 }
-    </script>
+</script>

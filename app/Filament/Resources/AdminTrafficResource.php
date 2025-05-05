@@ -57,9 +57,15 @@ class AdminTrafficResource extends Resource
                     )
                     ->reactive()
                     ->required(),
-                TextInput::make('category')
+                Select::make('category')
                     ->label('Category')
-                    ->placeholder('Commuterline, Transjakarta, etc....')
+                    ->options([
+                        'Commuterline' => 'Commuterline',
+                        'Transjakarta' => 'Transjakarta',
+                        'DOOH' => 'DOOH',
+                        'OOH' => 'OOH',
+                    ])
+                    ->reactive()
                     ->required(),
                 Select::make('media_statistic_id')
                     ->label('City')

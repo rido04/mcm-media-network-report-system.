@@ -65,9 +65,47 @@ class MediaPlacementResource extends Resource
                 TextINput::make('size')
                     ->label('Size')
                     ->required(),
+                Select::make('space_ads')
+                    ->label('Space Ads')
+                    ->options(function (callable $get) {
+                        $category = AdminTraffic::find($get('admin_traffic_id'))?->category;
+
+                        return match ($category) {
+                            'Commuterline' => [
+                                'Audio Land' => 'Audio Land',
+                                'Cover Seat' => 'Cover Seat',
+                                'Body Branding' => 'Body Branding',
+                                'Wall Branding' => 'Wall Branding',
+                                'Ceiling Panel' => 'Ceiling Panel',
+                                'Hand Grips' => 'Hand Grips',
+                                'Top Door' => 'Top Door',
+                                'Standing Panel' => 'Standing Panel',
+                                'Full Wrapping' => 'Full Wrapping',
+                            ],
+                            'Transjakarta' => [
+                                'Halte Branding' => 'Halte Branding',
+                                'Cover Seat' => 'Cover Seat',
+                                'Hand Grips' => 'Hand Grips',
+                                'Full Body' => 'Full Body',
+                                'Body Branding' => 'Body Branding',
+                            ],
+                            default => [],
+                        };
+                    })
+                    ->visible(function (callable $get) {
+                        $category = AdminTraffic::find($get('admin_traffic_id'))?->category;
+                        return in_array($category, ['Commuterline', 'Transjakarta']);
+                    })
+                    ->required(fn (callable $get) =>
+                        in_array(AdminTraffic::find($get('admin_traffic_id'))?->category, ['Commuterline', 'Transjakarta'])
+                    )
+                    ->live(),
                 TextInput::make('space_ads')
                     ->label('Space Ads')
-                    ->required(),
+                    ->visible(function (callable $get) {
+                        $traffic = AdminTraffic::find($get('admin_traffic_id'));
+                        return in_array(optional($traffic)->category, ['OOH', 'DOOH']);
+                    }),
                 TextInput::make('avg_daily_impression')
                     ->label('Avg Daily Impression')
                     ->numeric()
@@ -87,7 +125,7 @@ class MediaPlacementResource extends Resource
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('media')
-                    ->label('Media')                   
+                    ->label('Media')
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('adminTraffic.category')
@@ -118,7 +156,7 @@ class MediaPlacementResource extends Resource
                         if (!$data['value']) {
                             return $query;
                         }
-                        
+
                         return $query->where('media', $data['value']);
                     })
                     ->label('Media'),
