@@ -172,7 +172,7 @@ class PlayLogResource extends Resource
                 BulkActionGroup::make([
                 DeleteBulkAction::make(),
                 ExportBulkAction::make('export')
-                ->label('Export to Excel')
+                ->label('Download Excel')
                 ->icon('heroicon-o-arrow-down-tray')
                 ->color('green-800')
                 ]),

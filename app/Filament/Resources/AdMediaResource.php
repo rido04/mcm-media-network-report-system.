@@ -43,11 +43,11 @@ class AdMediaResource extends Resource
     }
     public static function  getPluralLabel(): string
     {
-        return 'Media Display';
+        return 'Ad Display';
     }
     public static function getNavigationLabel(): string
     {
-        return 'Media Display';
+        return 'Ad Display';
     }
     protected static ?string $navigationGroup = 'Media';
     public static function form(Form $form): Form

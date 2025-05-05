@@ -10,6 +10,11 @@ class EditMediaPlacement extends EditRecord
 {
     protected static string $resource = MediaPlacementResource::class;
     protected static ?string $title = 'Edit Media Placement';
+    protected function getRedirectUrl(): string
+    {
+        // redirect after input users
+        return $this->getResource()::getUrl('index');
+    }
     protected function getHeaderActions(): array
     {
         return [

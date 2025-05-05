@@ -10,6 +10,10 @@ class EditUser extends EditRecord
 {
     protected static string $resource = UserResource::class;
     protected static ?string $title = 'Edit Client';
+    protected function getRedirectUrl(): string|null
+    {
+        return $this->getResource()::getUrl('index');
+    }
     protected function getHeaderActions(): array
     {
         return [

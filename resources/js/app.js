@@ -52,16 +52,16 @@ function initSwiperContainer(container) {
                 centeredSlides: slideCount > 1,
             },
             768: {
-                slidesPerView: Math.min(slideCount, 2),
+                slidesPerView: Math.min(slideCount, 1),
                 centeredSlides: slideCount === 1,
                 spaceBetween: 24,
             },
             1024: {
-                slidesPerView: Math.min(slideCount, 3),
+                slidesPerView: Math.min(slideCount, 1),
                 spaceBetween: 32,
             },
             1280: {
-                slidesPerView: Math.min(slideCount, 2),
+                slidesPerView: Math.min(slideCount, 1),
                 spaceBetween: 32,
             },
         },
@@ -501,7 +501,3 @@ function initFloatingAssistant() {
         `;
     }
 }
-
-
-
-

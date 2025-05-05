@@ -1,17 +1,17 @@
 <div>
     <div class="bg-slate-800 min-h-screen">
         <!-- Navigation Bar -->
-        <nav class="bg-white shadow-sm border-b border-gray-200">
+        <nav class="backdrop-blur-lg bg-gradient-to-r from-slate-700/50 to-slate-600/50 border-b border-gray-500 sticky top-0 z-50">
             <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
                 <div class="flex justify-between h-14 sm:h-16">
                     <div class="flex">
-                        <a href="{{ route('company.dashboard') }}" class="flex items-center px-2 text-gray-700 hover:text-blue-600 transition">
+                        <a href="{{ route('company.dashboard') }}" class="flex items-center px-2 text-white hover:text-blue-600 transition">
                             <i class="fas fa-arrow-left mr-1"></i>
                             <span class="font-medium text-xs sm:text-sm md:text-base">Back to Dashboard</span>
                         </a>
                     </div>
                     <div class="flex items-center">
-                        <span class="text-xs text-gray-500">Profile View</span>
+                        <span class="text-xs text-white">Profile View</span>
                     </div>
                 </div>
             </div>
@@ -23,7 +23,7 @@
                 <div id="lottie-welcome" class="w-full h-56 sm:h-64 md:h-72 mx-auto flex items-center justify-center">
                     <div id="animation-fallback" class="text-center">
                         <i class="fas fa-smile text-5xl sm:text-6xl text-yellow-400 mb-4 animate-pulse"></i>
-                        <p class="text-gray-600 text-base sm:text-lg">Loading welcome...</p>
+                        <p class="text-gray-600 text-base sm:text-lg">Loading ...</p>
                     </div>
                 </div>
                 <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 mt-4">Welcome back, {{ $user->name }}!</h2>
@@ -83,7 +83,7 @@
                                     </div>
                                     <span class="ml-2 sm:ml-3 text-xs sm:text-sm text-gray-700">Member since</span>
                                 </div>
-                                <span class="text-xs sm:text-sm font-medium">{{ \Carbon\Carbon::parse($user->created_at)->format('M Y') }}</span>
+                                <span class="text-xs sm:text-sm font-medium">{{ \Carbon\Carbon::parse($user->created_at)->format('d M Y') }}</span>
                             </div>
 
                             <div class="flex items-center justify-between p-2 sm:p-3 bg-green-50 rounded-lg">
@@ -103,7 +103,7 @@
                                     </div>
                                     <span class="ml-2 sm:ml-3 text-xs sm:text-sm text-gray-700">Account type</span>
                                 </div>
-                                <span class="text-xs sm:text-sm font-medium">Premium</span>
+                                <span class="text-xs sm:text-sm font-medium">Client</span>
                             </div>
                         </div>
                     </div>
@@ -112,7 +112,7 @@
                     <div class="chart-container lg:col-span-2 bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 rounded-xl p-3 sm:p-5 shadow-lg">
                         <h2 class="text-lg sm:text-xl font-semibold text-white mb-3">Total Performance</h2>
                         <div class="relative w-full h-64 sm:h-72 md:h-80">
-                            <!-- add div wrapper with overflow-hidden -->
+                            <!-- div wrapper with overflow-hidden -->
                             <div class="w-full h-full rounded-lg overflow-hidden">
                                 <div id="performanceChart" class="w-full h-full"></div>
                             </div>
@@ -194,7 +194,7 @@
 
                 <!-- Footer -->
                 <div class="mt-4 sm:mt-6 text-center text-gray-500 text-xs">
-                    <p>&copy; {{ date('Y') }} {{ $user->name }}. All rights reserved.</p>
+                    <p>&copy; MCM Media Network {{ date('Y') }}. All rights reserved.</p>
                 </div>
             </div>
         </div>
@@ -357,7 +357,6 @@
                     }
                 });
             };
-
             window.addEventListener('resize', resizeChart);
         }
     });

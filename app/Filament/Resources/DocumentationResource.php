@@ -33,7 +33,7 @@ class DocumentationResource extends Resource
     protected static ?string $model = Documentation::class;
     protected static ?string $navigationIcon = 'heroicon-o-camera';
     protected static ?string $navigationGroup = 'Table Log';
-    protected static ?string $navigationLabel = 'Documnetation';
+    protected static ?string $navigationLabel = 'Documentation';
     public static function form(Form $form): Form
     {
         return $form
@@ -72,7 +72,9 @@ class DocumentationResource extends Resource
                 ImageColumn::make('image_path')
                     ->label('Image'),
                 TextColumn::make('description')
-                    ->label('Description')
+                    ->label('Description'),
+                TextColumn::make('created_at')
+                    ->label('Updated at')
 
             ])
             ->filters([

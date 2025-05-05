@@ -23,7 +23,7 @@ class CreateUser extends CreateRecord
 
     protected function getRedirectUrl(): string
     {
-        // redirect setelah input users
+        // redirect after input users
         return $this->getResource()::getUrl('index');
     }
 }
