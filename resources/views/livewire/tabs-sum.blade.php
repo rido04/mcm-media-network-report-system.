@@ -186,18 +186,18 @@
                     @forelse ($documentations as $index => $doc)
                     <div class="documentation-item group bg-slate-800 shadow-md overflow-hidden border border-gray-600 dark:border-gray-600 hover:shadow-lg transition-all duration-1000 hover:-translate-y-1 {{ $index >= 3 ? 'hidden' : '' }}"
                          x-data="{
-                             docData: {
-                                 id: {{ $doc->id }},
-                                 description: '{{ addslashes($doc->description) }}',
-                                 image_path: '{{ $doc->image_path }}',
-                                 created_at: '{{ $doc->created_at->format('d M Y H:i:s') }}',
-                                 user: { name: '{{ $doc->user->name ?? '-' }}' }
-                             },
+                            doc: @js([
+                                'id' => $doc->id,
+                                'image_path' => $doc->image_path,
+                                'description' => $doc->description,
+                                'created_at' => $doc->created_at->format('d M Y H:i:s'),
+                                'user' => ['name' => $doc->user->name ?? '-']
+                            ]),
                              hovering: false
                          }"
                          @mouseenter="hovering = true"
                          @mouseleave="hovering = false"
-                         @click="openModal(docData)">
+                         @click="openModal(doc)">
 
                         <div class="relative h-48 overflow-hidden cursor-pointer">
                             <img src="{{ asset('storage/' . $doc->image_path) }}"
@@ -382,9 +382,19 @@
             statsGrid.forceRender();
             playLogGrid.forceRender();
         }, 500);
-
+        // modal positioning
+        window.positionModalAtScroll = function(modal) {
+            const viewportHeight = window.innerHeight;
+            const scrollPosition = window.scrollY || window.pageYOffset;
+            const modalTop = Math.min(
+                Math.max(scrollPosition, 20),
+                document.body.scrollHeight - viewportHeight
+            );
+            modal.style.top = `${modalTop}px`;
+            modal.style.maxHeight = `${viewportHeight - 60}px`;
+        };
          // Fix for maintaining scroll position when opening/closing modal
-         document.addEventListener('alpine:initialized', () => {
+        document.addEventListener('alpine:initialized', () => {
             // Monitor for modal open/close to adjust positioning
             const observer = new MutationObserver((mutations) => {
                 mutations.forEach((mutation) => {
@@ -405,6 +415,7 @@
                 }
             }, 500);
         });
+
         // Load More functionality for Documentation tab
         const loadMoreBtn = document.getElementById('load-more-btn');
         if (loadMoreBtn) {
