@@ -17,13 +17,22 @@ class TabsSum extends Component
     public $documentations;
     public function mount()
     {
-
         $userId = Auth::id();
 
-        $this->mediaPlacement = MediaPlacement::where('user_id', $userId)->get();
-        $this->mediaStatistics = MediaStatistic::where('user_id', $userId)->get();
-        $this->playLogs = PlayLog::where('user_id', $userId)->get();
-        $this->documentations = Documentation::where('user_id', $userId)->get();
+        $this->mediaPlacement = MediaPlacement::with('adminTraffic')
+            ->where('user_id', $userId)
+            ->get();
+
+        $this->mediaStatistics = MediaStatistic::with('dailyImpressions')
+            ->where('user_id', $userId)
+            ->get();
+
+        $this->playLogs = PlayLog::where('user_id', $userId)
+            ->get(); // This one seems fine if there are no relations used in the view
+
+        $this->documentations = Documentation::with('user')
+            ->where('user_id', $userId)
+            ->get();
     }
     public function render()
     {
