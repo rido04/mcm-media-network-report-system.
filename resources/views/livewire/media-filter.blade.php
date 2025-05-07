@@ -51,9 +51,6 @@
                     <label class="block text-sm text-gray-600 mb-1">End Date</label>
                     <input type="date" wire:model.defer="filters.end_date" class="w-full pl-3 pr-3 py-2 border border-gray-200 rounded-lg text-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none text-sm" />
                 </div>
-                <button wire:click="clearDateFilter" class="text-sm text-blue-600 hover:text-blue-800 font-medium">
-                    Clear dates
-                </button>
             </div>
         </div>
 
@@ -72,9 +69,6 @@
                     </svg>
                 </div>
             </div>
-            <button wire:click="clearMediaFilter" class="mt-2 text-sm text-blue-600 hover:text-blue-800 font-medium">
-                Clear media plan
-            </button>
         </div>
 
         <div class="border-t border-gray-200 pt-4">
@@ -92,9 +86,6 @@
                     </svg>
                 </div>
             </div>
-            <button wire:click="clearCityFilter" class="mt-2 text-sm text-blue-600 hover:text-blue-800 font-medium">
-                Clear city
-            </button>
         </div>
 
         <div class="flex justify-between pt-4 border-t border-gray-200">

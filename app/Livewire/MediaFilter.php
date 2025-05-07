@@ -21,13 +21,13 @@ class MediaFilter extends Component
     public function mount()
     {
         // Default date values
-        if (!$this->filters['start_date']) {
-            $this->filters['start_date'] = now()->startOfYear()->format('Y-m-d');
-        }
+        // if (!$this->filters['start_date']) {
+        //     $this->filters['start_date'] = now()->startOfYear()->format('Y-m-d');
+        // }
 
-        if (!$this->filters['end_date']) {
-            $this->filters['end_date'] = now()->endOfYear()->format('Y-m-d');
-        }
+        // if (!$this->filters['end_date']) {
+        //     $this->filters['end_date'] = now()->endOfYear()->format('Y-m-d');
+        // }
 
         // Load from session if available
         $sessionFilters = session('filters');

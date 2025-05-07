@@ -55,11 +55,9 @@ class PlayLogResource extends Resource
                     ->required(),
                 TextInput::make('longitude')
                     ->label('Longitude')
-                    ->numeric()
                     ->required(),
                 TextInput::make('latitude')
                     ->label('Latitude')
-                    ->numeric()
                     ->required(),
                 TextInput::make('location')
                     ->label('Location')

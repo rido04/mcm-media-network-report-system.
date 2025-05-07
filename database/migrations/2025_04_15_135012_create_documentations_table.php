@@ -14,8 +14,11 @@ return new class extends Migration
         Schema::create('documentations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
-            $table->string('image_path');
+            $table->string('type');
+            $table->string('image_path')->nullable();
             $table->text('description');
+            $table->string('link_video')->nullable();
+            $table->string('thumbnail_path')->nullable();
             $table->timestamps();
         });
     }

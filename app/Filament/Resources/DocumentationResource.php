@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use Closure;
 use Filament\Forms;
 use App\Models\User;
 use Filament\Tables;
@@ -16,11 +17,12 @@ use Filament\Forms\Components\Textarea;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\FileUpload;
+
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Filters\SelectFilter;
-
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteBulkAction;
@@ -47,13 +49,55 @@ class DocumentationResource extends Resource
                 Textarea::make('description')
                     ->label('Description')
                     ->required(),
+                Select::make('type')
+                    ->label('Documentation Type')
+                    ->options([
+                        'image' => 'Image',
+                        'video' => 'Video',
+                    ])
+                    ->default('image')
+                    ->required()
+                    ->live(),
                 FileUpload::make('image_path')
-                    ->label('Masukan Gambar Dokumentasi')
-                    ->image()
+                    ->label('Image')
                     ->disk('public')
                     ->directory('image')
-                    ->visibility('public')
-                    ->required(),
+                    ->visible(fn (Forms\Get $get): bool => $get('type') === 'image')
+                    ->image()
+                    ->required(fn (Forms\Get $get): bool => $get('type') === 'image'),
+                    TextInput::make('link_video')
+                    ->label('Video Link')
+                    ->visible(fn (Forms\Get $get): bool => $get('type') === 'video')
+                    ->url()
+                    ->regex('/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/(watch\?v=|embed\/|v\/|shorts\/|youtu\.be\/)?[a-zA-Z0-9_-]{11}.*$/')
+                    ->required(fn (Forms\Get $get): bool => $get('type') === 'video')
+                    ->reactive()
+                    ->afterStateUpdated(function ($state, callable $set) {
+                        if ($state) {
+                            // Ekstrak Video ID from other youtube format e.g short
+                            preg_match('/(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|embed|shorts)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/', $state, $matches);
+                            if (isset($matches[1])) {
+                                // Normalize to standar format
+                                $set('link_video', "https://www.youtube.com/watch?v={$matches[1]}");
+                            } else {
+                                // If Url null, set error
+                                $set('link_video', null);
+                                // Error Notification
+                                Notification::make()
+                                    ->title('Invalid YouTube URL')
+                                    ->body('Please provide a valid YouTube video or Shorts URL.')
+                                    ->danger()
+                                    ->send();
+                            }
+                        }
+                    }),
+                FileUpload::make('thumbnail_path')
+                    ->label('Thumbnail')
+                    ->disk('public')
+                    ->directory('image')
+                    ->visible(fn (Forms\Get $get): bool => $get('type') === 'video')
+                    ->image()
+                    ->required(fn (Forms\Get $get): bool => $get('type') === 'video'),
             ]);
     }
 
@@ -73,6 +117,8 @@ class DocumentationResource extends Resource
                     ->label('Image'),
                 TextColumn::make('description')
                     ->label('Description'),
+                TextColumn::make('link_video')
+                    ->label('Link Video'),
                 TextColumn::make('created_at')
                     ->label('Updated at')
 
