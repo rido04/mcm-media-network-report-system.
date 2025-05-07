@@ -697,7 +697,7 @@ function openModal(doc) {
 function getYouTubeEmbedUrl(url) {
     if (!url) return '';
 
-    // Match YouTube URL patterns dan ekstrak video ID
+    // Match YouTube URL patterns and extract video ID
     const regex = /(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
     const matches = url.match(regex);
 

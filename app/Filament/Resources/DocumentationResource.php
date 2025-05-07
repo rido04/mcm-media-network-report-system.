@@ -113,12 +113,10 @@ class DocumentationResource extends Resource
                 TextColumn::make('user.name')
                     ->label('Client')
                     ->searchable(),
-                ImageColumn::make('image_path')
-                    ->label('Image'),
+                TextColumn::make('type')
+                    ->label('Type'),
                 TextColumn::make('description')
                     ->label('Description'),
-                TextColumn::make('link_video')
-                    ->label('Link Video'),
                 TextColumn::make('created_at')
                     ->label('Updated at')
 
