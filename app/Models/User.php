@@ -5,6 +5,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Contracts\Role;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
@@ -54,6 +55,7 @@ class User extends Authenticatable
 
     public function adMedia()
     {
+        Log::info('');
         return $this->hasMany(AdMedia::class);
     }
 

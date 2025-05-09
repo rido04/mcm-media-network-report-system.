@@ -159,7 +159,8 @@
 
             <!-- Modal Content with absolute positioning -->
             <div x-show="selectedDoc !== null"
-                    class="modal-content bg-slate-800 rounded-lg shadow-xl max-w-4xl w-full mx-auto my-8 overflow-hidden transform transition-all absolute left-0 right-0"
+                    class="modal-content bg-gradient-to-r from-slate-950 to-slate-800 sm:bg-gradient-to-b sm:from-slate-900 sm:to-slate-800
+                    lg:bg-gradient-to-r lg:from-slate-950 lg:to-slate-800 rounded-lg shadow-xl max-w-4xl w-full mx-auto my-8 overflow-hidden transform transition-all absolute left-0 right-0"
                     style="margin-left: auto; margin-right: auto;"
                     x-transition:enter="ease-out duration-300"
                     x-transition:enter-start="opacity-0 scale-95"
