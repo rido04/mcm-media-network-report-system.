@@ -26,5 +26,14 @@ public function dailyImpressions()
 {
     return $this->hasMany(DailyImpression::class, 'media_statistic_id');
 }
+public function mediaPlacements()
+{
+    return $this->hasMany(MediaPlacement::class);
+}
+public function getTotalImpressionAttribute()
+{
+    return $this->mediaPlacements()->sum('avg_daily_impression'); //accessor
+}
+
 
 }

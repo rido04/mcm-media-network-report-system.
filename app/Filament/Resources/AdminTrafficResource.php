@@ -37,14 +37,15 @@ class AdminTrafficResource extends Resource
         return 'Category';
     }
     protected static ?string $navigationGroup = 'Media';
-    public static function getEloquentQuery(): Builder // eager loading
+    public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
             ->with(['user'])
-            ->withAvg('dailyImpressions', 'impression')
-            ->withMax('dailyImpressions', 'impression')
-            ->withMin('dailyImpressions', 'impression');
+            ->withAvg('mediaPlacements', 'avg_daily_impression')
+            ->withMax('mediaPlacements', 'avg_daily_impression')
+            ->withMin('mediaPlacements', 'avg_daily_impression');
     }
+
 
     public static function form(Form $form): Form
     {
@@ -108,11 +109,13 @@ class AdminTrafficResource extends Resource
                 TextColumn::make('mediaStatistic.city')
                     ->label('City/District')
                     ->searchable(),
-                TextColumn::make('daily_impressions_max_impression')
+                    TextColumn::make('media_placements_max_avg_daily_impression')
                     ->label('Highest'),
-                TextColumn::make('daily_impressions_min_impression')
+
+                TextColumn::make('media_placements_min_avg_daily_impression')
                     ->label('Lowest'),
-                TextColumn::make('daily_impressions_avg_impression')
+
+                TextColumn::make('media_placements_avg_avg_daily_impression')
                     ->label('Average')
                     ->formatStateUsing(fn ($state) => number_format($state, 2)),
             ])

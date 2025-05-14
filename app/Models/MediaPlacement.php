@@ -16,6 +16,7 @@ class MediaPlacement extends Model
         'user_id',
         'daily_impression_id',
         'avg_daily_impression',
+        'media_statistic_id',
         'media',
         'size',
         'space_ads',
@@ -39,6 +40,14 @@ class MediaPlacement extends Model
     public function dailyImpression()
     {
         return $this->belongsTo(DailyImpression::class);
+    }
+    public function mediaStatistic():BelongsTo
+    {
+        return $this->belongsTo(MediaStatistic::class);
+    }
+    public function mediaStatistics()
+    {
+        return $this->hasMany(MediaStatistic::class);
     }
 
 }

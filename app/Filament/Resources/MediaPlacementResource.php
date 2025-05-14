@@ -10,6 +10,7 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\AdminTraffic;
 use App\Models\MediaPlacement;
+use App\Models\MediaStatistic;
 use App\Models\DailyImpression;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
@@ -17,13 +18,13 @@ use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\MediaPlacementResource\Pages;
 use App\Filament\Resources\MediaPlacementResource\RelationManagers;
-use Filament\Tables\Filters\SelectFilter;
 
 class MediaPlacementResource extends Resource
 {
@@ -58,6 +59,21 @@ class MediaPlacementResource extends Resource
                     ->searchable()
                     ->required()
                     ->live(),
+                Select::make('media_statistic_id')
+                    ->label('Media Plan')
+                    ->dehydrated(true)
+                    ->options(function (callable $get) {
+                        $userId = $get('user_id');
+                        if (!$userId) {
+                            return [];
+                        }
+                        return MediaStatistic::where('user_id', $userId)
+                            ->select('id', 'media')
+                            ->distinct()
+                            ->pluck('media', 'id');
+                        })
+                    ->live()
+                    ->required(),
                 TextInput::make('media')
                     ->label('Media')
                     ->placeholder('XXX001')
@@ -107,7 +123,7 @@ class MediaPlacementResource extends Resource
                         return in_array(optional($traffic)->category, ['OOH', 'DOOH']);
                     }),
                 TextInput::make('avg_daily_impression')
-                    ->label('Avg Daily Impression')
+                    ->label('Total Impression')
                     ->numeric()
                     ->required()
                     ->minValue(0)
@@ -124,6 +140,10 @@ class MediaPlacementResource extends Resource
                     ->label('Client')
                     ->sortable()
                     ->searchable(),
+                TextColumn::make('mediaStatistic.media')
+                    ->label('Media Plan')
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('media')
                     ->label('Media')
                     ->sortable()
@@ -141,7 +161,7 @@ class MediaPlacementResource extends Resource
                     ->searchable(),
                 TextColumn::make('avg_daily_impression')
                     ->numeric(2)
-                    ->label('Avg Impression')
+                    ->label('Total Impression')
                     ->sortable(),
             ])
             ->filters([

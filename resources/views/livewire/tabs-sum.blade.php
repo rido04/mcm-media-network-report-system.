@@ -1,6 +1,6 @@
 <div class="transition-all duration-1000 mt-20">
     <div x-data="{ tab: 'media_placement' }">
-        <!-- Enhanced Tab Navigation with Indicator Animation -->
+        <!-- Tab Navigation with Indicator Animation -->
         <div class="relative mb-6 transition-all duration-1000 ease-out transform opacity-0 translate-y-4"
          x-data="{
              shown: false,
@@ -54,61 +54,131 @@
         </div>
         </div>
 
-         <!-- Media Placement Tab -->
-         <div x-show="tab === 'media_placement'" x-transition:enter="transition ease-out duration-1000"
-         x-transition:enter-start="opacity-0 translate-y-2"
-         x-transition:enter-end="opacity-100 translate-y-0"
-         x-transition:leave="transition ease-in duration-200"
-         x-transition:leave-start="opacity-100 translate-y-0"
-         x-transition:leave-end="opacity-0 translate-y-2" x-cloak>
-        <div id="media-placement-grid" class="my-4"></div>
-    </div>
+        <!-- Media Placement Tab -->
+        <div x-show="tab === 'media_placement'" x-transition:enter="transition ease-out duration-1000"
+            x-transition:enter-start="opacity-0 translate-y-2"
+            x-transition:enter-end="opacity-100 translate-y-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 translate-y-0"
+            x-transition:leave-end="opacity-0 translate-y-2" x-cloak>
 
-    <!-- Media Plan Tab -->
-    <div x-show="tab === 'media_statistics'" x-transition:enter="transition ease-out duration-1000"
-         x-transition:enter-start="opacity-0 translate-y-2"
-         x-transition:enter-end="opacity-100 translate-y-0"
-         x-transition:leave="transition ease-in duration-200"
-         x-transition:leave-start="opacity-100 translate-y-0"
-         x-transition:leave-end="opacity-0 translate-y-2" x-cloak>
-        <div id="media-statistics-grid" class="my-4"></div>
-    </div>
+            <!-- Filter Row -->
+            <div class="mb-4 flex flex-wrap gap-2 items-center">
+                <div class="filter-container">
+                    <select id="filter-media" class="bg-slate-700 text-white border border-slate-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">All Media</option>
+                    </select>
+                </div>
+                <div class="filter-container">
+                    <select id="category-filter" class="bg-slate-700 text-white border border-slate-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">All Categories</option>
+                    </select>
+                </div>
+                <div class="filter-container">
+                    <select id="space-ads-filter" class="bg-slate-700 text-white border border-slate-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">All Space Ads</option>
+                    </select>
+                </div>
+                <div class="ml-auto">
+                    <button id="reset-mp-filters" class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded transition duration-300">
+                        Reset Filters
+                    </button>
+                </div>
+            </div>
 
-    <!-- Play Log Tab -->
-    <div x-show="tab === 'play_log'" x-transition:enter="transition ease-out duration-1000"
-         x-transition:enter-start="opacity-0 translate-y-2"
-         x-transition:enter-end="opacity-100 translate-y-0"
-         x-transition:leave="transition ease-in duration-200"
-         x-transition:leave-start="opacity-100 translate-y-0"
-         x-transition:leave-end="opacity-0 translate-y-2" x-cloak>
-        <div id="play-log-grid" class="my-4 overflow-x-auto"></div>
-        <button onclick="exportExcel(playLogsData, ['Device ID','Media Name','Play Date','Longitude','Latitude','Location'], 'play_logs.xlsx')" class="bg-green-800 hover:bg-slate-800 transition duration-500 ease-in-out text-white px-4 py-2 rounded">Download Excel</button>
-    </div>
+            <div id="media-placement-table" class="my-4"></div>
+        </div>
+
+        <!-- Media Plan Tab -->
+        <div x-show="tab === 'media_statistics'" x-transition:enter="transition ease-out duration-1000"
+            x-transition:enter-start="opacity-0 translate-y-2"
+            x-transition:enter-end="opacity-100 translate-y-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 translate-y-0"
+            x-transition:leave-end="opacity-0 translate-y-2" x-cloak>
+
+            <!-- Filter Row -->
+            <div class="mb-4 flex flex-wrap gap-2 items-center">
+                <div class="filter-container">
+                    <select id="media-plan-filter" class="bg-slate-700 text-white border border-slate-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">All Media Plans</option>
+                    </select>
+                </div>
+                <div class="filter-container">
+                    <select id="duration-filter" class="bg-slate-700 text-white border border-slate-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">All Durations</option>
+                    </select>
+                </div>
+                <div class="ml-auto">
+                    <button id="reset-ms-filters" class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded transition duration-300">
+                        Reset Filters
+                    </button>
+                </div>
+            </div>
+
+            <div id="media-statistics-table" class="my-4"></div>
+        </div>
+
+        <!-- Play Log Tab -->
+        <div x-show="tab === 'play_log'" x-transition:enter="transition ease-out duration-1000"
+            x-transition:enter-start="opacity-0 translate-y-2"
+            x-transition:enter-end="opacity-100 translate-y-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 translate-y-0"
+            x-transition:leave-end="opacity-0 translate-y-2" x-cloak>
+
+            <!-- Filter Row -->
+            <div class="mb-4 flex flex-wrap gap-2 items-center">
+                <div class="filter-container">
+                    <select id="device-filter" class="bg-slate-700 text-white border border-slate-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">All Devices</option>
+                    </select>
+                </div>
+                <div class="filter-container">
+                    <select id="media-name-filter" class="bg-slate-700 text-white border border-slate-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">All Media Names</option>
+                    </select>
+                </div>
+                <div class="ml-auto">
+                    <button id="reset-pl-filters" class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded transition duration-300">
+                        Reset Filters
+                    </button>
+                </div>
+            </div>
+
+            <div id="play-log-table" class="my-4 overflow-x-auto"></div>
+            <button onclick="exportExcel(playLogsData, ['Device ID','Media Name','Play Date','Longitude','Latitude','Location'], 'play_logs.xlsx')" class="bg-green-800 hover:bg-slate-800 transition duration-500 ease-in-out text-white px-4 py-2 rounded">Download Excel</button>
+        </div>
 
         <!-- Documentation Tab -->
-    <div x-show="tab === 'documentation'" x-transition:enter="transition ease-out duration-1000"
-    x-transition:enter-start="opacity-0 translate-y-2"
-    x-transition:enter-end="opacity-100 translate-y-0"
-    x-transition:leave="transition ease-in duration-200"
-    x-transition:leave-start="opacity-100 translate-y-0"
-    x-transition:leave-end="opacity-0 translate-y-2" x-cloak>
+        <div x-show="tab === 'documentation'" x-transition:enter="transition ease-out duration-1000"
+        x-transition:enter-start="opacity-0 translate-y-2"
+        x-transition:enter-end="opacity-100 translate-y-0"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100 translate-y-0"
+        x-transition:leave-end="opacity-0 translate-y-2" x-cloak>
 
-    <!-- Sub-tabs Navigation for Documentation -->
-    <div x-data="{ subTab: 'images' }">
-    <div class="mb-4 border-b border-gray-600 dark:border-gray-700">
-        <div class="flex lg:justify-center">
-            <button @click="subTab = 'images'"
-                    :class="subTab === 'images' ? 'text-blue-600 dark:text-blue-400 font-semibold border-b-2 border-blue-600 dark:border-blue-400' : 'text-white dark:text-gray-400 hover:text-blue-200 dark:hover:text-gray-200'"
-                    class="relative py-2 px-4 focus:outline-none transition-colors whitespace-nowrap group">
-                Images
-            </button>
-            <button @click="subTab = 'videos'"
-                    :class="subTab === 'videos' ? 'text-blue-600 dark:text-blue-400 font-semibold border-b-2 border-blue-600 dark:border-blue-400' : 'text-white dark:text-gray-400 hover:text-blue-200 dark:hover:text-gray-200'"
-                    class="relative py-2 px-4 focus:outline-none transition-colors whitespace-nowrap group">
-                Videos
-            </button>
+        <!-- Sub-tabs Navigation for Documentation -->
+        <div x-data="{ subTab: 'all' }">
+        <div class="mb-4 border-b border-gray-600 dark:border-gray-700">
+            <div class="flex lg:justify-center">
+                <button @click="subTab = 'all'"
+                        :class="subTab === 'all' ? 'text-blue-600 dark:text-blue-400 font-semibold border-b-2 border-blue-600 dark:border-blue-400' : 'text-white dark:text-gray-400 hover:text-blue-200 dark:hover:text-gray-200'"
+                        class="relative py-2 px-4 focus:outline-none transition-colors whitespace-nowrap group">
+                    All
+                </button>
+                <button @click="subTab = 'images'"
+                        :class="subTab === 'images' ? 'text-blue-600 dark:text-blue-400 font-semibold border-b-2 border-blue-600 dark:border-blue-400' : 'text-white dark:text-gray-400 hover:text-blue-200 dark:hover:text-gray-200'"
+                        class="relative py-2 px-4 focus:outline-none transition-colors whitespace-nowrap group">
+                    Images
+                </button>
+                <button @click="subTab = 'videos'"
+                        :class="subTab === 'videos' ? 'text-blue-600 dark:text-blue-400 font-semibold border-b-2 border-blue-600 dark:border-blue-400' : 'text-white dark:text-gray-400 hover:text-blue-200 dark:hover:text-gray-200'"
+                        class="relative py-2 px-4 focus:outline-none transition-colors whitespace-nowrap group">
+                    Videos
+                </button>
+            </div>
         </div>
-    </div>
 
     <!-- Documentation Modal -->
     <div x-data="{
@@ -130,7 +200,7 @@
             this.selectedDoc = doc;
             document.body.classList.add('modal-open');
 
-            // Crucial: Set the modal position based on current scroll
+            //Set the modal position based on current scroll
             this.$nextTick(() => {
                 const modal = document.querySelector('.modal-content');
                 if (modal) {
@@ -233,6 +303,116 @@
             </div>
         </div>
 
+        <!-- All Sub-Tab Content -->
+    <div x-show="subTab === 'all'" x-transition:enter="transition ease-out duration-500"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100">
+        <div id="documentation-all" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @forelse ($documentations as $index => $doc)
+        <div class="documentation-item group bg-slate-800 shadow-md overflow-hidden border border-gray-600 dark:border-gray-600 hover:shadow-lg transition-all duration-1000 hover:-translate-y-1 {{ $index > 3 ? 'hidden' : '' }}"
+                x-data="{
+                doc: @js([
+                    'id' => $doc->id,
+                    'image_path' => $doc->image_path,
+                    'link_video' => $doc->link_video,
+                    'description' => $doc->description,
+                    'created_at' => $doc->created_at->format('d M Y H:i:s'),
+                    'user' => ['name' => $doc->user->name ?? '-'],
+                    'type' => $doc->type
+                ]),
+                    hovering: false
+                }"
+                @mouseenter="hovering = true"
+                @mouseleave="hovering = false"
+                @click="openModal(doc)">
+
+            <div class="relative h-48 overflow-hidden cursor-pointer">
+                <!-- Image Content -->
+                <template x-if="doc.type === 'image'">
+                    <img :src="'{{ asset('storage/') }}/' + doc.image_path"
+                         :alt="doc.description"
+                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                </template>
+
+                <!-- Video Content -->
+                <template x-if="doc.type === 'video'">
+                    <!-- Video Thumbnail with Play Button -->
+                    <div class="relative w-full h-full">
+                         @php
+                            // Extract YouTube video ID from the URL
+                            $youtubeId = null;
+                            if ($doc->link_video) {
+                                preg_match('/(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/', $doc->link_video, $matches);
+                                $youtubeId = $matches[1] ?? null;
+                            }
+
+                            // Generate thumbnail URL
+                            $thumbnailUrl = $doc->thumbnail_path
+                                ? asset('storage/' . $doc->thumbnail_path)
+                                : ($youtubeId
+                                    ? "https://img.youtube.com/vi/{$youtubeId}/hqdefault.jpg"
+                                    : asset('storage/video-thumbnails/default.jpg'));
+                        @endphp
+                        <img src="{{ $thumbnailUrl }}"
+                                alt="{{ $doc->description }}"
+                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+
+                        <!-- Play Button Icon -->
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="bg-black/50 rounded-full p-3 transform transition-transform duration-300 group-hover:scale-110">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- Overlay that appears on hover -->
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-black/50 flex flex-col justify-end p-4 transition-opacity duration-300"
+                      :class="hovering ? 'opacity-100' : 'opacity-0'">
+                    <h4 class="text-sm font-medium text-white line-clamp-2">{{ $doc->description }}</h4>
+                    <div class="mt-2 flex items-center justify-between text-xs text-white">
+                        <span>Client: {{ $doc->user->name ?? '-' }}</span>
+                        <span>{{ $doc->created_at->format('d M Y') }}</span>
+                    </div>
+                    <div class="mt-3 text-center">
+                        <span class="inline-block bg-blue-600 hover:bg-blue-700 rounded-full px-3 py-1 text-xs text-white"
+                              x-text="doc.type === 'video' ? 'Play Video' : 'View Details'">
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @empty
+        <div class="col-span-3 py-12 text-center">
+            <div class="mx-auto max-w-md p-6 bg-slate-800/50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <h3 class="mt-4 text-sm font-medium text-white dark:text-white">No documentation available</h3>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Contact Admin for more help.</p>
+            </div>
+        </div>
+        @endforelse
+        </div>
+
+        <!-- Load More Button for All (Only show if there are more than 3 documentation items) -->
+        @php
+        $totalCount = $documentations->count();
+        @endphp
+        @if($totalCount > 3)
+        <div id="load-more-all" class="mt-8 text-center">
+            <button id="load-more-all-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                <span>Load More</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+        </div>
+        @endif
+    </div>
         <!-- Images Sub-Tab Content -->
         <div x-show="subTab === 'images'" x-transition:enter="transition ease-out duration-500"
                 x-transition:enter-start="opacity-0"
@@ -428,7 +608,7 @@
                 'start_date' => \Carbon\Carbon::parse($item->start_date)->format('d M Y'),
                 'end_date' => \Carbon\Carbon::parse($item->end_date)->format('d M Y'),
                 'duration' => \Carbon\Carbon::parse($item->start_date)->diffInDays($item->end_date) . ' days',
-                'total_impression' => $item->dailyImpressions->sum('impression') ?? 0
+                'total_impression' => $item->mediaPlacements->sum('avg_daily_impression') ?? 0
             ];
         })) !!};
 
@@ -443,107 +623,213 @@
             ];
         })) !!};
 
-        // Initialize grids when DOM is loaded
+        // Initialize tables and filters when DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
-        // Common GridJS configuration for ALL tables
-        const gridOptions = {
-            search: true,
-            pagination: true,
-            resizable: true,
-            width: '100%',
-            style: {
-                table: {
-                    'min-width': '600px',
-                },
-                th: {
-                    'background-color': '#1e293b',
-                    color: '#fff',
-                    padding: '0.75rem 1rem',
-                },
-                td: {
-                    padding: '0.75rem 1rem',
-                    'background-color': '#f1f1f1',
-                },
-            },
-            className: {
-                table: 'w-full bg-slate-700',
-                thead: 'bg-slate-800',
-                tbody: 'divide-y divide-gray-600',
-                tr: 'hover:bg-indigo-400 dark:hover:bg-gray-700/50',
-                th: 'text-left font-medium uppercase tracking-wider',
-                td: 'text-black break-words whitespace-normal',
-                footer: 'bg-[#f1f1f1]',
-            },
-        };
+            // Shared Tabulator configuration
+            const tabulatorTheme = {
+                layout: "fitColumns",
+                responsiveLayout: "collapse",
+                pagination: "local",
+                paginationSize: 10,
+                paginationSizeSelector: [5, 10, 25, 50, 100],
+                headerFilterLiveFilterDelay: 300,
+                movableColumns: true,
+                selectable: false
+            };
 
-        // ===== Media Placement Grid =====
-        new window.gridjs.Grid({
-            ...gridOptions,
-            columns: [
-                'Media',
-                'Category',
-                'Space Ads',
-                'Size',
-                {
-                    name: 'Avg Daily Impression',
-                    formatter: (cell) => gridjs.html(`<span>${new Intl.NumberFormat().format(cell)}</span>`)
+            // Format for number values
+            const numberFormatter = function(cell, formatterParams, onRendered) {
+                return new Intl.NumberFormat().format(cell.getValue());
+            };
+
+            // Helper function to populate select filters
+            function populateFilter(selectId, data, columnName) {
+                const select = document.getElementById(selectId);
+                if (!select) return;
+
+                // Get unique values
+                const uniqueValues = [...new Set(data.map(item => item[columnName]))].filter(Boolean);
+                uniqueValues.sort();
+
+                // Add options to select
+                uniqueValues.forEach(value => {
+                    const option = document.createElement('option');
+                    option.value = value;
+                    option.textContent = value;
+                    select.appendChild(option);
+                });
+            }
+
+            const mpData = mediaPlacementData.map(item => ({
+                media: item.media,
+                category: item.category,
+                space_ads: item.space_ads,
+                size: item.size,
+                avg_daily_impression: item.avg_daily_impression
+            }));
+            const msData = mediaStatisticsData.map(item => ({
+                media: item.media,
+                start_date: item.start_date,
+                end_date: item.end_date,
+                duration: item.duration,
+                total_impression: item.total_impression
+            }));
+            const plData = playLogsData.map(item => ({
+                device_id: item.device_id,
+                media_name: item.media_name,
+                play_date: item.play_date,
+                longitude: item.longitude,
+                latitude: item.latitude,
+                location: item.location
+            }));
+
+            // Initialize Media Placement Table
+            const mpTable = new Tabulator("#media-placement-table", {
+                ...tabulatorTheme,
+                data: mpData,
+                columns: [
+                    { title: "Media", field: "media", headerFilter: false },
+                    { title: "Category", field: "category", headerFilter: false },
+                    { title: "Space Ads", field: "space_ads", headerFilter: false },
+                    { title: "Size", field: "size", headerFilter: false },
+                    {
+                        title: "Total Impression",
+                        field: "avg_daily_impression",
+                        headerFilter: false,
+                        headerFilterFunc: ">="
+                    }
+                ]
+            });
+
+            // Initialize Media Statistics Table
+            const msTable = new Tabulator("#media-statistics-table", {
+                ...tabulatorTheme,
+                data: msData,
+                columns: [
+                    { title: "Media Plan", field: "media", headerFilter: false },
+                    { title: "Start Date", field: "start_date", headerFilter: false },
+                    { title: "End Date", field: "end_date", headerFilter: false },
+                    { title: "Duration", field: "duration", headerFilter: false },
+                    {
+                        title: "Total Impression",
+                        field: "total_impression",
+                        formatter: numberFormatter,
+                        headerFilter: false,
+                        headerFilterFunc: ">="
+                    }
+                ]
+            });
+
+            // Initialize Play Log Table
+            const plTable = new Tabulator("#play-log-table", {
+                ...tabulatorTheme,
+                data: plData,
+                columns: [
+                    { title: "Device ID", field: "device_id", headerFilter: false },
+                    { title: "Media Name", field: "media_name", headerFilter: false },
+                    { title: "Play Date", field: "play_date", headerFilter: false },
+                    { title: "Longitude", field: "longitude", headerFilter: false },
+                    { title: "Latitude", field: "latitude", headerFilter: false },
+                    { title: "Location", field: "location", headerFilter: false }
+                ]
+            });
+
+            // Populate filters
+            populateFilter("filter-media", mpData, "media");
+            populateFilter("category-filter", mpData, "category");
+            populateFilter("space-ads-filter", mpData, "space_ads");
+            populateFilter("media-plan-filter", msData, "media");
+            populateFilter("duration-filter", msData, "duration");
+            populateFilter("device-filter", plData, "device_id");
+            populateFilter("media-name-filter", plData, "media_name");
+
+            // Handle Media Placement filters
+            document.getElementById("filter-media").addEventListener("change", function() {
+                if (this.value === "") {
+                    mpTable.clearFilter("media");
+                } else {
+                    mpTable.setFilter("media", "=", this.value);
                 }
-            ],
-            data: mediaPlacementData.map(item => [
-                item.media,
-                item.category,
-                item.space_ads,
-                item.size,
-                item.avg_daily_impression
-            ])
-        }).render(document.getElementById('media-placement-grid'));
+            });
 
-        // ===== Media Statistics Grid =====
-        const statsGrid = new window.gridjs.Grid({
-            ...gridOptions,
-            columns: [
-                'Media Plan',
-                'Start Date',
-                'End Date',
-                'Duration',
-                {
-                    name: 'Total Impression',
-                    formatter: (cell) => gridjs.html(`<span>${new Intl.NumberFormat().format(cell)}</span>`)
+            document.getElementById("category-filter").addEventListener("change", function() {
+                if (this.value === "") {
+                    mpTable.clearFilter("category");
+                } else {
+                    mpTable.setFilter("category", "=", this.value);
                 }
-            ],
-            data: mediaStatisticsData.map(item => [
-                item.media,
-                item.start_date,
-                item.end_date,
-                item.duration,
-                item.total_impression
-            ])
-        }).render(document.getElementById('media-statistics-grid'));
+            });
 
-        // ===== Play Log Grid =====
-        const playLogGrid = new window.gridjs.Grid({
-            ...gridOptions,
-            columns: [
-                'Device ID',
-                'Media Name',
-                'Play Date',
-                'Longitude',
-                'Latitude',
-                'Location'
-            ],
-            data: playLogsData.map(item => [
-                item.device_id,
-                item.media_name,
-                item.play_date,
-                item.longitude,
-                item.latitude,
-                item.location
-            ])
-        }).render(document.getElementById('play-log-grid'));
-        setTimeout(() => {
-            statsGrid.forceRender();
-            playLogGrid.forceRender();
-        }, 500);
+            document.getElementById("space-ads-filter").addEventListener("change", function() {
+                if (this.value === "") {
+                    mpTable.clearFilter("space_ads");
+                } else {
+                    mpTable.setFilter("space_ads", "=", this.value);
+                }
+            });
+
+            document.getElementById("reset-mp-filters").addEventListener("click", function() {
+                document.getElementById("filter-media").value = "";
+                document.getElementById("category-filter").value = "";
+                document.getElementById("space-ads-filter").value = "";
+                mpTable.clearFilter(true);
+            });
+
+            // Handle Media Statistics filters
+            document.getElementById("media-plan-filter").addEventListener("change", function() {
+                if (this.value === "") {
+                    msTable.clearFilter("media");
+                } else {
+                    msTable.setFilter("media", "=", this.value);
+                }
+            });
+
+            document.getElementById("duration-filter").addEventListener("change", function() {
+                if (this.value === "") {
+                    msTable.clearFilter("duration");
+                } else {
+                    msTable.setFilter("duration", "=", this.value);
+                }
+            });
+
+            document.getElementById("reset-ms-filters").addEventListener("click", function() {
+                document.getElementById("media-plan-filter").value = "";
+                document.getElementById("duration-filter").value = "";
+                msTable.clearFilter(true);
+            });
+
+            // Handle Play Log filters
+            document.getElementById("device-filter").addEventListener("change", function() {
+                if (this.value === "") {
+                    plTable.clearFilter("device_id");
+                } else {
+                    plTable.setFilter("device_id", "=", this.value);
+                }
+            });
+
+            document.getElementById("media-name-filter").addEventListener("change", function() {
+                if (this.value === "") {
+                    plTable.clearFilter("media_name");
+                } else {
+                    plTable.setFilter("media_name", "=", this.value);
+                }
+            });
+
+            document.getElementById("reset-pl-filters").addEventListener("click", function() {
+                document.getElementById("device-filter").value = "";
+                document.getElementById("media-name-filter").value = "";
+                plTable.clearFilter(true);
+            });
+
+            // Redraw tables when tab changes
+            Alpine.effect(() => {
+                const tab = Alpine.store('tab') || Alpine.reactive({tab: 'media_placement'}).tab;
+                setTimeout(() => {
+                    if (tab === 'media_placement') mpTable.redraw(true);
+                    if (tab === 'media_statistics') msTable.redraw(true);
+                    if (tab === 'play_log') plTable.redraw(true);
+                }, 100);
+            });
         // modal positioning
         window.positionModalAtScroll = function(modal) {
             const viewportHeight = window.innerHeight;
@@ -632,33 +918,32 @@
         let currentlyShown = 3; // Awalnya menampilkan 3 item
 
         loadMoreBtn.addEventListener('click', function() {
-            // Hitung batch berikutnya untuk ditampilkan
+            // Count next batch to show
             const nextToShow = Math.min(currentlyShown + itemsPerLoad, items.length);
 
-            // Tampilkan batch berikutnya dengan animasi
+            // Show next batch with animation
             for (let i = currentlyShown; i < nextToShow; i++) {
                 items[i].classList.remove('hidden');
                 items[i].classList.add('animate-fade-in');
             }
 
-            // Perbarui jumlah item yang ditampilkan
+            // update item shown
             currentlyShown = nextToShow;
 
-            // Sembunyikan tombol jika semua item sudah ditampilkan
+            // Hide button if all item are showed
             if (currentlyShown >= items.length) {
                 loadMoreBtn.parentElement.style.display = 'none';
             }
         });
     }
 
-    // Inisialisasi "Load More" untuk sub-tab Images
+    // Initiate "Load More" for sub-tab Images
     initializeLoadMore('load-more-images-btn', '#documentation-images', '.documentation-item');
 
-    // Inisialisasi "Load More" untuk sub-tab Videos
+    // Initiate "Load More" for sub-tab Videos
     initializeLoadMore('load-more-videos-btn', '#documentation-videos', '.documentation-item');
-});
-// Add this function to extract YouTube ID and create embed URL
-function getYouTubeEmbedUrl(url) {
+    });
+    function getYouTubeEmbedUrl(url) {
     if (!url) return '';
 
     // Match YouTube URL patterns and extract video ID
@@ -673,8 +958,8 @@ function getYouTubeEmbedUrl(url) {
     return url; // Return original if no match (shouldn't happen with validation)
 }
 
-// Modify the existing openModal function to handle YouTube links
-function openModal(doc) {
+    // Modify the existing openModal function to handle YouTube links
+    function openModal(doc) {
     // Convert YouTube URL to embed URL if it's a video
     if (doc && doc.type === 'video' && doc.link_video) {
         doc.link_video = getYouTubeEmbedUrl(doc.link_video);
@@ -695,7 +980,7 @@ function openModal(doc) {
         }
     });
 }
-function getYouTubeEmbedUrl(url) {
+    function getYouTubeEmbedUrl(url) {
     if (!url) return '';
 
     // Match YouTube URL patterns and extract video ID
@@ -710,31 +995,117 @@ function getYouTubeEmbedUrl(url) {
 }
     </script>
 
-<style>
-    .animate-fade-in {
-        animation: fadeIn 0.5s ease-out forwards;
-    }
-
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: scale(0.95);
+    <style>
+        /* Tabulator styling*/
+        .tabulator {
+            background-color: transparent !important;
+            border:1px solid rgba(75, 85, 99, 0.3) !important;
         }
-        to {
-            opacity: 1;
-            transform: scale(1);
+
+        .tabulator-tableholder {
+            background-color: transparent !important;
         }
-    }
 
-    /* Modal styling */
-    .modal-content {
-        position: absolute;
-        /* Will be set dynamically by JavaScript */
-    }
+        .tabulator-row {
+            background-color: #020617 !important;
+            border-bottom: 1px solid rgba(75, 85, 99, 0.3) !important;
+            font-size: 16px !important;
+            color: white !important;
+        }
 
-    /* Prevent page scrolling when modal is open */
-    body.modal-open {
-        overflow: hidden;
-    }
+        .tabulator-row.tabulator-row-even {
+            background-color: #020617 !important;
+        }
+
+        .tabulator-row:hover {
+            background-color: rgba(79, 70, 229, 0.2) !important;
+            color: black !important;
+        }
+
+        .tabulator-header {
+            background-color: #020617 !important;
+            border-bottom: 2px solid rgb(75, 85, 99) !important;
+            border-top: 2px solid rgb(75, 85, 99) !important;
+            font-size: 20px !important;
+        }
+
+        .tabulator-col {
+            background-color: #020617 !important;
+            color: white !important;
+            border-right: 1px solid rgba(75, 85, 99, 0.3) !important;
+            border-left: 1px solid rgba(75, 85, 99, 0.3) !important;
+        }
+
+        .tabulator-footer {
+            background-color: #020617 !important;
+            color: white !important;
+            border-top: 1px solid rgba(75, 85, 99, 0.5) !important;
+            border-bottom: 1px solid rgba(75, 85, 99, 0.5) !important;
+        }
+
+        .tabulator-page {
+            background-color: #020617 !important;
+            color: white !important;
+            border: 1px solid rgba(75, 85, 99, 0.5) !important;
+        }
+
+        .tabulator-page.active {
+            background-color: rgb(37, 99, 235) !important;
+            color: white !important;
+        }
+
+        .tabulator-header-filter input {
+            background-color: rgba(30, 41, 59, 0.9) !important;
+            color: white !important;
+            border: 1px solid rgba(75, 85, 99, 0.5) !important;
+            padding: 4px !important;
+        }
+
+        /* Filter styling */
+        .filter-container {
+            position: relative;
+            min-width: 160px;
+        }
+
+        select {
+            appearance: none;
+        }
+
+        .filter-container::after {
+            font-size: 0.8em;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: #0F172A;
+        }
+
+        /* Documentation styling (keep existing) */
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Modal styling */
+        .modal-content {
+            position: absolute;
+            /* Will be set dynamically by JavaScript */
+        }
+
+        /* Prevent page scrolling when modal is open */
+        body.modal-open {
+            overflow: hidden;
+        }
     </style>
 </div>

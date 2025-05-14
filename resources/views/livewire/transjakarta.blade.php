@@ -20,7 +20,7 @@
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
         <div>
             <h3 class="text-xl font-bold text-white">
-                Transjakarta Impressions
+                Transjakarta Passenger
             </h3>
         </div>
     </div>
@@ -28,7 +28,7 @@
     <!-- Stats Summary - Desktop version (hidden on mobile) -->
     <div class="hidden md:grid md:grid-cols-3 gap-4 mb-6">
         <div class="bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 p-4 rounded-lg">
-            <div class="text-gray-400 text-xs uppercase font-semibold mb-1">Total Impressions</div>
+            <div class="text-gray-400 text-xs uppercase font-semibold mb-1">Total Passenger</div>
             <div class="text-2xl font-bold text-white" x-text="new Intl.NumberFormat().format(@js(array_sum($impressions)))"></div>
             <div class="text-indigo-400 text-sm mt-1" x-text="'For ' + @js(ucfirst($timeRange)) + ' period'"></div>
         </div>
@@ -40,7 +40,7 @@
         <div class="bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 p-4 rounded-lg">
             <div class="text-gray-400 text-xs uppercase font-semibold mb-1">Highest Value</div>
             <div class="text-2xl font-bold text-white" x-text="new Intl.NumberFormat().format(Math.max(...@js($impressions)))"></div>
-            <div class="text-indigo-400 text-sm mt-1" id="highestDateDesktop">Peak impression</div>
+            <div class="text-indigo-400 text-sm mt-1" id="highestDateDesktop">Peak Passenger</div>
         </div>
     </div>
 
@@ -62,7 +62,7 @@
             <div x-show="isExpanded" x-transition.duration.300ms id="mobileSummaryContent" class="space-y-4">
                 <div class="flex justify-between items-center">
                     <div>
-                        <div class="text-sm text-gray-300">Total Impressions</div>
+                        <div class="text-sm text-gray-300">Total Passenger</div>
                         <div class="text-lg font-bold text-white" x-text="new Intl.NumberFormat().format(@js(array_sum($impressions)))"></div>
                     </div>
                     <div class="bg-indigo-600 bg-opacity-20 rounded-full p-2">
@@ -88,7 +88,7 @@
                     <div>
                         <div class="text-sm text-gray-300">Highest Value</div>
                         <div class="text-lg font-bold text-white" x-text="new Intl.NumberFormat().format(Math.max(...@js($impressions)))"></div>
-                        <div class="text-xs text-indigo-400 mt-1" id="highestDateMobile">Peak impression</div>
+                        <div class="text-xs text-indigo-400 mt-1" id="highestDateMobile">Peak Passenger</div>
                     </div>
                     <div class="bg-indigo-600 bg-opacity-20 rounded-full p-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -140,7 +140,7 @@
                             data: {
                                 labels: labels,
                                 datasets: [{
-                                    label: 'Impressions',
+                                    label: 'Passenger',
                                     data: data,
                                     backgroundColor: gradient,
                                     borderColor: 'rgba(99, 102, 241, 1)',
@@ -189,7 +189,7 @@
                                         cornerRadius: 6,
                                         callbacks: {
                                             label: function(context) {
-                                                return 'Impressions: ' + context.raw.toLocaleString();
+                                                return 'Passenger: ' + context.raw.toLocaleString();
                                             }
                                         }
                                     }
@@ -228,7 +228,7 @@
                         // Find highest value date
                         const maxIndex = data.indexOf(Math.max(...data));
                         if (maxIndex !== -1) {
-                            document.getElementById('highestDateDesktop').innerHTML = 'Peak impression on ' + labels[maxIndex];
+                            document.getElementById('highestDateDesktop').innerHTML = 'Peak Passenger on ' + labels[maxIndex];
                             document.getElementById('highestDateMobile').innerHTML = 'on ' + labels[maxIndex];
                         }
 
@@ -245,7 +245,7 @@
                                 const newLabels = @js($labels);
                                 const newMaxIndex = newData.indexOf(Math.max(...newData));
                                 if (newMaxIndex !== -1) {
-                                    document.getElementById('highestDateDesktop').innerHTML = 'Peak impression on ' + newLabels[newMaxIndex];
+                                    document.getElementById('highestDateDesktop').innerHTML = 'Peak Passenger on ' + newLabels[newMaxIndex];
                                     document.getElementById('highestDateMobile').innerHTML = 'on ' + newLabels[newMaxIndex];
                                 }
                             }
@@ -289,7 +289,7 @@
 
             // Create download link
             const link = document.createElement('a');
-            link.download = 'transjakarta-impressions-{{ $timeRange }}.png';
+            link.download = 'transjakarta-Passenger-{{ $timeRange }}.png';
             link.href = image;
             link.click();
         } else {

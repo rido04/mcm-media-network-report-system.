@@ -99,7 +99,7 @@ class DailyImpressionResource extends Resource
                 ->disabled()
                 ->dehydrated(true),
             TextInput::make('impression')
-                ->label('Today Impression')
+                ->label('Today Passenger')
                 ->numeric()
                 ->required(),
             ]);
@@ -130,7 +130,7 @@ class DailyImpressionResource extends Resource
                 ->sortable()
                 ->date(),
             TextColumn::make('impression')
-                ->label('Daily Impression'),
+                ->label('Today Passenger'),
                 ])->defaultSort('date', 'desc')
             ->filters([
             SelectFilter::make('client')

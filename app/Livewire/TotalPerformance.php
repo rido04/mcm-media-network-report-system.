@@ -2,6 +2,7 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use App\Models\MediaPlacement;
 use App\Models\DailyImpression;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -9,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class TotalPerformance extends Component
 {
     public $datasets = [];
-    public $labels = [];
+    public $labels = "Total Performance";
     public $userId;
 
     public function mount()
@@ -19,58 +20,39 @@ class TotalPerformance extends Component
     }
 
     public function render()
-    {
-        $data = DailyImpression::with('adminTraffic')
-            ->join('admin_traffic', 'daily_impressions.admin_traffic_id', '=', 'admin_traffic.id')
-            // Filter user_id
-            ->where('admin_traffic.user_id', $this->userId)
-            ->select([
-                DB::raw('DATE(daily_impressions.date) as date'),
-                'admin_traffic.category',
-                DB::raw('SUM(daily_impressions.impression) as total'),
-            ])
-            ->groupBy('date', 'admin_traffic.category')
-            ->orderBy('date')
-            ->get();
+{
+    $data = MediaPlacement::select([
+        'media',
+        'avg_daily_impression as total',
+    ])
+    ->get();
 
-        $categories = $data->pluck('category')->unique()->values();
-        $dates = $data->pluck('date')->unique()->sort()->values();
+    $mediaValues = $data->pluck('media')->unique()->values();
+    $maxPoints = $data->groupBy('media')->map->count()->max(); // Max points for any media
+    $labels = range(1, $maxPoints); // [1, 2, 3, ...]
 
-        $colorPalette = [
-            '#4F46E5', // Indigo-600
-            '#2563EB', // Blue-600
-            '#7C3AED', // Violet-600
-            '#DB2777', // Pink-600
-            '#9333EA', // Purple-600
-            '#10B981', // Emerald-600
-            '#F59E0B', // Amber-500
-            '#EF4444', // Red-500
-            '#06B6D4', // Cyan-500
-            '#8B5CF6', // Purple-500
+    $colorPalette = [
+        '#4F46E5', '#2563EB', '#7C3AED', '#DB2777', '#9333EA',
+        '#10B981', '#F59E0B', '#EF4444', '#06B6D4', '#8B5CF6',
+    ];
+
+    $this->datasets = [];
+    foreach ($mediaValues as $index => $media) {
+        $colorIndex = $index % count($colorPalette);
+        $color = $colorPalette[$colorIndex];
+        $mediaData = $data->where('media', $media)->pluck('total')->values()->toArray();
+        $this->datasets[] = [
+            'label' => $media,
+            'data' => array_pad($mediaData, $maxPoints, null),
+            'backgroundColor' => $color,
+            'borderColor' => $color,
+            'borderWidth' => 1,
+            'pointLabels' => array_pad(array_fill(0, count($mediaData), $media), $maxPoints, null),
         ];
+    }
 
-        $this->datasets = [];
-            foreach ($categories as $index => $category) {
-                // Choose colors from colorPalette avriable
-                $colorIndex = $index % count($colorPalette);
-                $color = $colorPalette[$colorIndex];
+    $this->labels = $labels;
 
-                $this->datasets[] = [
-                    'label' => $category,
-                    'data' => $dates->map(function ($date) use ($data, $category) {
-                        return $data
-                            ->where('date', $date)
-                            ->where('category', $category)
-                            ->sum('total');
-                    })->toArray(),
-                    'backgroundColor' => $color,
-                    'borderColor' => $color,
-                    'borderWidth' => 1,
-                ];
-            }
-
-            $this->labels = $dates->map(fn ($date) => date('d M', strtotime($date)))->toArray();
-
-            return view('livewire.total-performance');
-        }
+    return view('livewire.total-performance');
+}
 }

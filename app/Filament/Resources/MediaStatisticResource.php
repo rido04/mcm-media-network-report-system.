@@ -98,13 +98,9 @@ class MediaStatisticResource extends Resource
                 ->numeric()
                 ->sortable()
                 ->toggleable(),
-            TextColumn::make('avg_impression')
-                ->label('Total Impression per Day')
-                ->state(function ($record) {
-                    $days = $record->dailyImpressions->count();
-                    return $days > 0 ? number_format($record->total_impression / $days, 2) : 0;
-                })
-                ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('total_impression')
+                ->label('Total Impression')
+                ->getStateUsing(fn ($record) => number_format($record->mediaPlacements()->sum('avg_daily_impression')))
         ])
         ->filters([
             SelectFilter::make('client')

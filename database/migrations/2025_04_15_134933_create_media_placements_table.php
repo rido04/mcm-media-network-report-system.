@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('space_ads');
             $table->string('size');
             $table->foreignId('daily_impression_id')->nullable()->contrained()->onDelete('cascade');
+            $table->foreignId('media_statistic_id')->nullable()->contrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

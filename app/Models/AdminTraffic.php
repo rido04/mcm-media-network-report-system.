@@ -51,4 +51,10 @@ class AdminTraffic extends Model
     {
         return $this->belongsTo(MediaStatistic::class);
     }
+
+    public function mediaPlacements()
+{
+    return $this->hasMany(MediaPlacement::class);
+}
+
 }

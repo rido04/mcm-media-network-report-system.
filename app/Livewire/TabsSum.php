@@ -23,7 +23,7 @@ class TabsSum extends Component
             ->where('user_id', $userId)
             ->get();
 
-        $this->mediaStatistics = MediaStatistic::with('dailyImpressions')
+        $this->mediaStatistics = MediaStatistic::with('mediaPlacements')
             ->where('user_id', $userId)
             ->get();
 

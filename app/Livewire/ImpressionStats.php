@@ -3,7 +3,7 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use App\Models\DailyImpression;
+use App\Models\MediaPlacement;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
@@ -78,53 +78,30 @@ class ImpressionStats extends Component
     }
 
     public function getImpressionStats()
-    {
-        $userId = Auth::id();
+{
+    $userId = Auth::id();
 
-        $query = DailyImpression::with(['adminTraffic', 'mediaStatistic']) // Eager loading
-            ->whereHas('adminTraffic', function ($q) use ($userId) {
-                $q->where('user_id', $userId);
-            });
+    $query = MediaPlacement::with(['adminTraffic', 'mediaStatistic'])
+        ->whereHas('adminTraffic', function ($q) use ($userId) {
+            $q->where('user_id', $userId);
+        });
 
-        // Date filters
-        if ($this->start_date) {
-            $query->whereDate('date', '>=', $this->start_date);
-        }
+    $result = $query->selectRaw('
+        MAX(avg_daily_impression) as highest,
+        MIN(avg_daily_impression) as lowest,
+        AVG(avg_daily_impression) as average,
+        SUM(avg_daily_impression) as total
+    ')->first();
 
-        if ($this->end_date) {
-            $query->whereDate('date', '<=', $this->end_date);
-        }
+    return [
+        'highest' => $result->highest ?? 0,
+        'lowest' => $result->lowest ?? 0,
+        'average' => $result->average ?? 0,
+        'total' => $result->total ?? 0,
+    ];
+}
 
-        // Media filter
-        if ($this->media_statistic_id && $this->media_statistic_id !== 'all') {
-            $query->whereHas('mediaStatistic', function($q) {
-                $q->where('media', $this->media_statistic_id)
-                ->orWhere('id', $this->media_statistic_id);
-            });
-        }
 
-        // City filter
-        if ($this->city) {
-            $query->whereHas('mediaStatistic', function($q) {
-                $q->where('city', $this->city);
-            });
-        }
-
-        // Use single query for all aggregation
-        $result = $query->selectRaw('
-            MAX(impression) as highest,
-            MIN(impression) as lowest,
-            AVG(impression) as average,
-            SUM(impression) as total
-        ')->first();
-
-        return [
-            'highest' => $result->highest ?? 0,
-            'lowest' => $result->lowest ?? 0,
-            'average' => $result->average ?? 0,
-            'total' => $result->total ?? 0,
-        ];
-    }
 
     public function render()
     {
